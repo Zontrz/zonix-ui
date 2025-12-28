@@ -809,7 +809,25 @@ function Zonix:Window(config)
         table.insert(window.Tabs, tab)
         
         if #window.Tabs == 1 then
-            tabBtn.MouseButton1Click:Fire()
+            task.spawn(function()
+                Utils:Ripple(tabBtn)
+                
+                for _, t in pairs(window.Tabs) do
+                    t.Active = false
+                    for _, btn in pairs(tabBar:GetChildren()) do
+                        if btn:IsA("TextButton") then
+                            Utils:Tween(btn, {BackgroundColor3 = theme.Tertiary, TextColor3 = theme.TextDark}, 0.2)
+                        end
+                    end
+                    for _, c in pairs(content:GetChildren()) do
+                        if c:IsA("ScrollingFrame") then c.Visible = false end
+                    end
+                end
+                
+                tab.Active = true
+                Utils:Tween(tabBtn, {BackgroundColor3 = theme.Accent, TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.2)
+                tabContent.Visible = true
+            end)
         end
         
         -- ═══════════════════════════════════════════════════════
