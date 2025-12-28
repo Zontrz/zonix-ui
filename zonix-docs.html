@@ -31,6 +31,11 @@
             box-sizing: border-box;
         }
 
+        html {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             font-family: 'Share Tech Mono', monospace;
             background: var(--bg-primary);
@@ -38,6 +43,8 @@
             line-height: 1.6;
             overflow-x: hidden;
             position: relative;
+            width: 100%;
+            max-width: 100vw;
         }
 
         body::before {
@@ -171,7 +178,7 @@
             nav {
                 position: fixed;
                 top: 0;
-                right: -100%;
+                right: 0;
                 height: 100vh;
                 width: 80%;
                 max-width: 350px;
@@ -182,12 +189,13 @@
                 gap: 0;
                 border-left: 2px solid var(--accent-cyan);
                 box-shadow: -5px 0 30px rgba(0, 255, 255, 0.3);
-                transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
                 overflow-y: auto;
             }
 
             nav.active {
-                right: 0;
+                transform: translateX(0);
             }
 
             nav a {
@@ -591,6 +599,15 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+            }
+
             .header-content {
                 flex-direction: column;
                 text-align: center;
@@ -614,10 +631,36 @@
 
             table {
                 font-size: 0.8rem;
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
             }
 
             th, td {
                 padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+            }
+
+            pre {
+                font-size: 0.75rem;
             }
         }
 
@@ -2257,7 +2300,6 @@ Zonix.Settings.Theme = <span class="string">"MyTheme"</span></code></pre>
                     </tr>
                 </thead>
                                 <tbody>
-                    <!-- WINDOWS EXECUTORS -->
                     <tr style="background: rgba(0, 255, 255, 0.05);">
                         <td colspan="5" style="color: var(--accent-cyan); font-weight: bold; text-align: center;">🪟 WINDOWS EXECUTORS</td>
                     </tr>
@@ -2430,7 +2472,6 @@ Zonix.Settings.Theme = <span class="string">"MyTheme"</span></code></pre>
                         <td style="color: var(--accent-green);">✅</td>
                     </tr>
 
-                    <!-- ANDROID EXECUTORS -->
                     <tr style="background: rgba(0, 255, 0, 0.05);">
                         <td colspan="5" style="color: var(--accent-green); font-weight: bold; text-align: center;">📱 ANDROID EXECUTORS</td>
                     </tr>
@@ -2470,7 +2511,6 @@ Zonix.Settings.Theme = <span class="string">"MyTheme"</span></code></pre>
                         <td style="color: var(--accent-green);">✅</td>
                     </tr>
 
-                    <!-- MAC EXECUTORS -->
                     <tr style="background: rgba(255, 0, 255, 0.05);">
                         <td colspan="5" style="color: var(--accent-magenta); font-weight: bold; text-align: center;">🍎 MAC EXECUTORS</td>
                     </tr>
@@ -2496,7 +2536,6 @@ Zonix.Settings.Theme = <span class="string">"MyTheme"</span></code></pre>
                         <td style="color: var(--accent-green);">✅</td>
                     </tr>
 
-                    <!-- iOS EXECUTORS -->
                     <tr style="background: rgba(255, 255, 0, 0.05);">
                         <td colspan="5" style="color: var(--accent-yellow); font-weight: bold; text-align: center;">📲 iOS EXECUTORS</td>
                     </tr>
@@ -2515,7 +2554,6 @@ Zonix.Settings.Theme = <span class="string">"MyTheme"</span></code></pre>
                         <td style="color: var(--accent-green);">✅</td>
                     </tr>
 
-                    <!-- UNIVERSAL SUPPORT -->
                     <tr style="background: rgba(255, 255, 255, 0.05);">
                         <td colspan="5" style="color: var(--text-white); font-weight: bold; text-align: center;">🌐 UNIVERSAL SUPPORT</td>
                     </tr>
