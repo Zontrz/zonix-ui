@@ -393,9 +393,6 @@ BgColor:Set(Color3.fromRGB(25, 25, 35))
 **Methods:**
 - `:Set(color)` - Set color (expects Color3)
 
-**Methods:**
-- `:Set(color3)` - Set color
-
 ---
 
 ### CopyButton
