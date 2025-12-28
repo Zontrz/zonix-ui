@@ -34,7 +34,13 @@
 local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
 ```
 
+**Alternative GitHub Path:**
+```lua
+local Zonix = loadstring(game:HttpGet("https://raw.githubusercontent.com/Zontrz/zonix-ui/refs/heads/main/main.lua"))()
+```
+
 **File Location:** https://hub.zon.su/zonix-ui.lua  
+**GitHub:** https://raw.githubusercontent.com/Zontrz/zonix-ui/refs/heads/main/main.lua  
 **Documentation:** https://zon.su/zonix
 
 ---
