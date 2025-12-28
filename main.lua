@@ -1642,12 +1642,14 @@ function Zonix:Window(config)
             cpLabel.TextXAlignment = Enum.TextXAlignment.Left
             cpLabel.Parent = cpFrame
             
-            local cpDisplay = Instance.new("Frame")
+            local cpDisplay = Instance.new("TextButton")
             cpDisplay.AnchorPoint = Vector2.new(1, 0.5)
             cpDisplay.BackgroundColor3 = default
             cpDisplay.BorderSizePixel = 0
             cpDisplay.Position = UDim2.new(1, -10, 0.5, 0)
             cpDisplay.Size = UDim2.new(0, 30, 0, 30)
+            cpDisplay.Text = ""
+            cpDisplay.AutoButtonColor = false
             cpDisplay.Parent = cpFrame
             
             local cpDisplayCorner = Instance.new("UICorner")
@@ -1663,34 +1665,276 @@ function Zonix:Window(config)
                 Zonix.Flags[flag] = default
             end
             
-            cpDisplay.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    local colors = {
-                        Color3.fromRGB(255, 0, 0), Color3.fromRGB(255, 127, 0),
-                        Color3.fromRGB(255, 255, 0), Color3.fromRGB(0, 255, 0),
-                        Color3.fromRGB(0, 127, 255), Color3.fromRGB(0, 0, 255),
-                        Color3.fromRGB(139, 0, 255), Color3.fromRGB(255, 255, 255)
-                    }
-                    
-                    local idx = 1
-                    for i, c in ipairs(colors) do
-                        if cpDisplay.BackgroundColor3 == c then
-                            idx = i
-                            break
-                        end
-                    end
-                    
-                    local newIdx = idx % #colors + 1
-                    local newColor = colors[newIdx]
-                    
-                    cpDisplay.BackgroundColor3 = newColor
-                    
-                    if flag then
-                        Zonix.Flags[flag] = newColor
-                    end
-                    
-                    pcall(callback, newColor)
+            local currentH = 0
+            local currentS = 1
+            local currentV = 1
+            local currentColor = default
+            local pickerOpen = false
+            
+            local function RGBtoHSV(col)
+                local r, g, b = col.R, col.G, col.B
+                local mx, mn = math.max(r, g, b), math.min(r, g, b)
+                local d = mx - mn
+                local h, s, v = 0, 0, mx
+                if d > 0 then
+                    s = d / mx
+                    if r == mx then h = (g - b) / d
+                    elseif g == mx then h = 2 + (b - r) / d
+                    else h = 4 + (r - g) / d end
+                    h = h / 6
+                    if h < 0 then h = h + 1 end
                 end
+                return h, s, v
+            end
+            
+            local function HSVtoRGB(h, s, v)
+                if s == 0 then return Color3.new(v, v, v) end
+                local i = math.floor(h * 6)
+                local f = h * 6 - i
+                local p, q, t = v * (1 - s), v * (1 - f * s), v * (1 - (1 - f) * s)
+                i = i % 6
+                if i == 0 then return Color3.new(v, t, p)
+                elseif i == 1 then return Color3.new(q, v, p)
+                elseif i == 2 then return Color3.new(p, v, t)
+                elseif i == 3 then return Color3.new(p, q, v)
+                elseif i == 4 then return Color3.new(t, p, v)
+                else return Color3.new(v, p, q) end
+            end
+            
+            local function ToHex(col)
+                return string.format("#%02x%02x%02x", math.floor(col.R * 255), math.floor(col.G * 255), math.floor(col.B * 255))
+            end
+            
+            local function ToCMYK(col)
+                local k = 1 - math.max(col.R, col.G, col.B)
+                if k == 1 then return 0, 0, 0, 1 end
+                return (1 - col.R - k) / (1 - k), (1 - col.G - k) / (1 - k), (1 - col.B - k) / (1 - k), k
+            end
+            
+            local function ToHSL(col)
+                local mx, mn = math.max(col.R, col.G, col.B), math.min(col.R, col.G, col.B)
+                local l = (mx + mn) / 2
+                if mx == mn then return 0, 0, l end
+                local d = mx - mn
+                local s = l > 0.5 and d / (2 - mx - mn) or d / (mx + mn)
+                local h
+                if col.R == mx then h = (col.G - col.B) / d + (col.G < col.B and 6 or 0)
+                elseif col.G == mx then h = (col.B - col.R) / d + 2
+                else h = (col.R - col.G) / d + 4 end
+                return h / 6, s, l
+            end
+            
+            currentH, currentS, currentV = RGBtoHSV(default)
+            
+            cpDisplay.MouseButton1Click:Connect(function()
+                if pickerOpen then return end
+                pickerOpen = true
+                
+                local sg = Instance.new("ScreenGui")
+                sg.Name = "ColorPickerModal"
+                sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                sg.DisplayOrder = 999999
+                sg.IgnoreGuiInset = true
+                sg.Parent = Executor.GetHui()
+                
+                local bg = Instance.new("TextButton", sg)
+                bg.BackgroundColor3, bg.BackgroundTransparency = Color3.new(0, 0, 0), 0.5
+                bg.BorderSizePixel, bg.Size, bg.ZIndex = 0, UDim2.new(1, 0, 1, 0), 999999
+                bg.Text = ""
+                bg.AutoButtonColor = false
+                bg.Active = true
+                
+                local pk = Instance.new("Frame", bg)
+                pk.AnchorPoint, pk.BackgroundColor3, pk.BorderSizePixel = Vector2.new(0.5, 0.5), theme.Background, 0
+                pk.Position, pk.Size, pk.ZIndex = UDim2.new(0.5, 0, 0.5, 0), UDim2.new(0, 480, 0, 580), 1000000
+                pk.Active = true
+                Instance.new("UICorner", pk).CornerRadius = UDim.new(0, 12)
+                local st = Instance.new("UIStroke", pk)
+                st.Color, st.Thickness = theme.Border, 2
+                
+                local tb = Instance.new("Frame", pk)
+                tb.BackgroundColor3, tb.BorderSizePixel, tb.Size, tb.ZIndex = theme.Topbar, 0, UDim2.new(1, 0, 0, 50), 1000001
+                Instance.new("UICorner", tb).CornerRadius = UDim.new(0, 12)
+                local tc = Instance.new("Frame", tb)
+                tc.BackgroundColor3, tc.BorderSizePixel, tc.Position, tc.Size, tc.ZIndex = theme.Topbar, 0, UDim2.new(0, 0, 1, -12), UDim2.new(1, 0, 0, 12), 1000001
+                local tl = Instance.new("TextLabel", tb)
+                tl.BackgroundTransparency, tl.Position, tl.Size = 1, UDim2.new(0, 20, 0, 0), UDim2.new(1, -80, 1, 0)
+                tl.Font, tl.Text, tl.TextColor3, tl.TextSize, tl.TextXAlignment, tl.ZIndex = Enum.Font.GothamBold, "Color Picker", theme.Text, 16, Enum.TextXAlignment.Left, 1000002
+                
+                local closeBtn = Instance.new("TextButton", tb)
+                closeBtn.AnchorPoint, closeBtn.BackgroundColor3, closeBtn.BorderSizePixel = Vector2.new(1, 0.5), theme.Error, 0
+                closeBtn.Position, closeBtn.Size = UDim2.new(1, -15, 0.5, 0), UDim2.new(0, 30, 0, 30)
+                closeBtn.Font, closeBtn.Text, closeBtn.TextColor3, closeBtn.TextSize, closeBtn.ZIndex = Enum.Font.GothamBold, "X", Color3.new(1, 1, 1), 18, 1000002
+                closeBtn.AutoButtonColor = false
+                Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
+                
+                closeBtn.MouseEnter:Connect(function()
+                    Utils:Tween(closeBtn, {BackgroundColor3 = Color3.fromRGB(200, 50, 50)}, 0.2)
+                end)
+                closeBtn.MouseLeave:Connect(function()
+                    Utils:Tween(closeBtn, {BackgroundColor3 = theme.Error}, 0.2)
+                end)
+                closeBtn.MouseButton1Click:Connect(function()
+                    pickerOpen = false
+                    sg:Destroy()
+                end)
+                
+                local sv = Instance.new("ImageButton", pk)
+                sv.BackgroundColor3, sv.BorderSizePixel, sv.Position, sv.Size, sv.ZIndex, sv.AutoButtonColor = HSVtoRGB(currentH, 1, 1), 0, UDim2.new(0, 20, 0, 70), UDim2.new(0, 340, 0, 320), 1000001, false
+                Instance.new("UICorner", sv).CornerRadius = UDim.new(0, 8)
+                
+                local w = Instance.new("Frame", sv)
+                w.BackgroundColor3, w.BorderSizePixel, w.Size, w.ZIndex = Color3.new(1, 1, 1), 0, UDim2.new(1, 0, 1, 0), 1000002
+                Instance.new("UICorner", w).CornerRadius = UDim.new(0, 8)
+                local wg = Instance.new("UIGradient", w)
+                wg.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1)})
+                
+                local bk = Instance.new("Frame", sv)
+                bk.BackgroundColor3, bk.BorderSizePixel, bk.Size, bk.ZIndex = Color3.new(0, 0, 0), 0, UDim2.new(1, 0, 1, 0), 1000003
+                Instance.new("UICorner", bk).CornerRadius = UDim.new(0, 8)
+                local bkg = Instance.new("UIGradient", bk)
+                bkg.Transparency, bkg.Rotation = NumberSequence.new({NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0)}), 90
+                
+                local sc = Instance.new("Frame", sv)
+                sc.AnchorPoint, sc.BackgroundColor3, sc.BorderSizePixel = Vector2.new(0.5, 0.5), Color3.new(1, 1, 1), 0
+                sc.Position, sc.Size, sc.ZIndex = UDim2.new(currentS, 0, 1 - currentV, 0), UDim2.new(0, 20, 0, 20), 1000004
+                Instance.new("UICorner", sc).CornerRadius = UDim.new(1, 0)
+                local scs = Instance.new("UIStroke", sc)
+                scs.Color, scs.Thickness = Color3.fromRGB(40, 40, 50), 3
+                
+                local hu = Instance.new("ImageButton", pk)
+                hu.BackgroundColor3, hu.BorderSizePixel, hu.Position, hu.Size, hu.ZIndex, hu.AutoButtonColor = Color3.new(1, 1, 1), 0, UDim2.new(0, 20, 0, 410), UDim2.new(0, 440, 0, 20), 1000001, false
+                Instance.new("UICorner", hu).CornerRadius = UDim.new(1, 0)
+                local hg = Instance.new("UIGradient", hu)
+                hg.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 255, 0)),
+                    ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
+                    ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 0, 255)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
+                })
+                
+                local hc = Instance.new("Frame", hu)
+                hc.AnchorPoint, hc.BackgroundColor3, hc.BorderSizePixel = Vector2.new(0.5, 0.5), Color3.new(1, 1, 1), 0
+                hc.Position, hc.Size, hc.ZIndex = UDim2.new(currentH, 0, 0.5, 0), UDim2.new(0, 16, 0, 32), 1000002
+                Instance.new("UICorner", hc).CornerRadius = UDim.new(1, 0)
+                local hcs = Instance.new("UIStroke", hc)
+                hcs.Color, hcs.Thickness = Color3.fromRGB(40, 40, 50), 3
+                
+                local pv = Instance.new("Frame", pk)
+                pv.BackgroundColor3, pv.BorderSizePixel, pv.Position, pv.Size, pv.ZIndex = currentColor, 0, UDim2.new(0, 380, 0, 70), UDim2.new(0, 80, 0, 80), 1000001
+                Instance.new("UICorner", pv).CornerRadius = UDim.new(0, 8)
+                local pvs = Instance.new("UIStroke", pv)
+                pvs.Color, pvs.Thickness = theme.Border, 2
+                
+                local hf = Instance.new("Frame", pk)
+                hf.BackgroundColor3, hf.BorderSizePixel, hf.Position, hf.Size, hf.ZIndex = theme.Secondary, 0, UDim2.new(0, 20, 0, 450), UDim2.new(0, 440, 0, 50), 1000001
+                Instance.new("UICorner", hf).CornerRadius = UDim.new(0, 8)
+                Instance.new("UIStroke", hf).Color = theme.Border
+                
+                local ht = Instance.new("TextLabel", hf)
+                ht.BackgroundTransparency, ht.Position, ht.Size = 1, UDim2.new(0, 15, 0, 0), UDim2.new(0, 100, 0, 20)
+                ht.Font, ht.Text, ht.TextColor3, ht.TextSize, ht.TextXAlignment, ht.ZIndex = Enum.Font.GothamBold, "HEX", theme.Text, 12, Enum.TextXAlignment.Left, 1000002
+                
+                local hv = Instance.new("TextLabel", hf)
+                hv.BackgroundTransparency, hv.Position, hv.Size = 1, UDim2.new(0, 15, 0, 20), UDim2.new(1, -80, 0, 25)
+                hv.Font, hv.Text, hv.TextColor3, hv.TextSize, hv.TextXAlignment, hv.ZIndex = Enum.Font.Gotham, ToHex(currentColor), theme.TextDark, 14, Enum.TextXAlignment.Left, 1000002
+                
+                local hb = Instance.new("TextButton", hf)
+                hb.AnchorPoint, hb.BackgroundTransparency, hb.Position, hb.Size = Vector2.new(1, 0.5), 1, UDim2.new(1, -10, 0.5, 0), UDim2.new(0, 30, 0, 30)
+                hb.Font, hb.Text, hb.TextColor3, hb.TextSize, hb.ZIndex = Enum.Font.GothamBold, "📋", theme.TextDark, 16, 1000002
+                hb.MouseButton1Click:Connect(function() Executor.SetClipboard(hv.Text) hb.Text = "✓" task.wait(1) hb.Text = "📋" end)
+                
+                local vf = Instance.new("Frame", pk)
+                vf.BackgroundTransparency, vf.Position, vf.Size, vf.ZIndex = 1, UDim2.new(0, 20, 0, 510), UDim2.new(0, 440, 0, 50), 1000001
+                
+                local function MV(n, x, v)
+                    local f = Instance.new("Frame", vf)
+                    f.BackgroundColor3, f.BorderSizePixel, f.Position, f.Size, f.ZIndex = theme.Secondary, 0, UDim2.new(0, x, 0, 0), UDim2.new(0, 105, 0, 50), 1000001
+                    Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
+                    Instance.new("UIStroke", f).Color = theme.Border
+                    local t = Instance.new("TextLabel", f)
+                    t.BackgroundTransparency, t.Position, t.Size = 1, UDim2.new(0, 10, 0, 5), UDim2.new(1, -20, 0, 15)
+                    t.Font, t.Text, t.TextColor3, t.TextSize, t.TextXAlignment, t.ZIndex = Enum.Font.GothamBold, n, theme.Text, 11, Enum.TextXAlignment.Left, 1000002
+                    local vv = Instance.new("TextLabel", f)
+                    vv.BackgroundTransparency, vv.Position, vv.Size = 1, UDim2.new(0, 10, 0, 22), UDim2.new(1, -20, 0, 23)
+                    vv.Font, vv.Text, vv.TextColor3, vv.TextSize, vv.TextXAlignment, vv.ZIndex = Enum.Font.Gotham, v, theme.TextDark, 12, Enum.TextXAlignment.Left, 1000002
+                    return vv
+                end
+                
+                local r, g, b = math.floor(currentColor.R * 255), math.floor(currentColor.G * 255), math.floor(currentColor.B * 255)
+                local rgbD = MV("RGB", 0, r .. ", " .. g .. ", " .. b)
+                local c, m, y, k = ToCMYK(currentColor)
+                local cmykD = MV("CMYK", 112, math.floor(c * 100) .. "%, " .. math.floor(m * 100) .. "%, " .. math.floor(y * 100) .. "%, " .. math.floor(k * 100) .. "%")
+                local hsvD = MV("HSV", 224, math.floor(currentH * 360) .. "°, " .. math.floor(currentS * 100) .. "%, " .. math.floor(currentV * 100) .. "%")
+                local h2, s2, l2 = ToHSL(currentColor)
+                local hslD = MV("HSL", 336, math.floor(h2 * 360) .. "°, " .. math.floor(s2 * 100) .. "%, " .. math.floor(l2 * 100) .. "%")
+                
+                local function Up(col)
+                    currentColor = col
+                    pv.BackgroundColor3, hv.Text = col, ToHex(col)
+                    local r2, g2, b2 = math.floor(col.R * 255), math.floor(col.G * 255), math.floor(col.B * 255)
+                    rgbD.Text = r2 .. ", " .. g2 .. ", " .. b2
+                    local c2, m2, y2, k2 = ToCMYK(col)
+                    cmykD.Text = math.floor(c2 * 100) .. "%, " .. math.floor(m2 * 100) .. "%, " .. math.floor(y2 * 100) .. "%, " .. math.floor(k2 * 100) .. "%"
+                    hsvD.Text = math.floor(currentH * 360) .. "°, " .. math.floor(currentS * 100) .. "%, " .. math.floor(currentV * 100) .. "%"
+                    local h3, s3, l3 = ToHSL(col)
+                    hslD.Text = math.floor(h3 * 360) .. "°, " .. math.floor(s3 * 100) .. "%, " .. math.floor(l3 * 100) .. "%"
+                end
+                
+                local svD = false
+                local function UpSV(i)
+                    currentS = math.clamp((i.Position.X - sv.AbsolutePosition.X) / sv.AbsoluteSize.X, 0, 1)
+                    currentV = 1 - math.clamp((i.Position.Y - sv.AbsolutePosition.Y) / sv.AbsoluteSize.Y, 0, 1)
+                    sc.Position = UDim2.new(currentS, 0, 1 - currentV, 0)
+                    Up(HSVtoRGB(currentH, currentS, currentV))
+                end
+                
+                sv.MouseButton1Down:Connect(function() svD = true end)
+                sv.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 then UpSV(i) end end)
+                
+                local huD = false
+                local function UpHu(i)
+                    currentH = math.clamp((i.Position.X - hu.AbsolutePosition.X) / hu.AbsoluteSize.X, 0, 1)
+                    hc.Position = UDim2.new(currentH, 0, 0.5, 0)
+                    sv.BackgroundColor3 = HSVtoRGB(currentH, 1, 1)
+                    Up(HSVtoRGB(currentH, currentS, currentV))
+                end
+                
+                hu.MouseButton1Down:Connect(function() huD = true end)
+                hu.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 then UpHu(i) end end)
+                
+                local inputEndedConn
+                local inputChangedConn
+                
+                inputEndedConn = UserInputService.InputEnded:Connect(function(i)
+                    if i.UserInputType == Enum.UserInputType.MouseButton1 then
+                        svD = false
+                        huD = false
+                    end
+                end)
+                
+                inputChangedConn = UserInputService.InputChanged:Connect(function(i)
+                    if i.UserInputType == Enum.UserInputType.MouseMovement then
+                        if svD then UpSV(i) end
+                        if huD then UpHu(i) end
+                    end
+                end)
+                
+                bg.MouseButton1Click:Connect(function()
+                    cpDisplay.BackgroundColor3 = currentColor
+                    if flag then Zonix.Flags[flag] = currentColor end
+                    pcall(callback, currentColor)
+                    pickerOpen = false
+                    inputEndedConn:Disconnect()
+                    inputChangedConn:Disconnect()
+                    sg:Destroy()
+                end)
+                
+                sg.Destroying:Connect(function()
+                    pickerOpen = false
+                    if inputEndedConn then inputEndedConn:Disconnect() end
+                    if inputChangedConn then inputChangedConn:Disconnect() end
+                end)
             end)
             
             if cpConfig.Tooltip then
@@ -1709,6 +1953,7 @@ function Zonix:Window(config)
                 end
             }
         end
+        
         
         function tab:CopyButton(cbConfig)
             cbConfig = cbConfig or {}
