@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZONIX UI v1.2 - Complete Documentation</title>
+    <title>ZONIX UI v1.3 - Complete Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -696,7 +696,7 @@
         <div class="header-content">
             <div>
                 <div class="logo glitch">ZONIX UI</div>
-                <div class="version">v1.2 | By Zontraz</div>
+                <div class="version">v1.3 | By Zontraz</div>
             </div>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -715,7 +715,7 @@
     </header>
 
     <section class="hero">
-        <h1 class="neon">ZONIX UI v1.2</h1>
+        <h1 class="neon">ZONIX UI v1.3</h1>
         <p>The most advanced UI library for Roblox exploits. Modern. Powerful. Universal.</p>
         <div class="cta-buttons">
             <a href="#installation" class="btn btn-primary">GET STARTED</a>
@@ -1817,6 +1817,351 @@ Progress:<span class="function">Set</span>(<span class="number">1.0</span>)</cod
                 <li>1.0 (100%): Green/Success color</li>
             </ul>
 
+            <h3 class="section-subtitle">✅ Checkbox</h3>
+            <p>Simple checkbox toggle control with on/off states.</p>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">LUA</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code><span class="keyword">local</span> Checkbox = Tab:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Enable Auto-Farm"</span>,
+    Default = <span class="keyword">false</span>,
+    Flag = <span class="string">"AutoFarm"</span>,
+    Callback = <span class="keyword">function</span>(checked)
+        <span class="function">print</span>(<span class="string">"Checkbox:"</span>, checked)
+    <span class="keyword">end</span>
+})
+
+Checkbox:<span class="function">Set</span>(<span class="keyword">true</span>)</code></pre>
+            </div>
+
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>string</td>
+                        <td>✗</td>
+                        <td>The checkbox label (default: "Checkbox")</td>
+                    </tr>
+                    <tr>
+                        <td>Default</td>
+                        <td>boolean</td>
+                        <td>✗</td>
+                        <td>Starting state (default: false)</td>
+                    </tr>
+                    <tr>
+                        <td>Flag</td>
+                        <td>string</td>
+                        <td>✗</td>
+                        <td>Flag name for accessing value</td>
+                    </tr>
+                    <tr>
+                        <td>Callback</td>
+                        <td>function</td>
+                        <td>✗</td>
+                        <td>Function called when toggled</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="section-subheading">Methods:</h4>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Parameters</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Set</td>
+                        <td>value (boolean)</td>
+                        <td>Set checkbox state (true/false)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="section-subheading">Features:</h4>
+            <ul style="color: var(--text-gray); margin-left: 2rem;">
+                <li>Simple on/off visual indicator</li>
+                <li>Similar to toggles but with checkbox styling</li>
+                <li>Perfect for use inside GroupBoxes</li>
+                <li>Flag system integration</li>
+            </ul>
+
+            <h3 class="section-subtitle">📏 Spacing</h3>
+            <p>Add custom vertical spacing between UI components.</p>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">LUA</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code>Tab:<span class="function">Button</span>({ Name = <span class="string">"Button 1"</span> })
+
+Tab:<span class="function">AddSpacing</span>(<span class="number">10</span>)  <span class="comment">-- Add 10 pixels</span>
+
+Tab:<span class="function">Button</span>({ Name = <span class="string">"Button 2"</span> })
+
+Tab:<span class="function">AddSpacing</span>(<span class="number">20</span>)  <span class="comment">-- Add 20 pixels</span>
+
+Tab:<span class="function">Button</span>({ Name = <span class="string">"Button 3"</span> })</code></pre>
+            </div>
+
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>pixels</td>
+                        <td>number</td>
+                        <td>Amount of vertical spacing in pixels (default: 10)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="section-subheading">Use Cases:</h4>
+            <ul style="color: var(--text-gray); margin-left: 2rem;">
+                <li>Separate different sections visually</li>
+                <li>Add breathing room between dense UI elements</li>
+                <li>Create visual hierarchy in your interface</li>
+                <li>Works in Tabs, SubTabs, and GroupBoxes</li>
+            </ul>
+
+            <h3 class="section-subtitle">📦 GroupBox</h3>
+            <p>Group related UI elements together with a labeled container.</p>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">LUA</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code><span class="keyword">local</span> FarmGroup = Tab:<span class="function">GroupBox</span>({
+    Name = <span class="string">"Farming Options"</span>,
+    Inline = <span class="keyword">false</span>  <span class="comment">-- Full width (default)</span>
+})
+
+FarmGroup:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Auto Collect"</span>,
+    Default = <span class="keyword">true</span>
+})
+
+FarmGroup:<span class="function">AddSpacing</span>(<span class="number">5</span>)
+
+FarmGroup:<span class="function">Button</span>({
+    Name = <span class="string">"Start Farming"</span>,
+    Callback = <span class="keyword">function</span>()
+        <span class="function">print</span>(<span class="string">"Started!"</span>)
+    <span class="keyword">end</span>
+})</code></pre>
+            </div>
+
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>string</td>
+                        <td>✗</td>
+                        <td>GroupBox title (default: "Group")</td>
+                    </tr>
+                    <tr>
+                        <td>Inline</td>
+                        <td>boolean</td>
+                        <td>✗</td>
+                        <td>Use inline layout (48% width, default: false)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="section-subheading">GroupBox Methods:</h4>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Checkbox(config)</td>
+                        <td>Add a checkbox to the group</td>
+                    </tr>
+                    <tr>
+                        <td>Button(config)</td>
+                        <td>Add a button to the group</td>
+                    </tr>
+                    <tr>
+                        <td>AddSpacing(pixels)</td>
+                        <td>Add vertical spacing inside the group</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="section-subheading">Features:</h4>
+            <ul style="color: var(--text-gray); margin-left: 2rem;">
+                <li>Organizes related controls together</li>
+                <li>Labeled header with accent color</li>
+                <li>Supports inline mode for side-by-side layout</li>
+                <li>Can be nested in Tabs and SubTabs</li>
+            </ul>
+
+            <h3 class="section-subtitle">📑 SubTab</h3>
+            <p>Create tabs within tabs for advanced organization.</p>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">LUA</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code><span class="keyword">local</span> MySubTabs = Tab:<span class="function">SubTab</span>({
+    Tabs = {<span class="string">"General"</span>, <span class="string">"Advanced"</span>, <span class="string">"Settings"</span>}
+})
+
+<span class="comment">-- Access individual sub-tabs</span>
+<span class="keyword">local</span> GeneralTab = MySubTabs.Tabs[<span class="number">1</span>]
+<span class="keyword">local</span> AdvancedTab = MySubTabs.Tabs[<span class="number">2</span>]
+<span class="keyword">local</span> SettingsTab = MySubTabs.Tabs[<span class="number">3</span>]
+
+<span class="comment">-- Add elements to sub-tabs</span>
+GeneralTab:<span class="function">Button</span>({
+    Name = <span class="string">"Basic Action"</span>,
+    Callback = <span class="keyword">function</span>()
+        <span class="function">print</span>(<span class="string">"General action!"</span>)
+    <span class="keyword">end</span>
+})
+
+AdvancedTab:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Advanced Feature"</span>,
+    Default = <span class="keyword">false</span>
+})</code></pre>
+            </div>
+
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tabs</td>
+                        <td>table</td>
+                        <td>✓</td>
+                        <td>Array of sub-tab names</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="section-subheading">SubTab Methods:</h4>
+            <p style="color: var(--text-gray);">Each sub-tab supports:</p>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Button(config)</td>
+                        <td>Add a button</td>
+                    </tr>
+                    <tr>
+                        <td>Checkbox(config)</td>
+                        <td>Add a checkbox</td>
+                    </tr>
+                    <tr>
+                        <td>AddSpacing(pixels)</td>
+                        <td>Add vertical spacing</td>
+                    </tr>
+                    <tr>
+                        <td>GroupBox(config)</td>
+                        <td>Add a group box</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 class="section-subheading">Features:</h4>
+            <ul style="color: var(--text-gray); margin-left: 2rem;">
+                <li>Tabs within tabs for complex organization</li>
+                <li>Clean horizontal tab switcher</li>
+                <li>Supports all standard UI components</li>
+                <li>Perfect for organizing settings by category</li>
+            </ul>
+
+            <h3 class="section-subtitle">➡️ In-line Layout</h3>
+            <p>Place GroupBoxes side-by-side instead of stacking vertically.</p>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">LUA</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code><span class="comment">-- Start inline layout</span>
+<span class="keyword">local</span> inline = Tab:<span class="function">StartInline</span>()
+
+<span class="comment">-- Add GroupBoxes that will appear side-by-side</span>
+<span class="keyword">local</span> SpeedGroup = Tab:<span class="function">GroupBox</span>({
+    Name = <span class="string">"Speed Settings"</span>,
+    Inline = <span class="keyword">true</span>
+})
+
+<span class="keyword">local</span> FarmGroup = Tab:<span class="function">GroupBox</span>({
+    Name = <span class="string">"Farming Settings"</span>,
+    Inline = <span class="keyword">true</span>
+})
+
+<span class="comment">-- Stop inline layout</span>
+inline.<span class="function">Stop</span>()
+
+<span class="comment">-- Elements below will stack normally</span>
+Tab:<span class="function">Button</span>({
+    Name = <span class="string">"Apply Settings"</span>
+})</code></pre>
+            </div>
+
+            <h4 class="section-subheading">How it Works:</h4>
+            <ol style="color: var(--text-gray); margin-left: 2rem;">
+                <li>Call <code>Tab:StartInline()</code> to begin horizontal layout</li>
+                <li>Add GroupBoxes with <code>Inline = true</code> (they'll appear side-by-side)</li>
+                <li>Call <code>inline.Stop()</code> to return to normal vertical stacking</li>
+            </ol>
+
+            <h4 class="section-subheading">Best Practices:</h4>
+            <ul style="color: var(--text-gray); margin-left: 2rem;">
+                <li>Use for grouping related controls (e.g., Speed section next to Farming section)</li>
+                <li>Limit to 2 inline groups for optimal mobile compatibility</li>
+                <li>Always call <code>.Stop()</code> to prevent layout issues</li>
+                <li>Each inline GroupBox takes 48% width, leaving 4% for spacing</li>
+            </ul>
+
             <h3 class="section-subtitle">💧 Watermark</h3>
             <p>Display executor info, branding, or status in a persistent watermark.</p>
             
@@ -1844,7 +2189,7 @@ Progress:<span class="function">Set</span>(<span class="number">1.0</span>)</cod
                         <td>Text</td>
                         <td>string</td>
                         <td>✗</td>
-                        <td>Watermark text (default: "Zonix UI v1.2 | {Executor}")</td>
+                        <td>Watermark text (default: "Zonix UI v1.3 | {Executor}")</td>
                     </tr>
                 </tbody>
             </table>
@@ -2789,6 +3134,138 @@ Tab:<span class="function">Section</span>(<span class="string">"Utility Componen
 Tab:<span class="function">CopyButton</span>({ Name = <span class="string">"Copy URL"</span>, Text = <span class="string">"https://hub.zon.su"</span> })
 Tab:<span class="function">ProgressBar</span>({ Name = <span class="string">"Progress"</span>, Progress = <span class="number">0.75</span> })</code></pre>
             </div>
+
+            <h3 class="section-subtitle">Example 5: New v1.3 Features <span style="color: var(--accent-green);">✨</span></h3>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">LUA - v1.3 FEATURES SHOWCASE</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
+<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"v1.3 Features"</span>, Icon = <span class="string">"rbxassetid://90642687165275"</span> })
+<span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({ Name = <span class="string">"New Features"</span>, Icon = <span class="string">"✨"</span> })
+
+<span class="comment">-- Checkboxes</span>
+Tab:<span class="function">Section</span>(<span class="string">"Checkboxes"</span>)
+Tab:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Auto Farm"</span>,
+    Default = <span class="keyword">true</span>,
+    Flag = <span class="string">"AutoFarm"</span>,
+    Callback = <span class="keyword">function</span>(checked)
+        <span class="function">print</span>(<span class="string">"Auto Farm:"</span>, checked)
+    <span class="keyword">end</span>
+})
+
+Tab:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Auto Collect"</span>,
+    Default = <span class="keyword">false</span>,
+    Flag = <span class="string">"AutoCollect"</span>
+})
+
+Tab:<span class="function">AddSpacing</span>(<span class="number">10</span>)  <span class="comment">-- Add spacing</span>
+
+<span class="comment">-- SubTabs</span>
+Tab:<span class="function">Section</span>(<span class="string">"SubTabs Example"</span>)
+<span class="keyword">local</span> MySubTabs = Tab:<span class="function">SubTab</span>({
+    Tabs = {<span class="string">"General"</span>, <span class="string">"Advanced"</span>, <span class="string">"Settings"</span>}
+})
+
+<span class="comment">-- General SubTab</span>
+MySubTabs.Tabs[<span class="number">1</span>]:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Enable Notifications"</span>,
+    Default = <span class="keyword">true</span>
+})
+
+MySubTabs.Tabs[<span class="number">1</span>]:<span class="function">AddSpacing</span>(<span class="number">5</span>)
+
+MySubTabs.Tabs[<span class="number">1</span>]:<span class="function">Button</span>({
+    Name = <span class="string">"Test Button"</span>,
+    Callback = <span class="keyword">function</span>()
+        Zonix:<span class="function">Notify</span>({
+            Title = <span class="string">"SubTab Test"</span>,
+            Content = <span class="string">"Button in General tab clicked!"</span>,
+            Type = <span class="string">"Success"</span>
+        })
+    <span class="keyword">end</span>
+})
+
+<span class="comment">-- Advanced SubTab</span>
+MySubTabs.Tabs[<span class="number">2</span>]:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Debug Mode"</span>,
+    Default = <span class="keyword">false</span>
+})
+
+<span class="comment">-- Settings SubTab</span>
+MySubTabs.Tabs[<span class="number">3</span>]:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Save on Exit"</span>,
+    Default = <span class="keyword">true</span>
+})
+
+Tab:<span class="function">AddSpacing</span>(<span class="number">15</span>)
+
+<span class="comment">-- In-line Layout with GroupBoxes</span>
+Tab:<span class="function">Section</span>(<span class="string">"In-line GroupBoxes"</span>)
+<span class="keyword">local</span> inline = Tab:<span class="function">StartInline</span>()
+
+<span class="keyword">local</span> SpeedGroup = Tab:<span class="function">GroupBox</span>({
+    Name = <span class="string">"Speed Settings"</span>,
+    Inline = <span class="keyword">true</span>
+})
+
+SpeedGroup:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Speed Enabled"</span>,
+    Default = <span class="keyword">false</span>
+})
+
+SpeedGroup:<span class="function">AddSpacing</span>(<span class="number">3</span>)
+
+SpeedGroup:<span class="function">Button</span>({
+    Name = <span class="string">"Apply Speed"</span>,
+    Callback = <span class="keyword">function</span>()
+        <span class="function">print</span>(<span class="string">"Speed applied!"</span>)
+    <span class="keyword">end</span>
+})
+
+<span class="keyword">local</span> FarmGroup = Tab:<span class="function">GroupBox</span>({
+    Name = <span class="string">"Farm Settings"</span>,
+    Inline = <span class="keyword">true</span>
+})
+
+FarmGroup:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Auto Farm"</span>,
+    Default = <span class="keyword">true</span>
+})
+
+FarmGroup:<span class="function">AddSpacing</span>(<span class="number">3</span>)
+
+FarmGroup:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Sell Items"</span>,
+    Default = <span class="keyword">false</span>
+})
+
+inline.<span class="function">Stop</span>()  <span class="comment">-- Stop inline layout</span>
+
+Tab:<span class="function">AddSpacing</span>(<span class="number">10</span>)
+
+<span class="comment">-- Regular GroupBox (full width)</span>
+<span class="keyword">local</span> MiscGroup = Tab:<span class="function">GroupBox</span>({
+    Name = <span class="string">"Miscellaneous"</span>
+})
+
+MiscGroup:<span class="function">Checkbox</span>({
+    Name = <span class="string">"Anti-AFK"</span>,
+    Default = <span class="keyword">true</span>
+})
+
+MiscGroup:<span class="function">AddSpacing</span>(<span class="number">5</span>)
+
+MiscGroup:<span class="function">Button</span>({
+    Name = <span class="string">"Rejoin Server"</span>,
+    Callback = <span class="keyword">function</span>()
+        <span class="function">game:GetService</span>(<span class="string">"TeleportService"</span>):<span class="function">Teleport</span>(game.PlaceId)
+    <span class="keyword">end</span>
+})</code></pre>
+            </div>
         </section>
 
         <section class="section" id="faq">
@@ -2857,7 +3334,7 @@ Tab:<span class="function">ProgressBar</span>({ Name = <span class="string">"Pro
                 <a href="#examples">Examples</a>
             </div>
             <div class="copyright">
-                <p>&copy; 2026 <strong class="neon">ZONIX UI v1.2</strong></p>
+                <p>&copy; 2026 <strong class="neon">ZONIX UI v1.3</strong></p>
                 <p>Created by <strong>Zontraz</strong> | <a href="https://zon.su" style="color: var(--accent-cyan);">zon.su</a></p>
             </div>
         </div>
