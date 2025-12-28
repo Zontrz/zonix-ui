@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ ZONIX UI v1.2
+# ⚡ ZONIX UI v1.3
 
 ### The Ultimate Roblox UI Library
 
@@ -18,7 +18,7 @@
 - 📱 **Fully Responsive** - Works perfectly on mobile, tablet, and desktop
 - 🎮 **Touch Support** - Native touch controls for mobile devices
 - 💾 **Config System** - Save and load your settings
-- 🔧 **14 Components** - Everything you need to build powerful UIs
+- 🔧 **18 Components** - Everything you need to build powerful UIs
 - ⚡ **Notifications & Prompts** - Built-in user feedback system
 - 🌈 **Custom Themes** - Create your own themes with 13 color properties
 - 🌈 **Rainbow Mode** - Animated rainbow borders and effects
@@ -26,6 +26,11 @@
 - 📋 **Clipboard Support** - Works across all executors
 - ⚙️ **Auto-Detection** - Automatically detects and adapts to your executor
 - 🖼️ **Custom Window Icons** - Add custom rbxassetid images to window topbars
+- ✅ **Checkboxes** - NEW! Simple toggle controls
+- 📑 **SubTabs** - NEW! Organize content with tabs within tabs
+- 📦 **GroupBoxes** - NEW! Group UI elements together
+- 📏 **Spacing Control** - NEW! Add custom spacing between elements
+- ➡️ **In-line Layout** - NEW! Place elements side-by-side
 
 ---
 
@@ -85,6 +90,7 @@ Tab:Button({
   - [Divider](#divider)
   - [Button](#button)
   - [Toggle](#toggle)
+  - [Checkbox](#checkbox-new)
   - [Slider](#slider)
   - [Dropdown](#dropdown)
   - [Textbox](#textbox)
@@ -92,6 +98,10 @@ Tab:Button({
   - [ColorPicker](#colorpicker)
   - [CopyButton](#copybutton)
   - [ProgressBar](#progressbar)
+  - [Spacing](#spacing-new)
+  - [GroupBox](#groupbox-new)
+  - [SubTab](#subtab-new)
+  - [In-line Layout](#in-line-layout-new)
 - [Utilities](#-utilities)
   - [Notifications](#notifications)
   - [Prompts](#prompts)
@@ -432,6 +442,170 @@ MyProgress:Set(0.75)                     -- Update progress (0 to 1)
 
 ---
 
+### Checkbox *(NEW!)*
+
+Simple checkbox toggle control.
+
+```lua
+local MyCheckbox = Tab:Checkbox({
+    Name = "Enable Auto-Farm",            -- Checkbox label (required)
+    Default = false,                      -- Starting state (optional, default: false)
+    Flag = "AutoFarm",                    -- Flag name (optional)
+    Callback = function(checked)          -- Function called on toggle (optional)
+        print("Checkbox is:", checked)
+    end
+})
+
+-- Methods
+MyCheckbox:Set(true)                      -- Update checkbox state
+local isChecked = Zonix.Flags.AutoFarm   -- Access current value via flag
+```
+
+**Methods:**
+- `:Set(value)` - Set checkbox state (true/false)
+
+**Note:** Checkboxes are similar to toggles but with a different visual style. Use checkboxes for simple on/off options within groups.
+
+---
+
+### Spacing *(NEW!)*
+
+Add custom vertical spacing between components.
+
+```lua
+Tab:AddSpacing(10)                        -- Add 10 pixels of spacing
+Tab:AddSpacing(20)                        -- Add 20 pixels of spacing
+```
+
+**Use Cases:**
+- Separate different sections visually
+- Add breathing room between dense UI elements
+- Create visual hierarchy in your interface
+
+---
+
+### GroupBox *(NEW!)*
+
+Group related UI elements together with a labeled container.
+
+```lua
+local FarmGroup = Tab:GroupBox({
+    Name = "Farming Options",             -- GroupBox title (required)
+    Inline = false                        -- Use inline layout (optional, default: false)
+})
+
+-- Add elements to the GroupBox
+FarmGroup:Checkbox({
+    Name = "Auto Collect",
+    Default = true,
+    Callback = function(checked)
+        print("Auto collect:", checked)
+    end
+})
+
+FarmGroup:AddSpacing(5)
+
+FarmGroup:Button({
+    Name = "Start Farming",
+    Callback = function()
+        print("Farming started!")
+    end
+})
+```
+
+**GroupBox Methods:**
+- `:Checkbox(config)` - Add a checkbox to the group
+- `:Button(config)` - Add a button to the group
+- `:AddSpacing(pixels)` - Add spacing within the group
+
+**Inline Option:**
+When `Inline = true`, the GroupBox takes up only 48% width, allowing you to place two GroupBoxes side-by-side using the in-line layout system.
+
+---
+
+### SubTab *(NEW!)*
+
+Create tabs within tabs for better organization.
+
+```lua
+local MySubTabs = Tab:SubTab({
+    Tabs = {"General", "Advanced", "Settings"}  -- SubTab names (required)
+})
+
+-- Access individual sub-tabs
+local GeneralTab = MySubTabs.Tabs[1]
+local AdvancedTab = MySubTabs.Tabs[2]
+local SettingsTab = MySubTabs.Tabs[3]
+
+-- Add elements to sub-tabs
+GeneralTab:Button({
+    Name = "Basic Action",
+    Callback = function()
+        print("General action!")
+    end
+})
+
+AdvancedTab:Checkbox({
+    Name = "Advanced Feature",
+    Default = false
+})
+
+SettingsTab:GroupBox({
+    Name = "Config"
+}):Checkbox({
+    Name = "Save on Exit"
+})
+```
+
+**SubTab Methods:**
+Each sub-tab supports:
+- `:Button(config)` - Add a button
+- `:Checkbox(config)` - Add a checkbox
+- `:AddSpacing(pixels)` - Add spacing
+- `:GroupBox(config)` - Add a group box
+
+---
+
+### In-line Layout *(NEW!)*
+
+Place elements side-by-side instead of stacking vertically.
+
+```lua
+-- Start inline layout
+local inline = Tab:StartInline()
+
+-- Add GroupBoxes that will appear side-by-side
+local LeftGroup = Tab:GroupBox({
+    Name = "Speed Settings",
+    Inline = true
+})
+
+local RightGroup = Tab:GroupBox({
+    Name = "Farming Settings",
+    Inline = true
+})
+
+-- Stop inline layout
+inline.Stop()
+
+-- Elements below this will stack normally again
+Tab:Button({
+    Name = "Apply Settings"
+})
+```
+
+**How it Works:**
+1. Call `Tab:StartInline()` to begin horizontal layout
+2. Add GroupBoxes with `Inline = true` (they'll appear side-by-side)
+3. Call `inline.Stop()` to return to normal vertical stacking
+
+**Best Practices:**
+- Use inline layout for grouping related controls (e.g., Speed section next to Farming section)
+- Limit to 2 inline groups for optimal mobile compatibility
+- Always call `.Stop()` to prevent layout issues
+
+---
+
 ## 🛠️ Utilities
 
 ### Notifications
@@ -711,6 +885,135 @@ Tab:Divider()
 Tab:Section("Utility Components")
 Tab:CopyButton({ Name = "Copy URL", Text = "https://hub.zon.su" })
 Tab:ProgressBar({ Name = "Progress", Progress = 0.75 })
+```
+
+### Example 5: New v1.3 Features Showcase
+
+```lua
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
+local Window = Zonix:Window({ Name = "v1.3 Features", Icon = "rbxassetid://90642687165275" })
+local Tab = Window:Tab({ Name = "New Features", Icon = "✨" })
+
+-- Checkboxes
+Tab:Section("Checkboxes")
+Tab:Checkbox({
+    Name = "Auto Farm",
+    Default = true,
+    Flag = "AutoFarm",
+    Callback = function(checked)
+        print("Auto Farm:", checked)
+    end
+})
+
+Tab:Checkbox({
+    Name = "Auto Collect",
+    Default = false,
+    Flag = "AutoCollect"
+})
+
+Tab:AddSpacing(10)  -- Add spacing
+
+-- SubTabs
+Tab:Section("SubTabs Example")
+local MySubTabs = Tab:SubTab({
+    Tabs = {"General", "Advanced", "Settings"}
+})
+
+-- General SubTab
+MySubTabs.Tabs[1]:Checkbox({
+    Name = "Enable Notifications",
+    Default = true
+})
+
+MySubTabs.Tabs[1]:AddSpacing(5)
+
+MySubTabs.Tabs[1]:Button({
+    Name = "Test Button",
+    Callback = function()
+        Zonix:Notify({
+            Title = "SubTab Test",
+            Content = "Button in General tab clicked!",
+            Type = "Success"
+        })
+    end
+})
+
+-- Advanced SubTab
+MySubTabs.Tabs[2]:Checkbox({
+    Name = "Debug Mode",
+    Default = false
+})
+
+-- Settings SubTab
+MySubTabs.Tabs[3]:Checkbox({
+    Name = "Save on Exit",
+    Default = true
+})
+
+Tab:AddSpacing(15)
+
+-- In-line Layout with GroupBoxes
+Tab:Section("In-line GroupBoxes")
+local inline = Tab:StartInline()
+
+local SpeedGroup = Tab:GroupBox({
+    Name = "Speed Settings",
+    Inline = true
+})
+
+SpeedGroup:Checkbox({
+    Name = "Speed Enabled",
+    Default = false
+})
+
+SpeedGroup:AddSpacing(3)
+
+SpeedGroup:Button({
+    Name = "Apply Speed",
+    Callback = function()
+        print("Speed applied!")
+    end
+})
+
+local FarmGroup = Tab:GroupBox({
+    Name = "Farm Settings",
+    Inline = true
+})
+
+FarmGroup:Checkbox({
+    Name = "Auto Farm",
+    Default = true
+})
+
+FarmGroup:AddSpacing(3)
+
+FarmGroup:Checkbox({
+    Name = "Sell Items",
+    Default = false
+})
+
+inline.Stop()  -- Stop inline layout
+
+Tab:AddSpacing(10)
+
+-- Regular GroupBox (full width)
+local MiscGroup = Tab:GroupBox({
+    Name = "Miscellaneous"
+})
+
+MiscGroup:Checkbox({
+    Name = "Anti-AFK",
+    Default = true
+})
+
+MiscGroup:AddSpacing(5)
+
+MiscGroup:Button({
+    Name = "Rejoin Server",
+    Callback = function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId)
+    end
+})
 ```
 
 ---
