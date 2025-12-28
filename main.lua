@@ -1,6 +1,6 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.2                             ║
+    ║                    Zonix UI v1.3                             ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
@@ -24,6 +24,7 @@
       • Windows & Tabs
       • Buttons with callbacks
       • Toggles with smooth animations
+      • Checkboxes (NEW!)
       • Sliders (draggable)
       • Dropdowns (expandable)
       • Textboxes with validation
@@ -49,6 +50,10 @@
       • Transparency Sliders
       • Toggle Groups
       • Custom Themes
+      • SubTabs (NEW!)
+      • GroupBoxes (NEW!)
+      • Spacing Control (NEW!)
+      • In-line Layout (NEW!)
     
     ✓ UI FEATURES:
       • 3 Built-in Themes + Custom
@@ -168,7 +173,7 @@ Executor.ListFiles = FindFunc("listfiles") or function() return {} end
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.2",
+    Version = "1.3",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -2126,6 +2131,710 @@ function Zonix:Window(config)
             }
         end
         
+        function tab:Checkbox(cbConfig)
+            cbConfig = cbConfig or {}
+            local cbName = cbConfig.Name or "Checkbox"
+            local default = cbConfig.Default or false
+            local callback = cbConfig.Callback or function() end
+            local flag = cbConfig.Flag
+            
+            local cbFrame = Instance.new("Frame")
+            cbFrame.BackgroundColor3 = theme.Secondary
+            cbFrame.BorderSizePixel = 0
+            cbFrame.Size = UDim2.new(1, 0, 0, 40)
+            cbFrame.Parent = tabContent
+            
+            local cbCorner = Instance.new("UICorner")
+            cbCorner.CornerRadius = UDim.new(0, 8)
+            cbCorner.Parent = cbFrame
+            
+            local cbStroke = Instance.new("UIStroke")
+            cbStroke.Color = theme.Border
+            cbStroke.Thickness = 1
+            cbStroke.Parent = cbFrame
+            
+            local cbLabel = Instance.new("TextLabel")
+            cbLabel.BackgroundTransparency = 1
+            cbLabel.Position = UDim2.new(0, 10, 0, 0)
+            cbLabel.Size = UDim2.new(1, -50, 1, 0)
+            cbLabel.Font = Enum.Font.GothamBold
+            cbLabel.Text = cbName
+            cbLabel.TextColor3 = theme.Text
+            cbLabel.TextSize = 13
+            cbLabel.TextXAlignment = Enum.TextXAlignment.Left
+            cbLabel.Parent = cbFrame
+            
+            local checkbox = Instance.new("TextButton")
+            checkbox.BackgroundColor3 = theme.Tertiary
+            checkbox.BorderSizePixel = 0
+            checkbox.AnchorPoint = Vector2.new(1, 0.5)
+            checkbox.Position = UDim2.new(1, -10, 0.5, 0)
+            checkbox.Size = UDim2.new(0, 24, 0, 24)
+            checkbox.Font = Enum.Font.GothamBold
+            checkbox.Text = ""
+            checkbox.TextColor3 = theme.Text
+            checkbox.TextSize = 16
+            checkbox.Parent = cbFrame
+            
+            local checkCorner = Instance.new("UICorner")
+            checkCorner.CornerRadius = UDim.new(0, 6)
+            checkCorner.Parent = checkbox
+            
+            local checkStroke = Instance.new("UIStroke")
+            checkStroke.Color = theme.Border
+            checkStroke.Thickness = 2
+            checkStroke.Parent = checkbox
+            
+            local checked = default
+            if flag then
+                Zonix.Flags[flag] = checked
+            end
+            
+            local function updateCheckbox()
+                checkbox.Text = checked and "✓" or ""
+                checkbox.BackgroundColor3 = checked and theme.Accent or theme.Tertiary
+                checkStroke.Color = checked and theme.Accent or theme.Border
+            end
+            
+            updateCheckbox()
+            
+            checkbox.MouseButton1Click:Connect(function()
+                checked = not checked
+                if flag then
+                    Zonix.Flags[flag] = checked
+                end
+                updateCheckbox()
+                Utils:Ripple(checkbox)
+                callback(checked)
+            end)
+            
+            cbFrame.MouseEnter:Connect(function()
+                Utils:Tween(cbStroke, {Color = theme.Accent}, 0.2)
+            end)
+            
+            cbFrame.MouseLeave:Connect(function()
+                Utils:Tween(cbStroke, {Color = theme.Border}, 0.2)
+            end)
+            
+            return {
+                Set = function(_, value)
+                    checked = value
+                    if flag then
+                        Zonix.Flags[flag] = checked
+                    end
+                    updateCheckbox()
+                    callback(checked)
+                end
+            }
+        end
+        
+        function tab:AddSpacing(pixels)
+            pixels = pixels or 10
+            
+            local spacer = Instance.new("Frame")
+            spacer.BackgroundTransparency = 1
+            spacer.BorderSizePixel = 0
+            spacer.Size = UDim2.new(1, 0, 0, pixels)
+            spacer.Parent = tabContent
+        end
+        
+        function tab:GroupBox(gbConfig)
+            gbConfig = gbConfig or {}
+            local gbName = gbConfig.Name or "Group"
+            local inline = gbConfig.Inline or false
+            
+            local groupBox = {
+                Elements = {},
+                Container = nil
+            }
+            
+            local gbFrame = Instance.new("Frame")
+            gbFrame.BackgroundColor3 = theme.Secondary
+            gbFrame.BorderSizePixel = 0
+            gbFrame.Size = inline and UDim2.new(0.48, 0, 0, 0) or UDim2.new(1, 0, 0, 0)
+            gbFrame.AutomaticSize = Enum.AutomaticSize.Y
+            gbFrame.Parent = tabContent
+            
+            local gbCorner = Instance.new("UICorner")
+            gbCorner.CornerRadius = UDim.new(0, 8)
+            gbCorner.Parent = gbFrame
+            
+            local gbStroke = Instance.new("UIStroke")
+            gbStroke.Color = theme.Border
+            gbStroke.Thickness = 1
+            gbStroke.Parent = gbFrame
+            
+            local gbHeader = Instance.new("TextLabel")
+            gbHeader.BackgroundTransparency = 1
+            gbHeader.Size = UDim2.new(1, 0, 0, 30)
+            gbHeader.Font = Enum.Font.GothamBold
+            gbHeader.Text = gbName
+            gbHeader.TextColor3 = theme.Accent
+            gbHeader.TextSize = 14
+            gbHeader.TextXAlignment = Enum.TextXAlignment.Left
+            gbHeader.Parent = gbFrame
+            
+            local gbHeaderPad = Instance.new("UIPadding")
+            gbHeaderPad.PaddingLeft = UDim.new(0, 10)
+            gbHeaderPad.Parent = gbHeader
+            
+            local gbContent = Instance.new("Frame")
+            gbContent.BackgroundTransparency = 1
+            gbContent.Position = UDim2.new(0, 0, 0, 35)
+            gbContent.Size = UDim2.new(1, 0, 1, -35)
+            gbContent.AutomaticSize = Enum.AutomaticSize.Y
+            gbContent.Parent = gbFrame
+            
+            local gbList = Instance.new("UIListLayout")
+            gbList.Padding = UDim.new(0, 6)
+            gbList.SortOrder = Enum.SortOrder.LayoutOrder
+            gbList.Parent = gbContent
+            
+            local gbPad = Instance.new("UIPadding")
+            gbPad.PaddingLeft = UDim.new(0, 10)
+            gbPad.PaddingRight = UDim.new(0, 10)
+            gbPad.PaddingBottom = UDim.new(0, 10)
+            gbPad.Parent = gbContent
+            
+            groupBox.Container = gbContent
+            
+            function groupBox:Button(btnConfig)
+                btnConfig = btnConfig or {}
+                local btnName = btnConfig.Name or "Button"
+                local callback = btnConfig.Callback or function() end
+                
+                local btnFrame = Instance.new("TextButton")
+                btnFrame.BackgroundColor3 = theme.Accent
+                btnFrame.BorderSizePixel = 0
+                btnFrame.Size = UDim2.new(1, 0, 0, 38)
+                btnFrame.Font = Enum.Font.GothamBold
+                btnFrame.Text = btnName
+                btnFrame.TextColor3 = Color3.fromRGB(255, 255, 255)
+                btnFrame.TextSize = 13
+                btnFrame.ClipsDescendants = true
+                btnFrame.Parent = gbContent
+                
+                local btnCorner = Instance.new("UICorner")
+                btnCorner.CornerRadius = UDim.new(0, 8)
+                btnCorner.Parent = btnFrame
+                
+                btnFrame.MouseButton1Click:Connect(function()
+                    Utils:Ripple(btnFrame)
+                    callback()
+                end)
+                
+                btnFrame.MouseEnter:Connect(function()
+                    Utils:Tween(btnFrame, {BackgroundColor3 = theme.AccentDark}, 0.2)
+                end)
+                
+                btnFrame.MouseLeave:Connect(function()
+                    Utils:Tween(btnFrame, {BackgroundColor3 = theme.Accent}, 0.2)
+                end)
+            end
+            
+            function groupBox:Checkbox(cbConfig)
+                cbConfig = cbConfig or {}
+                local cbName = cbConfig.Name or "Checkbox"
+                local default = cbConfig.Default or false
+                local callback = cbConfig.Callback or function() end
+                local flag = cbConfig.Flag
+                
+                local cbFrame = Instance.new("Frame")
+                cbFrame.BackgroundColor3 = theme.Tertiary
+                cbFrame.BorderSizePixel = 0
+                cbFrame.Size = UDim2.new(1, 0, 0, 35)
+                cbFrame.Parent = gbContent
+                
+                local cbCorner = Instance.new("UICorner")
+                cbCorner.CornerRadius = UDim.new(0, 6)
+                cbCorner.Parent = cbFrame
+                
+                local cbLabel = Instance.new("TextLabel")
+                cbLabel.BackgroundTransparency = 1
+                cbLabel.Position = UDim2.new(0, 8, 0, 0)
+                cbLabel.Size = UDim2.new(1, -40, 1, 0)
+                cbLabel.Font = Enum.Font.Gotham
+                cbLabel.Text = cbName
+                cbLabel.TextColor3 = theme.Text
+                cbLabel.TextSize = 12
+                cbLabel.TextXAlignment = Enum.TextXAlignment.Left
+                cbLabel.Parent = cbFrame
+                
+                local checkbox = Instance.new("TextButton")
+                checkbox.BackgroundColor3 = theme.Background
+                checkbox.BorderSizePixel = 0
+                checkbox.AnchorPoint = Vector2.new(1, 0.5)
+                checkbox.Position = UDim2.new(1, -8, 0.5, 0)
+                checkbox.Size = UDim2.new(0, 20, 0, 20)
+                checkbox.Font = Enum.Font.GothamBold
+                checkbox.Text = ""
+                checkbox.TextColor3 = theme.Text
+                checkbox.TextSize = 14
+                checkbox.Parent = cbFrame
+                
+                local checkCorner = Instance.new("UICorner")
+                checkCorner.CornerRadius = UDim.new(0, 4)
+                checkCorner.Parent = checkbox
+                
+                local checkStroke = Instance.new("UIStroke")
+                checkStroke.Color = theme.Border
+                checkStroke.Thickness = 1
+                checkStroke.Parent = checkbox
+                
+                local checked = default
+                if flag then
+                    Zonix.Flags[flag] = checked
+                end
+                
+                local function updateCheckbox()
+                    checkbox.Text = checked and "✓" or ""
+                    checkbox.BackgroundColor3 = checked and theme.Accent or theme.Background
+                    checkStroke.Color = checked and theme.Accent or theme.Border
+                end
+                
+                updateCheckbox()
+                
+                checkbox.MouseButton1Click:Connect(function()
+                    checked = not checked
+                    if flag then
+                        Zonix.Flags[flag] = checked
+                    end
+                    updateCheckbox()
+                    callback(checked)
+                end)
+                
+                return {
+                    Set = function(_, value)
+                        checked = value
+                        if flag then
+                            Zonix.Flags[flag] = checked
+                        end
+                        updateCheckbox()
+                        callback(checked)
+                    end
+                }
+            end
+            
+            function groupBox:AddSpacing(pixels)
+                pixels = pixels or 10
+                local spacer = Instance.new("Frame")
+                spacer.BackgroundTransparency = 1
+                spacer.BorderSizePixel = 0
+                spacer.Size = UDim2.new(1, 0, 0, pixels)
+                spacer.Parent = gbContent
+            end
+            
+            return groupBox
+        end
+        
+        function tab:SubTab(stConfig)
+            stConfig = stConfig or {}
+            local tabNames = stConfig.Tabs or {"SubTab 1", "SubTab 2"}
+            
+            local subTab = {
+                ActiveTab = 1,
+                Tabs = {}
+            }
+            
+            local stFrame = Instance.new("Frame")
+            stFrame.BackgroundTransparency = 1
+            stFrame.Size = UDim2.new(1, 0, 0, 0)
+            stFrame.AutomaticSize = Enum.AutomaticSize.Y
+            stFrame.Parent = tabContent
+            
+            local stHeader = Instance.new("Frame")
+            stHeader.BackgroundColor3 = theme.Secondary
+            stHeader.BorderSizePixel = 0
+            stHeader.Size = UDim2.new(1, 0, 0, 40)
+            stHeader.Parent = stFrame
+            
+            local stHeaderCorner = Instance.new("UICorner")
+            stHeaderCorner.CornerRadius = UDim.new(0, 8)
+            stHeaderCorner.Parent = stHeader
+            
+            local stHeaderStroke = Instance.new("UIStroke")
+            stHeaderStroke.Color = theme.Border
+            stHeaderStroke.Thickness = 1
+            stHeaderStroke.Parent = stHeader
+            
+            local stHeaderList = Instance.new("UIListLayout")
+            stHeaderList.FillDirection = Enum.FillDirection.Horizontal
+            stHeaderList.Padding = UDim.new(0, 4)
+            stHeaderList.SortOrder = Enum.SortOrder.LayoutOrder
+            stHeaderList.Parent = stHeader
+            
+            local stHeaderPad = Instance.new("UIPadding")
+            stHeaderPad.PaddingLeft = UDim.new(0, 5)
+            stHeaderPad.PaddingRight = UDim.new(0, 5)
+            stHeaderPad.PaddingTop = UDim.new(0, 5)
+            stHeaderPad.PaddingBottom = UDim.new(0, 5)
+            stHeaderPad.Parent = stHeader
+            
+            local stContent = Instance.new("Frame")
+            stContent.BackgroundTransparency = 1
+            stContent.Position = UDim2.new(0, 0, 0, 45)
+            stContent.Size = UDim2.new(1, 0, 1, -45)
+            stContent.AutomaticSize = Enum.AutomaticSize.Y
+            stContent.Parent = stFrame
+            
+            for i, tabName in ipairs(tabNames) do
+                local stBtn = Instance.new("TextButton")
+                stBtn.BackgroundColor3 = i == 1 and theme.Accent or theme.Tertiary
+                stBtn.BorderSizePixel = 0
+                stBtn.Size = UDim2.new(1 / #tabNames, -4, 1, 0)
+                stBtn.Font = Enum.Font.GothamBold
+                stBtn.Text = tabName
+                stBtn.TextColor3 = i == 1 and Color3.fromRGB(255, 255, 255) or theme.TextDark
+                stBtn.TextSize = 12
+                stBtn.Parent = stHeader
+                
+                local stBtnCorner = Instance.new("UICorner")
+                stBtnCorner.CornerRadius = UDim.new(0, 6)
+                stBtnCorner.Parent = stBtn
+                
+                local stTabContent = Instance.new("Frame")
+                stTabContent.BackgroundTransparency = 1
+                stTabContent.Size = UDim2.new(1, 0, 1, 0)
+                stTabContent.AutomaticSize = Enum.AutomaticSize.Y
+                stTabContent.Visible = i == 1
+                stTabContent.Parent = stContent
+                
+                local stTabList = Instance.new("UIListLayout")
+                stTabList.Padding = UDim.new(0, 6)
+                stTabList.SortOrder = Enum.SortOrder.LayoutOrder
+                stTabList.Parent = stTabContent
+                
+                local stTabPad = Instance.new("UIPadding")
+                stTabPad.PaddingTop = UDim.new(0, 5)
+                stTabPad.Parent = stTabContent
+                
+                local subTabObj = {
+                    Container = stTabContent,
+                    TabButton = stBtn,
+                    Index = i
+                }
+                
+                function subTabObj:Button(btnConfig)
+                    btnConfig = btnConfig or {}
+                    local btnName = btnConfig.Name or "Button"
+                    local callback = btnConfig.Callback or function() end
+                    
+                    local btnFrame = Instance.new("TextButton")
+                    btnFrame.BackgroundColor3 = theme.Accent
+                    btnFrame.BorderSizePixel = 0
+                    btnFrame.Size = UDim2.new(1, 0, 0, 38)
+                    btnFrame.Font = Enum.Font.GothamBold
+                    btnFrame.Text = btnName
+                    btnFrame.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    btnFrame.TextSize = 13
+                    btnFrame.ClipsDescendants = true
+                    btnFrame.Parent = stTabContent
+                    
+                    local btnCorner = Instance.new("UICorner")
+                    btnCorner.CornerRadius = UDim.new(0, 8)
+                    btnCorner.Parent = btnFrame
+                    
+                    btnFrame.MouseButton1Click:Connect(function()
+                        Utils:Ripple(btnFrame)
+                        callback()
+                    end)
+                    
+                    btnFrame.MouseEnter:Connect(function()
+                        Utils:Tween(btnFrame, {BackgroundColor3 = theme.AccentDark}, 0.2)
+                    end)
+                    
+                    btnFrame.MouseLeave:Connect(function()
+                        Utils:Tween(btnFrame, {BackgroundColor3 = theme.Accent}, 0.2)
+                    end)
+                end
+                
+                function subTabObj:Checkbox(cbConfig)
+                    cbConfig = cbConfig or {}
+                    local cbName = cbConfig.Name or "Checkbox"
+                    local default = cbConfig.Default or false
+                    local callback = cbConfig.Callback or function() end
+                    local flag = cbConfig.Flag
+                    
+                    local cbFrame = Instance.new("Frame")
+                    cbFrame.BackgroundColor3 = theme.Secondary
+                    cbFrame.BorderSizePixel = 0
+                    cbFrame.Size = UDim2.new(1, 0, 0, 40)
+                    cbFrame.Parent = stTabContent
+                    
+                    local cbCorner = Instance.new("UICorner")
+                    cbCorner.CornerRadius = UDim.new(0, 8)
+                    cbCorner.Parent = cbFrame
+                    
+                    local cbStroke = Instance.new("UIStroke")
+                    cbStroke.Color = theme.Border
+                    cbStroke.Thickness = 1
+                    cbStroke.Parent = cbFrame
+                    
+                    local cbLabel = Instance.new("TextLabel")
+                    cbLabel.BackgroundTransparency = 1
+                    cbLabel.Position = UDim2.new(0, 10, 0, 0)
+                    cbLabel.Size = UDim2.new(1, -50, 1, 0)
+                    cbLabel.Font = Enum.Font.GothamBold
+                    cbLabel.Text = cbName
+                    cbLabel.TextColor3 = theme.Text
+                    cbLabel.TextSize = 13
+                    cbLabel.TextXAlignment = Enum.TextXAlignment.Left
+                    cbLabel.Parent = cbFrame
+                    
+                    local checkbox = Instance.new("TextButton")
+                    checkbox.BackgroundColor3 = theme.Tertiary
+                    checkbox.BorderSizePixel = 0
+                    checkbox.AnchorPoint = Vector2.new(1, 0.5)
+                    checkbox.Position = UDim2.new(1, -10, 0.5, 0)
+                    checkbox.Size = UDim2.new(0, 24, 0, 24)
+                    checkbox.Font = Enum.Font.GothamBold
+                    checkbox.Text = ""
+                    checkbox.TextColor3 = theme.Text
+                    checkbox.TextSize = 16
+                    checkbox.Parent = cbFrame
+                    
+                    local checkCorner = Instance.new("UICorner")
+                    checkCorner.CornerRadius = UDim.new(0, 6)
+                    checkCorner.Parent = checkbox
+                    
+                    local checkStroke = Instance.new("UIStroke")
+                    checkStroke.Color = theme.Border
+                    checkStroke.Thickness = 2
+                    checkStroke.Parent = checkbox
+                    
+                    local checked = default
+                    if flag then
+                        Zonix.Flags[flag] = checked
+                    end
+                    
+                    local function updateCheckbox()
+                        checkbox.Text = checked and "✓" or ""
+                        checkbox.BackgroundColor3 = checked and theme.Accent or theme.Tertiary
+                        checkStroke.Color = checked and theme.Accent or theme.Border
+                    end
+                    
+                    updateCheckbox()
+                    
+                    checkbox.MouseButton1Click:Connect(function()
+                        checked = not checked
+                        if flag then
+                            Zonix.Flags[flag] = checked
+                        end
+                        updateCheckbox()
+                        Utils:Ripple(checkbox)
+                        callback(checked)
+                    end)
+                    
+                    return {
+                        Set = function(_, value)
+                            checked = value
+                            if flag then
+                                Zonix.Flags[flag] = checked
+                            end
+                            updateCheckbox()
+                            callback(checked)
+                        end
+                    }
+                end
+                
+                function subTabObj:AddSpacing(pixels)
+                    pixels = pixels or 10
+                    local spacer = Instance.new("Frame")
+                    spacer.BackgroundTransparency = 1
+                    spacer.BorderSizePixel = 0
+                    spacer.Size = UDim2.new(1, 0, 0, pixels)
+                    spacer.Parent = stTabContent
+                end
+                
+                function subTabObj:GroupBox(gbConfig)
+                    gbConfig = gbConfig or {}
+                    local gbName = gbConfig.Name or "Group"
+                    local inline = gbConfig.Inline or false
+                    
+                    local groupBox = {
+                        Elements = {},
+                        Container = nil
+                    }
+                    
+                    local gbFrame = Instance.new("Frame")
+                    gbFrame.BackgroundColor3 = theme.Tertiary
+                    gbFrame.BorderSizePixel = 0
+                    gbFrame.Size = inline and UDim2.new(0.48, 0, 0, 0) or UDim2.new(1, 0, 0, 0)
+                    gbFrame.AutomaticSize = Enum.AutomaticSize.Y
+                    gbFrame.Parent = stTabContent
+                    
+                    local gbCorner = Instance.new("UICorner")
+                    gbCorner.CornerRadius = UDim.new(0, 8)
+                    gbCorner.Parent = gbFrame
+                    
+                    local gbHeader = Instance.new("TextLabel")
+                    gbHeader.BackgroundTransparency = 1
+                    gbHeader.Size = UDim2.new(1, 0, 0, 28)
+                    gbHeader.Font = Enum.Font.GothamBold
+                    gbHeader.Text = gbName
+                    gbHeader.TextColor3 = theme.Accent
+                    gbHeader.TextSize = 13
+                    gbHeader.TextXAlignment = Enum.TextXAlignment.Left
+                    gbHeader.Parent = gbFrame
+                    
+                    local gbHeaderPad = Instance.new("UIPadding")
+                    gbHeaderPad.PaddingLeft = UDim.new(0, 8)
+                    gbHeaderPad.Parent = gbHeader
+                    
+                    local gbContent = Instance.new("Frame")
+                    gbContent.BackgroundTransparency = 1
+                    gbContent.Position = UDim2.new(0, 0, 0, 30)
+                    gbContent.Size = UDim2.new(1, 0, 1, -30)
+                    gbContent.AutomaticSize = Enum.AutomaticSize.Y
+                    gbContent.Parent = gbFrame
+                    
+                    local gbList = Instance.new("UIListLayout")
+                    gbList.Padding = UDim.new(0, 5)
+                    gbList.SortOrder = Enum.SortOrder.LayoutOrder
+                    gbList.Parent = gbContent
+                    
+                    local gbPad = Instance.new("UIPadding")
+                    gbPad.PaddingLeft = UDim.new(0, 8)
+                    gbPad.PaddingRight = UDim.new(0, 8)
+                    gbPad.PaddingBottom = UDim.new(0, 8)
+                    gbPad.Parent = gbContent
+                    
+                    groupBox.Container = gbContent
+                    
+                    function groupBox:Checkbox(cbConfig)
+                        cbConfig = cbConfig or {}
+                        local cbName = cbConfig.Name or "Checkbox"
+                        local default = cbConfig.Default or false
+                        local callback = cbConfig.Callback or function() end
+                        local flag = cbConfig.Flag
+                        
+                        local cbFrame = Instance.new("Frame")
+                        cbFrame.BackgroundColor3 = theme.Secondary
+                        cbFrame.BorderSizePixel = 0
+                        cbFrame.Size = UDim2.new(1, 0, 0, 32)
+                        cbFrame.Parent = gbContent
+                        
+                        local cbCorner = Instance.new("UICorner")
+                        cbCorner.CornerRadius = UDim.new(0, 6)
+                        cbCorner.Parent = cbFrame
+                        
+                        local cbLabel = Instance.new("TextLabel")
+                        cbLabel.BackgroundTransparency = 1
+                        cbLabel.Position = UDim2.new(0, 8, 0, 0)
+                        cbLabel.Size = UDim2.new(1, -38, 1, 0)
+                        cbLabel.Font = Enum.Font.Gotham
+                        cbLabel.Text = cbName
+                        cbLabel.TextColor3 = theme.Text
+                        cbLabel.TextSize = 11
+                        cbLabel.TextXAlignment = Enum.TextXAlignment.Left
+                        cbLabel.Parent = cbFrame
+                        
+                        local checkbox = Instance.new("TextButton")
+                        checkbox.BackgroundColor3 = theme.Background
+                        checkbox.BorderSizePixel = 0
+                        checkbox.AnchorPoint = Vector2.new(1, 0.5)
+                        checkbox.Position = UDim2.new(1, -8, 0.5, 0)
+                        checkbox.Size = UDim2.new(0, 18, 0, 18)
+                        checkbox.Font = Enum.Font.GothamBold
+                        checkbox.Text = ""
+                        checkbox.TextColor3 = theme.Text
+                        checkbox.TextSize = 12
+                        checkbox.Parent = cbFrame
+                        
+                        local checkCorner = Instance.new("UICorner")
+                        checkCorner.CornerRadius = UDim.new(0, 4)
+                        checkCorner.Parent = checkbox
+                        
+                        local checkStroke = Instance.new("UIStroke")
+                        checkStroke.Color = theme.Border
+                        checkStroke.Thickness = 1
+                        checkStroke.Parent = checkbox
+                        
+                        local checked = default
+                        if flag then
+                            Zonix.Flags[flag] = checked
+                        end
+                        
+                        local function updateCheckbox()
+                            checkbox.Text = checked and "✓" or ""
+                            checkbox.BackgroundColor3 = checked and theme.Accent or theme.Background
+                            checkStroke.Color = checked and theme.Accent or theme.Border
+                        end
+                        
+                        updateCheckbox()
+                        
+                        checkbox.MouseButton1Click:Connect(function()
+                            checked = not checked
+                            if flag then
+                                Zonix.Flags[flag] = checked
+                            end
+                            updateCheckbox()
+                            callback(checked)
+                        end)
+                        
+                        return {
+                            Set = function(_, value)
+                                checked = value
+                                if flag then
+                                    Zonix.Flags[flag] = checked
+                                end
+                                updateCheckbox()
+                                callback(checked)
+                            end
+                        }
+                    end
+                    
+                    function groupBox:AddSpacing(pixels)
+                        pixels = pixels or 10
+                        local spacer = Instance.new("Frame")
+                        spacer.BackgroundTransparency = 1
+                        spacer.BorderSizePixel = 0
+                        spacer.Size = UDim2.new(1, 0, 0, pixels)
+                        spacer.Parent = gbContent
+                    end
+                    
+                    return groupBox
+                end
+                
+                stBtn.MouseButton1Click:Connect(function()
+                    for j, otherTab in ipairs(subTab.Tabs) do
+                        otherTab.Container.Visible = j == i
+                        otherTab.TabButton.BackgroundColor3 = j == i and theme.Accent or theme.Tertiary
+                        otherTab.TabButton.TextColor3 = j == i and Color3.fromRGB(255, 255, 255) or theme.TextDark
+                    end
+                    subTab.ActiveTab = i
+                end)
+                
+                table.insert(subTab.Tabs, subTabObj)
+            end
+            
+            return subTab
+        end
+        
+        function tab:StartInline()
+            local inlineContainer = Instance.new("Frame")
+            inlineContainer.BackgroundTransparency = 1
+            inlineContainer.Size = UDim2.new(1, 0, 0, 0)
+            inlineContainer.AutomaticSize = Enum.AutomaticSize.Y
+            inlineContainer.Parent = tabContent
+            
+            local inlineList = Instance.new("UIListLayout")
+            inlineList.FillDirection = Enum.FillDirection.Horizontal
+            inlineList.HorizontalAlignment = Enum.HorizontalAlignment.Left
+            inlineList.Padding = UDim.new(0, 8)
+            inlineList.SortOrder = Enum.SortOrder.LayoutOrder
+            inlineList.Parent = inlineContainer
+            
+            local originalContent = tabContent
+            tabContent = inlineContainer
+            
+            return {
+                Stop = function()
+                    tabContent = originalContent
+                end
+            }
+        end
+        
         return tab
     end
     
@@ -2179,7 +2888,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.2 LOADED!                    ║")
+print("║                 Zonix UI v1.3 LOADED!                    ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
