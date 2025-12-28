@@ -631,7 +631,7 @@ function Zonix:Window(config)
     minimize.BorderSizePixel = 0
     minimize.Size = UDim2.new(0, 30, 0, 30)
     minimize.Font = Enum.Font.GothamBold
-    minimize.Text = "_"
+    minimize.Text = "-"
     minimize.TextColor3 = theme.Text
     minimize.TextSize = 18
     minimize.Parent = controls
@@ -645,7 +645,7 @@ function Zonix:Window(config)
     close.BorderSizePixel = 0
     close.Size = UDim2.new(0, 30, 0, 30)
     close.Font = Enum.Font.GothamBold
-    close.Text = "×"
+    close.Text = "X"
     close.TextColor3 = Color3.fromRGB(255, 255, 255)
     close.TextSize = 20
     close.Parent = controls
@@ -684,7 +684,7 @@ function Zonix:Window(config)
         Utils:Ripple(minimize)
         window.Minimized = not window.Minimized
         Utils:Tween(main, {Size = window.Minimized and UDim2.new(0, 700, 0, 45) or UDim2.new(0, 700, 0, 520)}, 0.3)
-        minimize.Text = window.Minimized and "□" or "_"
+        minimize.Text = window.Minimized and "+" or "-"
     end)
     
     minimize.MouseEnter:Connect(function()
