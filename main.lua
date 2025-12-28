@@ -61,6 +61,7 @@
       • Mobile Responsive
       • Draggable Windows
       • Minimize/Maximize
+      • Custom Window Icons
 ]]
 
 local TweenService = game:GetService("TweenService")
@@ -543,6 +544,7 @@ end
 function Zonix:Window(config)
     config = config or {}
     local windowName = config.Name or "Zonix UI"
+    local windowIcon = config.Icon
     local theme = Utils:GetTheme()
     
     local window = {
@@ -601,16 +603,38 @@ function Zonix:Window(config)
     topFix.Size = UDim2.new(1, 0, 0, 12)
     topFix.Parent = topbar
     
-    local title = Instance.new("TextLabel")
-    title.BackgroundTransparency = 1
-    title.Position = UDim2.new(0, 15, 0, 0)
-    title.Size = UDim2.new(0.7, 0, 1, 0)
-    title.Font = Enum.Font.GothamBold
-    title.Text = windowName
-    title.TextColor3 = theme.Text
-    title.TextSize = 16
-    title.TextXAlignment = Enum.TextXAlignment.Left
-    title.Parent = topbar
+    if windowIcon then
+        local icon = Instance.new("ImageLabel")
+        icon.BackgroundTransparency = 1
+        icon.Position = UDim2.new(0, 12, 0.5, 0)
+        icon.AnchorPoint = Vector2.new(0, 0.5)
+        icon.Size = UDim2.new(0, 28, 0, 28)
+        icon.Image = windowIcon
+        icon.ScaleType = Enum.ScaleType.Fit
+        icon.Parent = topbar
+        
+        local title = Instance.new("TextLabel")
+        title.BackgroundTransparency = 1
+        title.Position = UDim2.new(0, 48, 0, 0)
+        title.Size = UDim2.new(0.7, -48, 1, 0)
+        title.Font = Enum.Font.GothamBold
+        title.Text = windowName
+        title.TextColor3 = theme.Text
+        title.TextSize = 16
+        title.TextXAlignment = Enum.TextXAlignment.Left
+        title.Parent = topbar
+    else
+        local title = Instance.new("TextLabel")
+        title.BackgroundTransparency = 1
+        title.Position = UDim2.new(0, 15, 0, 0)
+        title.Size = UDim2.new(0.7, 0, 1, 0)
+        title.Font = Enum.Font.GothamBold
+        title.Text = windowName
+        title.TextColor3 = theme.Text
+        title.TextSize = 16
+        title.TextXAlignment = Enum.TextXAlignment.Left
+        title.Parent = topbar
+    end
     
     local controls = Instance.new("Frame")
     controls.AnchorPoint = Vector2.new(1, 0)
