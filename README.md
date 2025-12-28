@@ -25,6 +25,7 @@
 - 🔑 **Flag System** - Easy access to component values
 - 📋 **Clipboard Support** - Works across all executors
 - ⚙️ **Auto-Detection** - Automatically detects and adapts to your executor
+- 🖼️ **Custom Window Icons** - Add custom rbxassetid images to window topbars
 
 ---
 
@@ -53,7 +54,8 @@ local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
 
 -- Create a window
 local Window = Zonix:Window({
-    Name = "My Script Hub"
+    Name = "My Script Hub",
+    Icon = "rbxassetid://90642687165275"  -- Optional custom icon
 })
 
 -- Create a tab
@@ -106,12 +108,14 @@ Tab:Button({
 
 ```lua
 local Window = Zonix:Window({
-    Name = "My Script Name"    -- Window title (optional, default: "Zonix UI")
+    Name = "My Script Name",          -- Window title (optional, default: "Zonix UI")
+    Icon = "rbxassetid://1234567890"  -- Window icon (optional, uses ImageLabel)
 })
 ```
 
 **Parameters:**
 - `Name` (string, optional) - The window title (default: "Zonix UI")
+- `Icon` (string, optional) - Asset ID for a custom window icon displayed in the topbar (e.g., "rbxassetid://90642687165275")
 
 **Window Features:**
 - Draggable by clicking and holding the top bar
@@ -119,6 +123,15 @@ local Window = Zonix:Window({
 - Close button (×) - Destroys the window completely
 - Smooth animations for all interactions
 - Automatic shadow and glow effects
+- Custom icon support with proper scaling (28x28 pixels, centered vertically)
+
+**Example with Icon:**
+```lua
+local Window = Zonix:Window({
+    Name = "Cool Script",
+    Icon = "rbxassetid://90642687165275"
+})
+```
 
 ### Creating Tabs
 
@@ -331,22 +344,54 @@ local key = Zonix.Flags.UIToggle        -- Access current key via flag
 
 ### ColorPicker
 
-Color selection component.
+Advanced color picker with multiple color space support (RGB, HSV, HSL, CMYK, HEX).
 
 ```lua
 local MyColor = Tab:ColorPicker({
-    Name = "Theme Color",                 -- ColorPicker name (required)
-    Default = Color3.fromRGB(0, 255, 255), -- Starting color (optional)
-    Flag = "ThemeColor",                  -- Flag name (optional)
-    Callback = function(color)            -- Function called on color change (optional)
-        print("Color:", color)
+    Name = "Theme Color",                      -- ColorPicker name (required)
+    Default = Color3.fromRGB(138, 43, 226),   -- Starting color (optional, default: white)
+    Flag = "ThemeColor",                       -- Flag name (optional)
+    Callback = function(color)                 -- Function called on color change (optional)
+        print("Color changed to:", color)
     end
 })
 
 -- Methods
-MyColor:Set(Color3.fromRGB(255, 0, 255)) -- Change color
-local color = Zonix.Flags.ThemeColor    -- Access current color via flag
+MyColor:Set(Color3.fromRGB(255, 0, 0))        -- Update color
+local color = Zonix.Flags.ThemeColor         -- Access current value via flag
 ```
+
+**Features:**
+- **Interactive Color Wheel**: Visual HSV color selector with saturation/value gradient
+- **Hue Slider**: Full spectrum hue selection bar with draggable cursor
+- **Live Preview**: Real-time color preview box showing selected color
+- **Multiple Color Formats**:
+  - **RGB** (Red, Green, Blue) - Standard RGB values (0-255)
+  - **HSV** (Hue, Saturation, Value) - Hue in degrees (0-360°), S/V in percentages
+  - **HSL** (Hue, Saturation, Lightness) - Alternative color representation
+  - **CMYK** (Cyan, Magenta, Yellow, Key/Black) - Print color model in percentages
+  - **HEX** - Hexadecimal color code (e.g., #8A2BE2)
+- **Copy to Clipboard**: Built-in button to instantly copy HEX color codes
+- **Modal Interface**: Full-screen overlay with clean, professional design
+- **Smooth Interactions**: Drag-to-select color with visual feedback and indicators
+
+**Usage Example:**
+```lua
+local BgColor = Tab:ColorPicker({
+    Name = "Background Color",
+    Default = Color3.fromRGB(15, 15, 20),
+    Flag = "BgColor",
+    Callback = function(color)
+        game.Lighting.Ambient = color
+    end
+})
+
+-- Later, update the color programmatically
+BgColor:Set(Color3.fromRGB(25, 25, 35))
+```
+
+**Methods:**
+- `:Set(color)` - Set color (expects Color3)
 
 **Methods:**
 - `:Set(color3)` - Set color
