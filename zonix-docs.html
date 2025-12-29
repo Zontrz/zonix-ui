@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZONIX UI v1.3 - Complete Documentation</title>
+    <title>ZONIX UI v1.3.2 - Complete Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -696,7 +696,7 @@
         <div class="header-content">
             <div>
                 <div class="logo glitch">ZONIX UI</div>
-                <div class="version">v1.3 | By Zontraz</div>
+                <div class="version">v1.3.2 | By Zontraz</div>
             </div>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -715,7 +715,7 @@
     </header>
 
     <section class="hero">
-        <h1 class="neon">ZONIX UI v1.3</h1>
+        <h1 class="neon">ZONIX UI v1.3.2</h1>
         <p>The most advanced UI library for Roblox exploits. Modern. Powerful. Universal.</p>
         <div class="cta-buttons">
             <a href="#installation" class="btn btn-primary">GET STARTED</a>
@@ -724,6 +724,42 @@
     </section>
 
     <div class="container">
+        <section class="section" id="whats-new">
+            <h2 class="section-title">// WHAT'S NEW IN v1.3.2</h2>
+            <div class="feature-grid">
+                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">Enhanced Icon System</div>
+                    <div class="feature-desc">Emoji AND image icons for Window & Tabs with new table format: { Type = "emoji", Value = "🔥" }</div>
+                </div>
+                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
+                    <div class="feature-icon">📦</div>
+                    <div class="feature-title">Complete GroupBox Support</div>
+                    <div class="feature-desc">ALL 13 components now work inside GroupBox containers with proper styling</div>
+                </div>
+                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
+                    <div class="feature-icon">📑</div>
+                    <div class="feature-title">Complete SubTab Support</div>
+                    <div class="feature-desc">ALL 13 components now work inside SubTab containers for advanced organization</div>
+                </div>
+                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
+                    <div class="feature-icon">🎛️</div>
+                    <div class="feature-title">Fixed Sliders</div>
+                    <div class="feature-desc">White draggable circle handles for precise value control</div>
+                </div>
+                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
+                    <div class="feature-icon">📂</div>
+                    <div class="feature-title">Fixed Dropdowns</div>
+                    <div class="feature-desc">Smooth expansion animations with rotating arrow indicators</div>
+                </div>
+                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
+                    <div class="feature-icon">⚙️</div>
+                    <div class="feature-title">Full Flag Support</div>
+                    <div class="feature-desc">Access values from Button, Checkbox, Toggle, Slider, Dropdown, Textbox, Keybind, ColorPicker via Zonix.Flags</div>
+                </div>
+            </div>
+        </section>
+        
         <section class="section" id="features">
             <h2 class="section-title">// CORE FEATURES</h2>
             <div class="feature-grid">
@@ -839,12 +875,18 @@ Zonix:<span class="function">Notify</span>({
 
 <span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({
     Name = <span class="string">"My Script"</span>,
-    Icon = <span class="string">"rbxassetid://90642687165275"</span>  <span class="comment">-- Optional custom icon</span>
+    Icon = {
+        Type = <span class="string">"emoji"</span>,
+        Value = <span class="string">"🔥"</span>
+    }
 })
 
 <span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({
     Name = <span class="string">"Main"</span>,
-    Icon = <span class="string">"🏠"</span>
+    Icon = {
+        Type = <span class="string">"emoji"</span>,
+        Value = <span class="string">"🏠"</span>
+    }
 })
 
 Tab:<span class="function">Button</span>({
@@ -860,7 +902,7 @@ Tab:<span class="function">Button</span>({
             <h2 class="section-title">// WINDOW & TAB CREATION</h2>
 
             <h3 class="section-subtitle">🪟 Window</h3>
-            <p>Create the main window container for your UI. Windows can be dragged, minimized, and closed. Support for custom icons via rbxassetid.</p>
+            <p>Create the main window container for your UI. Windows can be dragged, minimized, and closed. Supports emoji and image icons (emoji characters or rbxassetid).</p>
 
             <div class="code-block">
                 <div class="code-header">
@@ -869,7 +911,10 @@ Tab:<span class="function">Button</span>({
                 </div>
                 <pre><code><span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({
     Name = <span class="string">"My Script Name"</span>,
-    Icon = <span class="string">"rbxassetid://90642687165275"</span>  <span class="comment">-- Optional custom icon</span>
+    Icon = {
+        Type = <span class="string">"image"</span>,
+        Value = <span class="string">"rbxassetid://90642687165275"</span>
+    }
 })</code></pre>
             </div>
 
@@ -891,9 +936,9 @@ Tab:<span class="function">Button</span>({
                     </tr>
                     <tr>
                         <td>Icon</td>
-                        <td>string</td>
+                        <td>table</td>
                         <td>✗</td>
-                        <td>Asset ID for custom window icon (e.g., "rbxassetid://1234567890"). Displays as 28x28px ImageLabel in topbar</td>
+                        <td>Icon configuration with Type ("emoji" or "image") and Value (emoji character or rbxassetid). Displays as 28x28px in topbar. Example: { Type = "emoji", Value = "🔥" }</td>
                     </tr>
                 </tbody>
             </table>
@@ -905,7 +950,7 @@ Tab:<span class="function">Button</span>({
                 <li>Close button (x) - Destroys the window completely</li>
                 <li>Smooth animations for all interactions</li>
                 <li>Automatic shadow and glow effects</li>
-                <li>Custom icon support with proper scaling (28x28 pixels, centered vertically)</li>
+                <li>Emoji or image icon support (28x28 pixels, centered vertically)</li>
             </ul>
 
             <h3 class="section-subtitle">📑 Tab</h3>
@@ -918,7 +963,10 @@ Tab:<span class="function">Button</span>({
                 </div>
                 <pre><code><span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({
     Name = <span class="string">"Tab Name"</span>,
-    Icon = <span class="string">"🏠"</span>
+    Icon = {
+        Type = <span class="string">"emoji"</span>,  <span class="comment">-- "emoji" or "image"</span>
+        Value = <span class="string">"🏠"</span>     <span class="comment">-- emoji or rbxassetid</span>
+    }
 })</code></pre>
             </div>
 
@@ -940,9 +988,9 @@ Tab:<span class="function">Button</span>({
                     </tr>
                     <tr>
                         <td>Icon</td>
-                        <td>string</td>
+                        <td>table</td>
                         <td>✗</td>
-                        <td>Emoji or text icon (default: "📄")</td>
+                        <td>Icon configuration with Type ("emoji" or "image") and Value (emoji character or rbxassetid). Default: { Type = "emoji", Value = "📄" }</td>
                     </tr>
                 </tbody>
             </table>
@@ -954,6 +1002,7 @@ Tab:<span class="function">Button</span>({
                 <li>Smooth color transitions on selection</li>
                 <li>Scrollable content area</li>
                 <li>Hover effects for inactive tabs</li>
+                <li>Emoji or image icon support (18x18 pixels)</li>
             </ul>
         </section>
 
@@ -2189,7 +2238,7 @@ Tab:<span class="function">Button</span>({
                         <td>Text</td>
                         <td>string</td>
                         <td>✗</td>
-                        <td>Watermark text (default: "Zonix UI v1.3 | {Executor}")</td>
+                        <td>Watermark text (default: "Zonix UI v1.3.2 | {Executor}")</td>
                     </tr>
                 </tbody>
             </table>
@@ -3135,14 +3184,14 @@ Tab:<span class="function">CopyButton</span>({ Name = <span class="string">"Copy
 Tab:<span class="function">ProgressBar</span>({ Name = <span class="string">"Progress"</span>, Progress = <span class="number">0.75</span> })</code></pre>
             </div>
 
-            <h3 class="section-subtitle">Example 5: New v1.3 Features <span style="color: var(--accent-green);">✨</span></h3>
+            <h3 class="section-subtitle">Example 5: New v1.3.2 Features <span style="color: var(--accent-green);">✨</span></h3>
             <div class="code-block">
                 <div class="code-header">
-                    <span class="code-lang">LUA - v1.3 FEATURES SHOWCASE</span>
+                    <span class="code-lang">LUA - v1.3.2 FEATURES SHOWCASE</span>
                     <button class="copy-btn" onclick="copyCode(this)">COPY</button>
                 </div>
                 <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
-<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"v1.3 Features"</span>, Icon = <span class="string">"rbxassetid://90642687165275"</span> })
+<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"v1.3.2 Features"</span>, Icon = { Type = <span class="string">"emoji"</span>, Value = <span class="string">"🔥"</span> } })
 <span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({ Name = <span class="string">"New Features"</span>, Icon = <span class="string">"✨"</span> })
 
 <span class="comment">-- Checkboxes</span>
@@ -3334,7 +3383,7 @@ MiscGroup:<span class="function">Button</span>({
                 <a href="#examples">Examples</a>
             </div>
             <div class="copyright">
-                <p>&copy; 2026 <strong class="neon">ZONIX UI v1.3</strong></p>
+                <p>&copy; <span id="copyright-year"></span> <strong class="neon">ZONIX UI v1.3.2</strong></p>
                 <p>Created by <strong>Zontraz</strong> | <a href="https://zon.su" style="color: var(--accent-cyan);">zon.su</a></p>
             </div>
         </div>
@@ -3391,6 +3440,11 @@ MiscGroup:<span class="function">Button</span>({
                 }
             });
         }
+    </script>
+
+    <script>
+        // Set copyright year automatically
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 </body>
 </html>
