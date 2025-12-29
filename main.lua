@@ -73,7 +73,6 @@
 --                    AUTOEXE SUPPORT - WAIT FOR GAME
 -- ═══════════════════════════════════════════════════════════════
 
--- Wait for game to fully load (autoexe safety)
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
