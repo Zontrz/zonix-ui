@@ -19,6 +19,7 @@
       • iOS: Delta, Krnl
       • Universal clipboard (setclipboard on ANY executor)
       • Auto-detection system
+      • ⚡ AUTOEXE SUPPORT (NEW!) - Works when executed before game loads!
     
     ✓ NORMAL FEATURES:
       • Windows & Tabs
@@ -68,6 +69,15 @@
       • Minimize/Maximize
       • Custom Window Icons
 ]]
+-- ═══════════════════════════════════════════════════════════════
+--                    AUTOEXE SUPPORT - WAIT FOR GAME
+-- ═══════════════════════════════════════════════════════════════
+
+-- Wait for game to fully load (autoexe safety)
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -77,7 +87,24 @@ local HttpService = game:GetService("HttpService")
 local TextService = game:GetService("TextService")
 
 local Player = Players.LocalPlayer
-local Mouse = Player:GetMouse()
+if not Player then
+    Player = Players:GetPropertyChangedSignal("LocalPlayer"):Wait()
+    Player = Players.LocalPlayer
+end
+
+local Mouse
+local function GetMouse()
+    local success, result = pcall(function()
+        return Player:GetMouse()
+    end)
+    if success then
+        return result
+    else
+        task.wait(0.1)
+        return Player:GetMouse()
+    end
+end
+Mouse = GetMouse()
 
 -- ═══════════════════════════════════════════════════════════════
 --                    EXECUTOR COMPATIBILITY
@@ -4809,13 +4836,14 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.3.2 LOADED!                    ║")
+print("║                 Zonix UI v1.3.2 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
 print("║  Executor: " .. string.format("%-42s", Zonix.Executor) .. " ║")
 print("║  Clipboard: " .. (Executor.SetClipboard and "✓ Supported" or "✗ Not Supported") .. string.rep(" ", 36) .. " ║")
 print("║  Files: " .. (Executor.WriteFile and "✓ Supported" or "✗ Not Supported") .. string.rep(" ", 40) .. " ║")
+print("║  ⚡ AutoExe: ✓ Fully Compatible                          ║")
 print("╚══════════════════════════════════════════════════════════╝")
 
 return Zonix
