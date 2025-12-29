@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ ZONIX UI v1.3
+# ⚡ ZONIX UI v1.3.2
 
 ### The Ultimate Roblox UI Library
 
@@ -12,25 +12,37 @@
 
 ---
 
+## 🎯 What's New in v1.3.2
+
+- 🎨 **Enhanced Icon System** - Emoji and image icons for Window & Tabs
+- 📦 **Complete GroupBox Components** - ALL 13 components now work inside GroupBox
+- 📑 **Complete SubTab Components** - ALL 13 components now work inside SubTabs
+- 🎛️ **Fixed Sliders** - White draggable circle handles for precise control
+- 📂 **Fixed Dropdowns** - Smooth expansion animations with rotating arrows
+- ⚙️ **Full Flag Support** - Access values from Button, Checkbox, Toggle, Slider, Dropdown, Textbox, Keybind, ColorPicker
+
+---
+
 ## 🎯 Features
 
 - 🎨 **3 Built-in Themes** - Dark, Light, and Midnight
 - 📱 **Fully Responsive** - Works perfectly on mobile, tablet, and desktop
 - 🎮 **Touch Support** - Native touch controls for mobile devices
 - 💾 **Config System** - Save and load your settings
-- 🔧 **18 Components** - Everything you need to build powerful UIs
+- 🔧 **13 Core Components** - Label, Section, Paragraph, Divider, Button, Checkbox, Toggle, Slider, Dropdown, Textbox, ProgressBar, Keybind, ColorPicker
 - ⚡ **Notifications & Prompts** - Built-in user feedback system
 - 🌈 **Custom Themes** - Create your own themes with 13 color properties
 - 🌈 **Rainbow Mode** - Animated rainbow borders and effects
 - 🔑 **Flag System** - Easy access to component values
 - 📋 **Clipboard Support** - Works across all executors
 - ⚙️ **Auto-Detection** - Automatically detects and adapts to your executor
-- 🖼️ **Custom Window Icons** - Add custom rbxassetid images to window topbars
-- ✅ **Checkboxes** - NEW! Simple toggle controls
-- 📑 **SubTabs** - NEW! Organize content with tabs within tabs
-- 📦 **GroupBoxes** - NEW! Group UI elements together
-- 📏 **Spacing Control** - NEW! Add custom spacing between elements
-- ➡️ **In-line Layout** - NEW! Place elements side-by-side
+- 🖼️ **Enhanced Icons** - Emoji and image icons for Window & Tabs
+- ✅ **Checkboxes** - Simple toggle controls
+- 📑 **SubTabs** - Organize content with tabs within tabs (ALL 13 components supported)
+- 📦 **GroupBoxes** - Group UI elements together (ALL 13 components supported)
+- 📏 **Spacing Control** - Add custom spacing between elements
+- ➡️ **In-line Layout** - Place elements side-by-side
+- 🔄 **Nested GroupBoxes** - GroupBox inside GroupBox support
 
 ---
 
@@ -57,16 +69,22 @@ local Zonix = loadstring(game:HttpGet("https://raw.githubusercontent.com/Zontrz/
 -- Load the library
 local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
 
--- Create a window
+-- Create a window with emoji icon
 local Window = Zonix:Window({
     Name = "My Script Hub",
-    Icon = "rbxassetid://90642687165275"  -- Optional custom icon
+    Icon = {
+        Type = "emoji",  -- or "image"
+        Value = "🔥"     -- emoji or rbxassetid
+    }
 })
 
--- Create a tab
+-- Create a tab with icon
 local Tab = Window:Tab({
     Name = "Main",
-    Icon = "🏠"
+    Icon = {
+        Type = "emoji",
+        Value = "🏠"
+    }
 })
 
 -- Add components
@@ -102,6 +120,7 @@ Tab:Button({
   - [GroupBox](#groupbox-new)
   - [SubTab](#subtab-new)
   - [In-line Layout](#in-line-layout-new)
+- [Flag System](#-flag-system)
 - [Utilities](#-utilities)
   - [Notifications](#notifications)
   - [Prompts](#prompts)
@@ -118,14 +137,19 @@ Tab:Button({
 
 ```lua
 local Window = Zonix:Window({
-    Name = "My Script Name",          -- Window title (optional, default: "Zonix UI")
-    Icon = "rbxassetid://1234567890"  -- Window icon (optional, uses ImageLabel)
+    Name = "My Script Name",  -- Window title (optional, default: "Zonix UI")
+    Icon = {                  -- Window icon (optional)
+        Type = "emoji",       -- "emoji" or "image"
+        Value = "🔥"          -- emoji character or rbxassetid
+    }
 })
 ```
 
 **Parameters:**
 - `Name` (string, optional) - The window title (default: "Zonix UI")
-- `Icon` (string, optional) - Asset ID for a custom window icon displayed in the topbar (e.g., "rbxassetid://90642687165275")
+- `Icon` (table, optional) - Window icon configuration
+  - `Type` (string) - Icon type: `"emoji"` (text/emoji) or `"image"` (rbxassetid)
+  - `Value` (string) - Icon value: emoji character (e.g., "🔥") or asset ID (e.g., "rbxassetid://12345")
 
 **Window Features:**
 - Draggable by clicking and holding the top bar
@@ -133,13 +157,26 @@ local Window = Zonix:Window({
 - Close button (×) - Destroys the window completely
 - Smooth animations for all interactions
 - Automatic shadow and glow effects
-- Custom icon support with proper scaling (28x28 pixels, centered vertically)
+- Emoji or image icon support (28x28 pixels, centered vertically)
 
-**Example with Icon:**
+**Icon Examples:**
 ```lua
+-- Emoji icon
 local Window = Zonix:Window({
     Name = "Cool Script",
-    Icon = "rbxassetid://90642687165275"
+    Icon = {
+        Type = "emoji",
+        Value = "⚡"
+    }
+})
+
+-- Image icon
+local Window = Zonix:Window({
+    Name = "Premium Script",
+    Icon = {
+        Type = "image",
+        Value = "rbxassetid://90642687165275"
+    }
 })
 ```
 
@@ -147,10 +184,19 @@ local Window = Zonix:Window({
 
 ```lua
 local Tab = Window:Tab({
-    Name = "Tab Name",    -- Tab name (optional, default: "Tab")
-    Icon = "🏠"          -- Tab icon (optional, default: "📄")
+    Name = "Tab Name",  -- Tab name (optional, default: "Tab")
+    Icon = {            -- Tab icon (optional)
+        Type = "emoji", -- "emoji" or "image"
+        Value = "🏠"    -- emoji or rbxassetid
+    }
 })
 ```
+
+**Tab Parameters:**
+- `Name` (string, optional) - Tab display name (default: "Tab")
+- `Icon` (table, optional) - Tab icon configuration (default: "📄" emoji)
+  - `Type` (string) - Icon type: `"emoji"` (text/emoji) or `"image"` (rbxassetid)
+  - `Value` (string) - Icon value: emoji character (e.g., "🏠") or asset ID (e.g., "rbxassetid://12345")
 
 **Tab Features:**
 - Click to switch between tabs
@@ -158,6 +204,27 @@ local Tab = Window:Tab({
 - Smooth color transitions on selection
 - Scrollable content area
 - Hover effects for inactive tabs
+- Emoji or image icon support
+
+**Tab Icon Examples:**
+```lua
+-- Emoji icons
+local HomeTab = Window:Tab({
+    Name = "Home",
+    Icon = { Type = "emoji", Value = "🏠" }
+})
+
+local SettingsTab = Window:Tab({
+    Name = "Settings",
+    Icon = { Type = "emoji", Value = "⚙️" }
+})
+
+-- Image icon
+local PremiumTab = Window:Tab({
+    Name = "Premium",
+    Icon = { Type = "image", Value = "rbxassetid://12345" }
+})
+```
 
 ---
 
@@ -603,6 +670,108 @@ Tab:Button({
 - Use inline layout for grouping related controls (e.g., Speed section next to Farming section)
 - Limit to 2 inline groups for optimal mobile compatibility
 - Always call `.Stop()` to prevent layout issues
+
+---
+
+## 🔑 Flag System
+
+The flag system allows you to easily access and monitor component values without storing references. Set a `Flag` parameter on any interactive component, and access its current value via `Zonix.Flags`.
+
+### Components Supporting Flags
+
+| Component | Flag Access | Value Type |
+|-----------|-------------|------------|
+| Button | `Zonix.Flags.YourFlag` | `true` (when clicked) |
+| Checkbox | `Zonix.Flags.YourFlag` | `boolean` |
+| Toggle | `Zonix.Flags.YourFlag` | `boolean` |
+| Slider | `Zonix.Flags.YourFlag` | `number` |
+| Dropdown | `Zonix.Flags.YourFlag` | `string` |
+| Textbox | `Zonix.Flags.YourFlag` | `string` |
+| Keybind | `Zonix.Flags.YourFlag` | `Enum.KeyCode` |
+| ColorPicker | `Zonix.Flags.YourFlag` | `Color3` |
+
+### Example Usage
+
+```lua
+-- Setting flags on components
+Tab:Toggle({
+    Name = "Auto Farm",
+    Flag = "AutoFarm",
+    Default = false
+})
+
+Tab:Slider({
+    Name = "Speed",
+    Flag = "Speed",
+    Min = 0,
+    Max = 100,
+    Default = 50
+})
+
+Tab:Dropdown({
+    Name = "Mode",
+    Flag = "GameMode",
+    Options = {"Easy", "Normal", "Hard"},
+    Default = "Normal"
+})
+
+Tab:Textbox({
+    Name = "Username",
+    Flag = "Username",
+    Default = ""
+})
+
+Tab:Checkbox({
+    Name = "Enable ESP",
+    Flag = "ESP",
+    Default = true
+})
+
+Tab:Keybind({
+    Name = "Toggle UI",
+    Flag = "UIKeybind",
+    Default = Enum.KeyCode.RightShift
+})
+
+Tab:ColorPicker({
+    Name = "ESP Color",
+    Flag = "ESPColor",
+    Default = Color3.fromRGB(255, 0, 0)
+})
+
+-- Accessing flag values
+while task.wait(0.1) do
+    if Zonix.Flags.AutoFarm then
+        local speed = Zonix.Flags.Speed
+        local mode = Zonix.Flags.GameMode
+        local username = Zonix.Flags.Username
+        local espEnabled = Zonix.Flags.ESP
+        local espColor = Zonix.Flags.ESPColor
+        
+        print("Farming at speed:", speed, "in mode:", mode)
+    end
+end
+
+-- Check keybind
+game:GetService("UserInputService").InputBegan:Connect(function(input)
+    if input.KeyCode == Zonix.Flags.UIKeybind then
+        print("UI keybind pressed!")
+    end
+end)
+```
+
+### Flag Best Practices
+
+✅ **DO:**
+- Use descriptive flag names (e.g., `"PlayerSpeed"` not `"s"`)
+- Check if flag exists before accessing: `if Zonix.Flags.MyFlag then`
+- Use flags in loops for real-time value monitoring
+- Set flags on all interactive components for easy config save/load
+
+❌ **DON'T:**
+- Use special characters in flag names
+- Reuse flag names across different components
+- Modify `Zonix.Flags` directly (use component `:Set()` methods)
 
 ---
 
