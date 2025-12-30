@@ -1,6 +1,6 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.3.2                           ║
+    ║                    Zonix UI v1.3.3                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
@@ -251,7 +251,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.2",
+    Version = "1.3.3",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -681,15 +681,73 @@ function Zonix:Window(config)
     local gui = CreateGui()
     table.insert(Zonix.Windows, gui)
 
+    local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local windowWidth, windowHeight
+    
+    if isMobile then
+        windowWidth = math.min(screenSize.X * 0.9, 500)
+        windowHeight = math.min(screenSize.Y * 0.7, 600)
+    else
+        local baseWidth = 700
+        local baseHeight = 520
+        local baseScreenWidth = 1920
+        
+        if screenSize.X > baseScreenWidth then
+            local scaleFactor = math.min(screenSize.X / baseScreenWidth, 1.8)  -- Cap at 1.8x
+            windowWidth = baseWidth * scaleFactor
+            windowHeight = baseHeight * scaleFactor
+        elseif screenSize.X < 1366 then
+            local scaleFactor = screenSize.X / 1366
+            windowWidth = math.max(baseWidth * scaleFactor, 500)  -- Minimum 500px
+            windowHeight = math.max(baseHeight * scaleFactor, 400)  -- Minimum 400px
+        else
+            windowWidth = baseWidth
+            windowHeight = baseHeight
+        end
+    end
+
     local main = Instance.new("Frame")
     main.Name = "Main"
     main.AnchorPoint = Vector2.new(0.5, 0.5)
     main.BackgroundColor3 = theme.Background
     main.BorderSizePixel = 0
     main.Position = UDim2.new(0.5, 0, 0.5, 0)
-    main.Size = UDim2.new(0, 700, 0, 520)
+    main.Size = UDim2.new(0, windowWidth, 0, windowHeight)
     main.ClipsDescendants = true
     main.Parent = gui
+
+    workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+        local newScreenSize = workspace.CurrentCamera.ViewportSize
+        
+        if isMobile then
+            windowWidth = math.min(newScreenSize.X * 0.9, 500)
+            windowHeight = math.min(newScreenSize.Y * 0.7, 600)
+        else
+            local baseWidth = 700
+            local baseHeight = 520
+            local baseScreenWidth = 1920
+            
+            if newScreenSize.X > baseScreenWidth then
+                local scaleFactor = math.min(newScreenSize.X / baseScreenWidth, 1.8)
+                windowWidth = baseWidth * scaleFactor
+                windowHeight = baseHeight * scaleFactor
+            elseif newScreenSize.X < 1366 then
+                local scaleFactor = newScreenSize.X / 1366
+                windowWidth = math.max(baseWidth * scaleFactor, 500)
+                windowHeight = math.max(baseHeight * scaleFactor, 400)
+            else
+                windowWidth = baseWidth
+                windowHeight = baseHeight
+            end
+        end
+        
+        if not window.Minimized then
+            main.Size = UDim2.new(0, windowWidth, 0, windowHeight)
+        else
+            main.Size = UDim2.new(0, windowWidth, 0, 45)
+        end
+    end)
 
     local mainCorner = Instance.new("UICorner")
     mainCorner.CornerRadius = UDim.new(0, 12)
@@ -867,7 +925,7 @@ function Zonix:Window(config)
         function()
             Utils:Ripple(minimize)
             window.Minimized = not window.Minimized
-            Utils:Tween(main, {Size = window.Minimized and UDim2.new(0, 700, 0, 45) or UDim2.new(0, 700, 0, 520)}, 0.3)
+            Utils:Tween(main, {Size = window.Minimized and UDim2.new(0, windowWidth, 0, 45) or UDim2.new(0, windowWidth, 0, windowHeight)}, 0.3)
             minimize.Text = window.Minimized and "+" or "-"
         end
     )
@@ -4835,7 +4893,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.3.2 LOADED!                  ║")
+print("║                 Zonix UI v1.3.3 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
