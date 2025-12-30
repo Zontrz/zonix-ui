@@ -263,7 +263,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.4",
+    Version = "1.3.5",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
