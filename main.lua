@@ -263,7 +263,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.5",
+    Version = "1.3.4",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -2195,18 +2195,14 @@ function Zonix:Window(config)
                     bg.AutoButtonColor = false
                     bg.Active = true
 
-                    -- Fully responsive scaling for all screen sizes
                     local viewportSize = workspace.CurrentCamera.ViewportSize
                     local baseWidth, baseHeight = 480, 580
                     local scale
                     
-                    -- Mobile: scale down to fit
                     if viewportSize.X < 600 or viewportSize.Y < 700 then
                         scale = math.min(viewportSize.X / 500, viewportSize.Y / 650) * 0.95
-                    -- Large screens: scale up proportionally (max 1.5x)
                     elseif viewportSize.X > 1920 then
                         scale = math.min(viewportSize.X / 1920, 1.5)
-                    -- Normal screens: use base size
                     else
                         scale = 1
                     end
