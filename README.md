@@ -12,7 +12,7 @@
 
 ---
 
-## 🎯 What's New in v1.3.3
+## 🎯 What's New in v1.3.2
 
 - 🎨 **Enhanced Icon System** - Emoji and image icons for Window & Tabs
 - 📦 **Complete GroupBox Components** - ALL 13 components now work inside GroupBox
