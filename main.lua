@@ -1,16 +1,18 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.3.6                           ║
+    ║                    Zonix UI v1.3.7                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
     
-    🎉 v1.3.6 - PROMPT SYSTEM ADDED:
-    • New Prompt dialog system with customizable buttons
-    • Confirmation dialogs with overlay backdrop
-    • Smooth animations and hover effects
-    • Perfect for critical actions requiring user confirmation
+    🔧 v1.3.7 - CONFIG SYSTEM FIX:
+    • SaveConfig now properly saves ALL UI element values
+    • LoadConfig now updates UI elements when loading configs
+    • Toggles, Sliders, Dropdowns, Colors, Checkboxes, Textboxes, Keybinds ALL save/load correctly
+    • Color3 values properly serialized and restored
+    • KeyCode enums properly serialized and restored
+    • Fixed issue where configs only saved some values
     
     📱 v1.3.5 - FULLY RESPONSIVE COLOR PICKER:
     • Color picker now scales on ALL screen sizes
@@ -270,11 +272,12 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.6",
+    Version = "1.3.7",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
     Flags = {},
+    FlaggedElements = {},
     Windows = {},
     Notifications = {},
     Themes = {}
@@ -1633,13 +1636,19 @@ function Zonix:Window(config)
                 Utils:AddTooltip(togFrame, togConfig.Tooltip)
             end
 
-            return {
+            local toggleElement = {
                 Set = function(_, value)
                     if toggled ~= value then
                         toggle()
                     end
                 end
             }
+            
+            if flag then
+                Zonix.FlaggedElements[flag] = toggleElement
+            end
+            
+            return toggleElement
         end
 
         function tab:Slider(slConfig)
@@ -1786,7 +1795,7 @@ function Zonix:Window(config)
                 Utils:AddTooltip(slFrame, slConfig.Tooltip)
             end
 
-            return {
+            local sliderElement = {
                 Set = function(_, newValue)
                     value = math.clamp(newValue, min, max)
                     slValue.Text = tostring(value)
@@ -1801,6 +1810,12 @@ function Zonix:Window(config)
                     pcall(callback, value)
                 end
             }
+            
+            if flag then
+                Zonix.FlaggedElements[flag] = sliderElement
+            end
+            
+            return sliderElement
         end
 
         function tab:Dropdown(ddConfig)
@@ -1923,7 +1938,7 @@ function Zonix:Window(config)
                 Utils:AddTooltip(ddFrame, ddConfig.Tooltip)
             end
 
-            return {
+            local dropdownElement = {
                 Set = function(_, opt)
                     if table.find(options, opt) then
                         selected = opt
@@ -1988,6 +2003,12 @@ function Zonix:Window(config)
                     end
                 end
             }
+            
+            if flag then
+                Zonix.FlaggedElements[flag] = dropdownElement
+            end
+            
+            return dropdownElement
         end
 
         function tab:Textbox(tbConfig)
@@ -2081,7 +2102,7 @@ function Zonix:Window(config)
                 Utils:AddTooltip(tbFrame, tbConfig.Tooltip)
             end
 
-            return {
+            local textboxElement = {
                 Set = function(_, text)
                     tb.Text = text
 
@@ -2092,6 +2113,12 @@ function Zonix:Window(config)
                     pcall(callback, text)
                 end
             }
+            
+            if flag then
+                Zonix.FlaggedElements[flag] = textboxElement
+            end
+            
+            return textboxElement
         end
 
         function tab:Keybind(kbConfig)
@@ -2183,7 +2210,7 @@ function Zonix:Window(config)
                 Utils:AddTooltip(kbFrame, kbConfig.Tooltip)
             end
 
-            return {
+            local keybindElement = {
                 Set = function(_, key)
                     currentKey = key
                     kbBtn.Text = currentKey.Name
@@ -2193,6 +2220,12 @@ function Zonix:Window(config)
                     end
                 end
             }
+            
+            if flag then
+                Zonix.FlaggedElements[flag] = keybindElement
+            end
+            
+            return keybindElement
         end
 
         function tab:ColorPicker(cpConfig)
@@ -2775,9 +2808,11 @@ function Zonix:Window(config)
                 Utils:AddTooltip(cpFrame, cpConfig.Tooltip)
             end
 
-            return {
+            local colorPickerElement = {
                 Set = function(_, color)
                     cpDisplay.BackgroundColor3 = color
+                    currentColor = color
+                    currentH, currentS, currentV = RGBtoHSV(color)
 
                     if flag then
                         Zonix.Flags[flag] = color
@@ -2786,6 +2821,12 @@ function Zonix:Window(config)
                     pcall(callback, color)
                 end
             }
+            
+            if flag then
+                Zonix.FlaggedElements[flag] = colorPickerElement
+            end
+            
+            return colorPickerElement
         end
 
         function tab:CopyButton(cbConfig)
@@ -3032,7 +3073,7 @@ function Zonix:Window(config)
                 end
             )
 
-            return {
+            local checkboxElement = {
                 Set = function(_, value)
                     checked = value
                     if flag then
@@ -3042,6 +3083,12 @@ function Zonix:Window(config)
                     callback(checked)
                 end
             }
+            
+            if flag then
+                Zonix.FlaggedElements[flag] = checkboxElement
+            end
+            
+            return checkboxElement
         end
 
         function tab:AddSpacing(pixels)
@@ -3229,7 +3276,7 @@ function Zonix:Window(config)
                     end
                 )
 
-                return {
+                local checkboxElement = {
                     Set = function(_, value)
                         checked = value
                         if flag then
@@ -3239,6 +3286,12 @@ function Zonix:Window(config)
                         callback(checked)
                     end
                 }
+                
+                if flag then
+                    Zonix.FlaggedElements[flag] = checkboxElement
+                end
+                
+                return checkboxElement
             end
 
             function groupBox:Label(text)
@@ -4965,7 +5018,7 @@ function Zonix:Window(config)
                             end
                         )
 
-                        return {
+                        local checkboxElement = {
                             Set = function(_, value)
                                 checked = value
                                 if flag then
@@ -4975,6 +5028,12 @@ function Zonix:Window(config)
                                 callback(checked)
                             end
                         }
+                        
+                        if flag then
+                            Zonix.FlaggedElements[flag] = checkboxElement
+                        end
+                        
+                        return checkboxElement
                     end
 
                     return groupBox
@@ -5033,7 +5092,27 @@ end
 
 function Zonix:SaveConfig(name)
     name = name or "default"
-    local config = HttpService:JSONEncode(Zonix.Flags)
+    
+    local configData = {}
+    for flag, value in pairs(Zonix.Flags) do
+        if typeof(value) == "Color3" then
+            configData[flag] = {
+                _type = "Color3",
+                R = value.R,
+                G = value.G,
+                B = value.B
+            }
+        elseif typeof(value) == "EnumItem" then
+            configData[flag] = {
+                _type = "KeyCode",
+                Name = value.Name
+            }
+        else
+            configData[flag] = value
+        end
+    end
+    
+    local config = HttpService:JSONEncode(configData)
 
     pcall(
         function()
@@ -5058,11 +5137,24 @@ function Zonix:LoadConfig(name)
     pcall(
         function()
             if Executor.IsFile(Zonix.Settings.ConfigFolder .. "/" .. name .. ".json") then
-                local config =
+                local configData =
                     HttpService:JSONDecode(Executor.ReadFile(Zonix.Settings.ConfigFolder .. "/" .. name .. ".json"))
 
-                for flag, value in pairs(config) do
-                    Zonix.Flags[flag] = value
+                for flag, value in pairs(configData) do
+                    if type(value) == "table" and value._type == "Color3" then
+                        Zonix.Flags[flag] = Color3.new(value.R, value.G, value.B)
+                    elseif type(value) == "table" and value._type == "KeyCode" then
+                        Zonix.Flags[flag] = Enum.KeyCode[value.Name] or Enum.KeyCode.E
+                    else
+                        Zonix.Flags[flag] = value
+                    end
+                end
+
+                for flag, element in pairs(Zonix.FlaggedElements) do
+                    local value = Zonix.Flags[flag]
+                    if value ~= nil and element.Set then
+                        element:Set(value)
+                    end
                 end
 
                 Zonix:Notify(
@@ -5083,7 +5175,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.3.6 LOADED!                  ║")
+print("║                 Zonix UI v1.3.7 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
