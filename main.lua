@@ -1,10 +1,16 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.3.3                           ║
+    ║                    Zonix UI v1.3.4                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+    
+    📱 v1.3.4 - MOBILE COMPATIBILITY UPDATE:
+    • Fixed slider touch input on mobile devices
+    • Fixed color picker touch dragging
+    • All interactive elements now fully support touch gestures
+    • Improved mobile responsiveness across all components
     
     🔥 INSANE FEATURES:
     
@@ -251,7 +257,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.3",
+    Version = "1.3.4",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -694,13 +700,13 @@ function Zonix:Window(config)
         local baseScreenWidth = 1920
         
         if screenSize.X > baseScreenWidth then
-            local scaleFactor = math.min(screenSize.X / baseScreenWidth, 1.8)  -- Cap at 1.8x
+            local scaleFactor = math.min(screenSize.X / baseScreenWidth, 1.8)
             windowWidth = baseWidth * scaleFactor
             windowHeight = baseHeight * scaleFactor
         elseif screenSize.X < 1366 then
             local scaleFactor = screenSize.X / 1366
-            windowWidth = math.max(baseWidth * scaleFactor, 500)  -- Minimum 500px
-            windowHeight = math.max(baseHeight * scaleFactor, 400)  -- Minimum 400px
+            windowWidth = math.max(baseWidth * scaleFactor, 500)
+            windowHeight = math.max(baseHeight * scaleFactor, 400)
         else
             windowWidth = baseWidth
             windowHeight = baseHeight
@@ -1571,15 +1577,17 @@ function Zonix:Window(config)
                 pcall(callback, value)
             end
 
-            slBtn.MouseButton1Down:Connect(
-                function()
-                    dragging = true
+            slBtn.InputBegan:Connect(
+                function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                        dragging = true
+                    end
                 end
             )
 
             UserInputService.InputEnded:Connect(
                 function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                         dragging = false
                     end
                 end
@@ -1587,7 +1595,7 @@ function Zonix:Window(config)
 
             UserInputService.InputChanged:Connect(
                 function(input)
-                    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+                    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
                         update(input)
                     end
                 end
@@ -1595,7 +1603,7 @@ function Zonix:Window(config)
 
             slBack.InputBegan:Connect(
                 function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                         update(input)
                     end
                 end
@@ -2494,14 +2502,10 @@ function Zonix:Window(config)
                         Up(HSVtoRGB(currentH, currentS, currentV))
                     end
 
-                    sv.MouseButton1Down:Connect(
-                        function()
-                            svD = true
-                        end
-                    )
                     sv.InputBegan:Connect(
                         function(i)
-                            if i.UserInputType == Enum.UserInputType.MouseButton1 then
+                            if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                                svD = true
                                 UpSV(i)
                             end
                         end
@@ -2515,14 +2519,10 @@ function Zonix:Window(config)
                         Up(HSVtoRGB(currentH, currentS, currentV))
                     end
 
-                    hu.MouseButton1Down:Connect(
-                        function()
-                            huD = true
-                        end
-                    )
                     hu.InputBegan:Connect(
                         function(i)
-                            if i.UserInputType == Enum.UserInputType.MouseButton1 then
+                            if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                                huD = true
                                 UpHu(i)
                             end
                         end
@@ -2534,7 +2534,7 @@ function Zonix:Window(config)
                     inputEndedConn =
                         UserInputService.InputEnded:Connect(
                         function(i)
-                            if i.UserInputType == Enum.UserInputType.MouseButton1 then
+                            if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
                                 svD = false
                                 huD = false
                             end
@@ -2544,7 +2544,7 @@ function Zonix:Window(config)
                     inputChangedConn =
                         UserInputService.InputChanged:Connect(
                         function(i)
-                            if i.UserInputType == Enum.UserInputType.MouseMovement then
+                            if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
                                 if svD then
                                     UpSV(i)
                                 end
@@ -3334,15 +3334,17 @@ function Zonix:Window(config)
                     pcall(callback, value)
                 end
 
-                slBtn.MouseButton1Down:Connect(
-                    function()
-                        dragging = true
+                slBtn.InputBegan:Connect(
+                    function(input)
+                        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                            dragging = true
+                        end
                     end
                 )
 
                 UserInputService.InputEnded:Connect(
                     function(input)
-                        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                             dragging = false
                         end
                     end
@@ -3350,7 +3352,7 @@ function Zonix:Window(config)
 
                 UserInputService.InputChanged:Connect(
                     function(input)
-                        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+                        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
                             update(input)
                         end
                     end
@@ -3358,7 +3360,7 @@ function Zonix:Window(config)
 
                 slBack.InputBegan:Connect(
                     function(input)
-                        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                             update(input)
                         end
                     end
@@ -4893,7 +4895,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.3.3 LOADED!                  ║")
+print("║                 Zonix UI v1.3.4 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
