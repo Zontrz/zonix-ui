@@ -1,10 +1,16 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.3.5                           ║
+    ║                    Zonix UI v1.3.6                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+    
+    🎉 v1.3.6 - PROMPT SYSTEM ADDED:
+    • New Prompt dialog system with customizable buttons
+    • Confirmation dialogs with overlay backdrop
+    • Smooth animations and hover effects
+    • Perfect for critical actions requiring user confirmation
     
     📱 v1.3.5 - FULLY RESPONSIVE COLOR PICKER:
     • Color picker now scales on ALL screen sizes
@@ -76,6 +82,7 @@
       • Ripple Animations
       • Watermark
       • Notifications (4 types)
+      • Prompts/Dialogs (NEW!)
       • Mobile Responsive
       • Draggable Windows
       • Minimize/Maximize
@@ -263,7 +270,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.5",
+    Version = "1.3.6",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -622,6 +629,166 @@ function Zonix:Notify(config)
             gui:Destroy()
         end
     )
+end
+
+-- ═══════════════════════════════════════════════════════════════
+--                         PROMPT SYSTEM
+-- ═══════════════════════════════════════════════════════════════
+
+function Zonix:Prompt(config)
+    config = config or {}
+    local title = config.Title or "Confirmation"
+    local content = config.Content or ""
+    local buttons = config.Buttons or {}
+
+    local theme = Utils:GetTheme()
+    local gui = CreateGui()
+
+    local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local promptWidth, promptHeight
+    
+    if isMobile then
+        promptWidth = math.min(screenSize.X * 0.85, 350)
+        promptHeight = 220
+    else
+        local baseWidth = 400
+        local baseHeight = 200
+        local baseScreenWidth = 1920
+        
+        if screenSize.X > baseScreenWidth then
+            local scaleFactor = math.min(screenSize.X / baseScreenWidth, 1.5)
+            promptWidth = baseWidth * scaleFactor
+            promptHeight = baseHeight * scaleFactor
+        elseif screenSize.X < 1366 then
+            local scaleFactor = screenSize.X / 1366
+            promptWidth = math.max(baseWidth * scaleFactor, 320)
+            promptHeight = math.max(baseHeight * scaleFactor, 180)
+        else
+            promptWidth = baseWidth
+            promptHeight = baseHeight
+        end
+    end
+
+    local overlay = Instance.new("Frame")
+    overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    overlay.BackgroundTransparency = 0.5
+    overlay.BorderSizePixel = 0
+    overlay.Size = UDim2.new(1, 0, 1, 0)
+    overlay.ZIndex = 999
+    overlay.Parent = gui
+
+    local prompt = Instance.new("Frame")
+    prompt.AnchorPoint = Vector2.new(0.5, 0.5)
+    prompt.BackgroundColor3 = theme.Secondary
+    prompt.BorderSizePixel = 0
+    prompt.Position = UDim2.new(0.5, 0, 0.5, 0)
+    prompt.Size = UDim2.new(0, 0, 0, 0)
+    prompt.ZIndex = 1000
+    prompt.Parent = overlay
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = prompt
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = theme.Border
+    stroke.Thickness = 1
+    stroke.Parent = prompt
+
+    local titleSize = isMobile and 14 or (promptWidth >= 600 and 18 or 16)
+    local contentSize = isMobile and 11 or (promptWidth >= 600 and 14 or 13)
+    local padding = isMobile and 15 or 20
+
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Position = UDim2.new(0, padding, 0, padding)
+    titleLabel.Size = UDim2.new(1, -padding * 2, 0, 25)
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.Text = title
+    titleLabel.TextColor3 = theme.Text
+    titleLabel.TextSize = titleSize
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.ZIndex = 1001
+    titleLabel.Parent = prompt
+
+    local contentLabel = Instance.new("TextLabel")
+    contentLabel.BackgroundTransparency = 1
+    contentLabel.Position = UDim2.new(0, padding, 0, padding + 35)
+    contentLabel.Size = UDim2.new(1, -padding * 2, 0, promptHeight - (padding * 2 + 100))
+    contentLabel.Font = Enum.Font.Gotham
+    contentLabel.Text = content
+    contentLabel.TextColor3 = theme.TextDark
+    contentLabel.TextSize = contentSize
+    contentLabel.TextWrapped = true
+    contentLabel.TextXAlignment = Enum.TextXAlignment.Left
+    contentLabel.TextYAlignment = Enum.TextYAlignment.Top
+    contentLabel.ZIndex = 1001
+    contentLabel.Parent = prompt
+
+    local buttonContainer = Instance.new("Frame")
+    buttonContainer.BackgroundTransparency = 1
+    buttonContainer.Position = UDim2.new(0, padding, 1, -60)
+    buttonContainer.Size = UDim2.new(1, -padding * 2, 0, 40)
+    buttonContainer.ZIndex = 1001
+    buttonContainer.Parent = prompt
+
+    local buttonLayout = Instance.new("UIListLayout")
+    buttonLayout.FillDirection = Enum.FillDirection.Horizontal
+    buttonLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+    buttonLayout.Padding = UDim.new(0, 10)
+    buttonLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    buttonLayout.Parent = buttonContainer
+
+    local function closePrompt()
+        Utils:Tween(prompt, {Size = UDim2.new(0, 0, 0, 0)}, 0.2)
+        Utils:Tween(overlay, {BackgroundTransparency = 1}, 0.2)
+        task.wait(0.2)
+        gui:Destroy()
+    end
+
+    local buttonCount = 0
+    for _, buttonConfig in pairs(buttons) do
+        buttonCount = buttonCount + 1
+    end
+
+    local buttonWidth = isMobile and math.floor(promptWidth * 0.35) or 100
+    local buttonTextSize = isMobile and 12 or 13
+
+    for name, buttonConfig in pairs(buttons) do
+        local buttonText = buttonConfig.Text or name
+        local callback = buttonConfig.Callback or function() end
+
+        local button = Instance.new("TextButton")
+        button.BackgroundColor3 = name == "Confirm" and theme.Accent or theme.Tertiary
+        button.BorderSizePixel = 0
+        button.Size = UDim2.new(0, buttonWidth, 1, 0)
+        button.Font = Enum.Font.GothamBold
+        button.Text = buttonText
+        button.TextColor3 = name == "Confirm" and Color3.fromRGB(255, 255, 255) or theme.Text
+        button.TextSize = buttonTextSize
+        button.ZIndex = 1002
+        button.Parent = buttonContainer
+
+        local btnCorner = Instance.new("UICorner")
+        btnCorner.CornerRadius = UDim.new(0, 8)
+        btnCorner.Parent = button
+
+        button.MouseButton1Click:Connect(function()
+            closePrompt()
+            task.spawn(callback)
+        end)
+
+        button.MouseEnter:Connect(function()
+            Utils:Tween(button, {BackgroundColor3 = name == "Confirm" and Utils:Lighten(theme.Accent, 1.2) or Utils:Lighten(theme.Tertiary, 1.2)}, 0.2)
+        end)
+
+        button.MouseLeave:Connect(function()
+            Utils:Tween(button, {BackgroundColor3 = name == "Confirm" and theme.Accent or theme.Tertiary}, 0.2)
+        end)
+    end
+
+    Utils:Tween(prompt, {Size = UDim2.new(0, promptWidth, 0, promptHeight)}, 0.3, Enum.EasingStyle.Back)
 end
 
 -- ═══════════════════════════════════════════════════════════════
@@ -4916,7 +5083,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.3.5 LOADED!                  ║")
+print("║                 Zonix UI v1.3.6 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
