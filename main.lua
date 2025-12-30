@@ -1,10 +1,16 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.3.4                           ║
+    ║                    Zonix UI v1.3.5                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+    
+    📱 v1.3.5 - FULLY RESPONSIVE COLOR PICKER:
+    • Color picker now scales on ALL screen sizes
+    • Mobile: Automatically scales down to fit small screens
+    • Large screens (>1920px): Scales up proportionally (max 1.5x)
+    • All UI elements scale perfectly across any resolution
     
     📱 v1.3.4 - MOBILE COMPATIBILITY UPDATE:
     • Fixed slider touch input on mobile devices
@@ -257,7 +263,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.4",
+    Version = "1.3.5",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -2189,9 +2195,28 @@ function Zonix:Window(config)
                     bg.AutoButtonColor = false
                     bg.Active = true
 
+                    -- Fully responsive scaling for all screen sizes
+                    local viewportSize = workspace.CurrentCamera.ViewportSize
+                    local baseWidth, baseHeight = 480, 580
+                    local scale
+                    
+                    -- Mobile: scale down to fit
+                    if viewportSize.X < 600 or viewportSize.Y < 700 then
+                        scale = math.min(viewportSize.X / 500, viewportSize.Y / 650) * 0.95
+                    -- Large screens: scale up proportionally (max 1.5x)
+                    elseif viewportSize.X > 1920 then
+                        scale = math.min(viewportSize.X / 1920, 1.5)
+                    -- Normal screens: use base size
+                    else
+                        scale = 1
+                    end
+                    
+                    local pickerWidth = math.floor(baseWidth * scale)
+                    local pickerHeight = math.floor(baseHeight * scale)
+
                     local pk = Instance.new("Frame", bg)
                     pk.AnchorPoint, pk.BackgroundColor3, pk.BorderSizePixel = Vector2.new(0.5, 0.5), theme.Background, 0
-                    pk.Position, pk.Size, pk.ZIndex = UDim2.new(0.5, 0, 0.5, 0), UDim2.new(0, 480, 0, 580), 1000000
+                    pk.Position, pk.Size, pk.ZIndex = UDim2.new(0.5, 0, 0.5, 0), UDim2.new(0, pickerWidth, 0, pickerHeight), 1000000
                     pk.Active = true
                     Instance.new("UICorner", pk).CornerRadius = UDim.new(0, 12)
                     local st = Instance.new("UIStroke", pk)
@@ -2201,7 +2226,7 @@ function Zonix:Window(config)
                     tb.BackgroundColor3, tb.BorderSizePixel, tb.Size, tb.ZIndex =
                         theme.Topbar,
                         0,
-                        UDim2.new(1, 0, 0, 50),
+                        UDim2.new(1, 0, 0, math.floor(50 * scale)),
                         1000001
                     Instance.new("UICorner", tb).CornerRadius = UDim.new(0, 12)
                     local tc = Instance.new("Frame", tb)
@@ -2212,12 +2237,12 @@ function Zonix:Window(config)
                         UDim2.new(1, 0, 0, 12),
                         1000001
                     local tl = Instance.new("TextLabel", tb)
-                    tl.BackgroundTransparency, tl.Position, tl.Size = 1, UDim2.new(0, 20, 0, 0), UDim2.new(1, -80, 1, 0)
+                    tl.BackgroundTransparency, tl.Position, tl.Size = 1, UDim2.new(0, math.floor(20 * scale), 0, 0), UDim2.new(1, math.floor(-80 * scale), 1, 0)
                     tl.Font, tl.Text, tl.TextColor3, tl.TextSize, tl.TextXAlignment, tl.ZIndex =
                         Enum.Font.GothamBold,
                         "Color Picker",
                         theme.Text,
-                        16,
+                        math.floor(16 * scale),
                         Enum.TextXAlignment.Left,
                         1000002
 
@@ -2226,12 +2251,12 @@ function Zonix:Window(config)
                         Vector2.new(1, 0.5),
                         theme.Error,
                         0
-                    closeBtn.Position, closeBtn.Size = UDim2.new(1, -15, 0.5, 0), UDim2.new(0, 30, 0, 30)
+                    closeBtn.Position, closeBtn.Size = UDim2.new(1, math.floor(-15 * scale), 0.5, 0), UDim2.new(0, math.floor(30 * scale), 0, math.floor(30 * scale))
                     closeBtn.Font, closeBtn.Text, closeBtn.TextColor3, closeBtn.TextSize, closeBtn.ZIndex =
                         Enum.Font.GothamBold,
                         "X",
                         Color3.new(1, 1, 1),
-                        18,
+                        math.floor(18 * scale),
                         1000002
                     closeBtn.AutoButtonColor = false
                     Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
@@ -2257,8 +2282,8 @@ function Zonix:Window(config)
                     sv.BackgroundColor3, sv.BorderSizePixel, sv.Position, sv.Size, sv.ZIndex, sv.AutoButtonColor =
                         HSVtoRGB(currentH, 1, 1),
                         0,
-                        UDim2.new(0, 20, 0, 70),
-                        UDim2.new(0, 340, 0, 320),
+                        UDim2.new(0, math.floor(20 * scale), 0, math.floor(70 * scale)),
+                        UDim2.new(0, math.floor(340 * scale), 0, math.floor(320 * scale)),
                         1000001,
                         false
                     Instance.new("UICorner", sv).CornerRadius = UDim.new(0, 8)
@@ -2293,18 +2318,18 @@ function Zonix:Window(config)
                         0
                     sc.Position, sc.Size, sc.ZIndex =
                         UDim2.new(currentS, 0, 1 - currentV, 0),
-                        UDim2.new(0, 20, 0, 20),
+                        UDim2.new(0, math.floor(20 * scale), 0, math.floor(20 * scale)),
                         1000004
                     Instance.new("UICorner", sc).CornerRadius = UDim.new(1, 0)
                     local scs = Instance.new("UIStroke", sc)
-                    scs.Color, scs.Thickness = Color3.fromRGB(40, 40, 50), 3
+                    scs.Color, scs.Thickness = Color3.fromRGB(40, 40, 50), math.max(2, math.floor(3 * scale))
 
                     local hu = Instance.new("ImageButton", pk)
                     hu.BackgroundColor3, hu.BorderSizePixel, hu.Position, hu.Size, hu.ZIndex, hu.AutoButtonColor =
                         Color3.new(1, 1, 1),
                         0,
-                        UDim2.new(0, 20, 0, 410),
-                        UDim2.new(0, 440, 0, 20),
+                        UDim2.new(0, math.floor(20 * scale), 0, math.floor(410 * scale)),
+                        UDim2.new(0, math.floor(440 * scale), 0, math.floor(20 * scale)),
                         1000001,
                         false
                     Instance.new("UICorner", hu).CornerRadius = UDim.new(1, 0)
@@ -2327,17 +2352,17 @@ function Zonix:Window(config)
                         Vector2.new(0.5, 0.5),
                         Color3.new(1, 1, 1),
                         0
-                    hc.Position, hc.Size, hc.ZIndex = UDim2.new(currentH, 0, 0.5, 0), UDim2.new(0, 16, 0, 32), 1000002
+                    hc.Position, hc.Size, hc.ZIndex = UDim2.new(currentH, 0, 0.5, 0), UDim2.new(0, math.floor(16 * scale), 0, math.floor(32 * scale)), 1000002
                     Instance.new("UICorner", hc).CornerRadius = UDim.new(1, 0)
                     local hcs = Instance.new("UIStroke", hc)
-                    hcs.Color, hcs.Thickness = Color3.fromRGB(40, 40, 50), 3
+                    hcs.Color, hcs.Thickness = Color3.fromRGB(40, 40, 50), math.max(2, math.floor(3 * scale))
 
                     local pv = Instance.new("Frame", pk)
                     pv.BackgroundColor3, pv.BorderSizePixel, pv.Position, pv.Size, pv.ZIndex =
                         currentColor,
                         0,
-                        UDim2.new(0, 380, 0, 70),
-                        UDim2.new(0, 80, 0, 80),
+                        UDim2.new(0, math.floor(380 * scale), 0, math.floor(70 * scale)),
+                        UDim2.new(0, math.floor(80 * scale), 0, math.floor(80 * scale)),
                         1000001
                     Instance.new("UICorner", pv).CornerRadius = UDim.new(0, 8)
                     local pvs = Instance.new("UIStroke", pv)
@@ -2347,8 +2372,8 @@ function Zonix:Window(config)
                     hf.BackgroundColor3, hf.BorderSizePixel, hf.Position, hf.Size, hf.ZIndex =
                         theme.Secondary,
                         0,
-                        UDim2.new(0, 20, 0, 450),
-                        UDim2.new(0, 440, 0, 50),
+                        UDim2.new(0, math.floor(20 * scale), 0, math.floor(450 * scale)),
+                        UDim2.new(0, math.floor(440 * scale), 0, math.floor(50 * scale)),
                         1000001
                     Instance.new("UICorner", hf).CornerRadius = UDim.new(0, 8)
                     Instance.new("UIStroke", hf).Color = theme.Border
@@ -2356,26 +2381,26 @@ function Zonix:Window(config)
                     local ht = Instance.new("TextLabel", hf)
                     ht.BackgroundTransparency, ht.Position, ht.Size =
                         1,
-                        UDim2.new(0, 15, 0, 0),
-                        UDim2.new(0, 100, 0, 20)
+                        UDim2.new(0, math.floor(15 * scale), 0, 0),
+                        UDim2.new(0, math.floor(100 * scale), 0, math.floor(20 * scale))
                     ht.Font, ht.Text, ht.TextColor3, ht.TextSize, ht.TextXAlignment, ht.ZIndex =
                         Enum.Font.GothamBold,
                         "HEX",
                         theme.Text,
-                        12,
+                        math.floor(12 * scale),
                         Enum.TextXAlignment.Left,
                         1000002
 
                     local hv = Instance.new("TextLabel", hf)
                     hv.BackgroundTransparency, hv.Position, hv.Size =
                         1,
-                        UDim2.new(0, 15, 0, 20),
-                        UDim2.new(1, -80, 0, 25)
+                        UDim2.new(0, math.floor(15 * scale), 0, math.floor(20 * scale)),
+                        UDim2.new(1, math.floor(-80 * scale), 0, math.floor(25 * scale))
                     hv.Font, hv.Text, hv.TextColor3, hv.TextSize, hv.TextXAlignment, hv.ZIndex =
                         Enum.Font.Gotham,
                         ToHex(currentColor),
                         theme.TextDark,
-                        14,
+                        math.floor(14 * scale),
                         Enum.TextXAlignment.Left,
                         1000002
 
@@ -2383,13 +2408,13 @@ function Zonix:Window(config)
                     hb.AnchorPoint, hb.BackgroundTransparency, hb.Position, hb.Size =
                         Vector2.new(1, 0.5),
                         1,
-                        UDim2.new(1, -10, 0.5, 0),
-                        UDim2.new(0, 30, 0, 30)
+                        UDim2.new(1, math.floor(-10 * scale), 0.5, 0),
+                        UDim2.new(0, math.floor(30 * scale), 0, math.floor(30 * scale))
                     hb.Font, hb.Text, hb.TextColor3, hb.TextSize, hb.ZIndex =
                         Enum.Font.GothamBold,
                         "📋",
                         theme.TextDark,
-                        16,
+                        math.floor(16 * scale),
                         1000002
                     hb.MouseButton1Click:Connect(
                         function()
@@ -2403,8 +2428,8 @@ function Zonix:Window(config)
                     local vf = Instance.new("Frame", pk)
                     vf.BackgroundTransparency, vf.Position, vf.Size, vf.ZIndex =
                         1,
-                        UDim2.new(0, 20, 0, 510),
-                        UDim2.new(0, 440, 0, 50),
+                        UDim2.new(0, math.floor(20 * scale), 0, math.floor(510 * scale)),
+                        UDim2.new(0, math.floor(440 * scale), 0, math.floor(50 * scale)),
                         1000001
 
                     local function MV(n, x, v)
@@ -2412,33 +2437,33 @@ function Zonix:Window(config)
                         f.BackgroundColor3, f.BorderSizePixel, f.Position, f.Size, f.ZIndex =
                             theme.Secondary,
                             0,
-                            UDim2.new(0, x, 0, 0),
-                            UDim2.new(0, 105, 0, 50),
+                            UDim2.new(0, math.floor(x * scale), 0, 0),
+                            UDim2.new(0, math.floor(105 * scale), 0, math.floor(50 * scale)),
                             1000001
                         Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
                         Instance.new("UIStroke", f).Color = theme.Border
                         local t = Instance.new("TextLabel", f)
                         t.BackgroundTransparency, t.Position, t.Size =
                             1,
-                            UDim2.new(0, 10, 0, 5),
-                            UDim2.new(1, -20, 0, 15)
+                            UDim2.new(0, math.floor(10 * scale), 0, math.floor(5 * scale)),
+                            UDim2.new(1, math.floor(-20 * scale), 0, math.floor(15 * scale))
                         t.Font, t.Text, t.TextColor3, t.TextSize, t.TextXAlignment, t.ZIndex =
                             Enum.Font.GothamBold,
                             n,
                             theme.Text,
-                            11,
+                            math.floor(11 * scale),
                             Enum.TextXAlignment.Left,
                             1000002
                         local vv = Instance.new("TextLabel", f)
                         vv.BackgroundTransparency, vv.Position, vv.Size =
                             1,
-                            UDim2.new(0, 10, 0, 22),
-                            UDim2.new(1, -20, 0, 23)
+                            UDim2.new(0, math.floor(10 * scale), 0, math.floor(22 * scale)),
+                            UDim2.new(1, math.floor(-20 * scale), 0, math.floor(23 * scale))
                         vv.Font, vv.Text, vv.TextColor3, vv.TextSize, vv.TextXAlignment, vv.ZIndex =
                             Enum.Font.Gotham,
                             v,
                             theme.TextDark,
-                            12,
+                            math.floor(12 * scale),
                             Enum.TextXAlignment.Left,
                             1000002
                         return vv
@@ -4895,7 +4920,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.3.4 LOADED!                  ║")
+print("║                 Zonix UI v1.3.5 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
