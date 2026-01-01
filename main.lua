@@ -1,10 +1,34 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.3.7                           ║
+    ║                    Zonix UI v1.4.0                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+    
+    🔥 v1.4.0 - ADVANCED SEARCH & MINIMIZE MODES:
+    • NEW: Advanced Search Component with customizable options
+    • Live search with debouncing and result highlighting
+    • Search history with auto-save (configurable)
+    • Case-sensitive search option
+    • Custom filter functions support
+    • Result count display with color coding
+    • Search result highlighting with auto-fade
+    • Clear button with smooth animations
+    • NEW: Minimize Mode options - "collapse" or "shrink"
+    • "shrink" mode minimizes window to small 100x100 square
+    • "collapse" mode keeps traditional top bar only minimize
+    • Configurable per window via MinimizeMode parameter
+    • 6 Search Modes - Exact, Contains, Starts With, Ends With, Fuzzy, Regex
+    • Fuzzy search with Levenshtein distance algorithm
+    • Intelligent result scoring and ranking system
+    • Score-based highlight intensity (better matches = brighter highlights)
+    • Search mode selector dropdown with icons
+    • Tag-based searching with score boosting
+    • Configurable fuzzy matching threshold
+    • Max results limit to optimize performance
+    • Programmatic mode switching via SetMode()
+    • AddElementTag() for custom element categorization
     
     🔧 v1.3.7 - CONFIG SYSTEM FIX:
     • SaveConfig now properly saves ALL UI element values
@@ -55,7 +79,7 @@
     
     ✓ ADVANCED FEATURES:
       • Multi-Dropdown (select multiple)
-      • Search functionality
+      • Advanced Search Component (NEW in v1.4.0!)
       • Progress Bars
       • Loading Indicators
       • Console Logger (built-in)
@@ -87,7 +111,7 @@
       • Prompts/Dialogs (NEW!)
       • Mobile Responsive
       • Draggable Windows
-      • Minimize/Maximize
+      • Minimize/Maximize with Modes (NEW!)
       • Custom Window Icons
 ]]
 -- ═══════════════════════════════════════════════════════════════
@@ -272,7 +296,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.3.7",
+    Version = "1.4.0",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -852,12 +876,22 @@ function Zonix:Window(config)
     config = config or {}
     local windowName = config.Name or "Zonix UI"
     local windowIcon = config.Icon
+    local minimizeMode = config.MinimizeMode or "collapse"
     local theme = Utils:GetTheme()
+
+    local function getInitials(name)
+        local initials = ""
+        for word in name:gmatch("%S+") do
+            initials = initials .. word:sub(1, 1):upper()
+        end
+        return initials
+    end
 
     local window = {
         Tabs = {},
         CurrentTab = nil,
-        Minimized = false
+        Minimized = false,
+        MinimizeMode = minimizeMode
     }
 
     local gui = CreateGui()
@@ -866,10 +900,12 @@ function Zonix:Window(config)
     local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
     local screenSize = workspace.CurrentCamera.ViewportSize
     local windowWidth, windowHeight
+    local shrinkSize
     
     if isMobile then
         windowWidth = math.min(screenSize.X * 0.9, 500)
         windowHeight = math.min(screenSize.Y * 0.7, 600)
+        shrinkSize = math.max(math.min(screenSize.X * 0.15, 80), 60)
     else
         local baseWidth = 700
         local baseHeight = 520
@@ -879,13 +915,16 @@ function Zonix:Window(config)
             local scaleFactor = math.min(screenSize.X / baseScreenWidth, 1.8)
             windowWidth = baseWidth * scaleFactor
             windowHeight = baseHeight * scaleFactor
+            shrinkSize = math.min(100 * scaleFactor, 150)
         elseif screenSize.X < 1366 then
             local scaleFactor = screenSize.X / 1366
             windowWidth = math.max(baseWidth * scaleFactor, 500)
             windowHeight = math.max(baseHeight * scaleFactor, 400)
+            shrinkSize = math.max(100 * scaleFactor, 80)
         else
             windowWidth = baseWidth
             windowHeight = baseHeight
+            shrinkSize = 100
         end
     end
 
@@ -905,6 +944,7 @@ function Zonix:Window(config)
         if isMobile then
             windowWidth = math.min(newScreenSize.X * 0.9, 500)
             windowHeight = math.min(newScreenSize.Y * 0.7, 600)
+            shrinkSize = math.max(math.min(newScreenSize.X * 0.15, 80), 60)
         else
             local baseWidth = 700
             local baseHeight = 520
@@ -914,20 +954,27 @@ function Zonix:Window(config)
                 local scaleFactor = math.min(newScreenSize.X / baseScreenWidth, 1.8)
                 windowWidth = baseWidth * scaleFactor
                 windowHeight = baseHeight * scaleFactor
+                shrinkSize = math.min(100 * scaleFactor, 150)
             elseif newScreenSize.X < 1366 then
                 local scaleFactor = newScreenSize.X / 1366
                 windowWidth = math.max(baseWidth * scaleFactor, 500)
                 windowHeight = math.max(baseHeight * scaleFactor, 400)
+                shrinkSize = math.max(100 * scaleFactor, 80)
             else
                 windowWidth = baseWidth
                 windowHeight = baseHeight
+                shrinkSize = 100
             end
         end
         
         if not window.Minimized then
             main.Size = UDim2.new(0, windowWidth, 0, windowHeight)
         else
-            main.Size = UDim2.new(0, windowWidth, 0, 45)
+            if window.MinimizeMode == "shrink" then
+                main.Size = UDim2.new(0, shrinkSize, 0, shrinkSize)
+            else
+                main.Size = UDim2.new(0, windowWidth, 0, 45)
+            end
         end
     end)
 
@@ -1001,6 +1048,12 @@ function Zonix:Window(config)
             title.TextSize = 16
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Parent = topbar
+            
+            window.TitleLabel = title
+            window.IconLabel = iconLabel
+            window.FullName = windowName
+            window.ShortName = getInitials(windowName)
+            window.IconValue = iconValue
         else
             local icon = Instance.new("ImageLabel")
             icon.BackgroundTransparency = 1
@@ -1021,6 +1074,11 @@ function Zonix:Window(config)
             title.TextSize = 16
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Parent = topbar
+            
+            window.TitleLabel = title
+            window.IconLabel = icon
+            window.FullName = windowName
+            window.ShortName = getInitials(windowName)
         end
     else
         local title = Instance.new("TextLabel")
@@ -1033,6 +1091,10 @@ function Zonix:Window(config)
         title.TextSize = 16
         title.TextXAlignment = Enum.TextXAlignment.Left
         title.Parent = topbar
+        
+        window.TitleLabel = title
+        window.FullName = windowName
+        window.ShortName = getInitials(windowName)
     end
 
     local controls = Instance.new("Frame")
@@ -1077,6 +1139,22 @@ function Zonix:Window(config)
     closeCorner.CornerRadius = UDim.new(0, 6)
     closeCorner.Parent = close
 
+    local centerLabel = Instance.new("TextLabel")
+    centerLabel.BackgroundTransparency = 1
+    centerLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+    centerLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+    centerLabel.Size = UDim2.new(0.8, 0, 0, 30)
+    centerLabel.Font = Enum.Font.GothamBold
+    centerLabel.Text = getInitials(windowName)
+    centerLabel.TextColor3 = theme.Text
+    centerLabel.TextSize = 18
+    centerLabel.TextXAlignment = Enum.TextXAlignment.Center
+    centerLabel.TextYAlignment = Enum.TextYAlignment.Center
+    centerLabel.Visible = false
+    centerLabel.ZIndex = 10
+    centerLabel.Parent = main
+    window.CenterLabel = centerLabel
+
     local tabBar = Instance.new("Frame")
     tabBar.BackgroundColor3 = theme.Secondary
     tabBar.BorderSizePixel = 0
@@ -1107,7 +1185,44 @@ function Zonix:Window(config)
         function()
             Utils:Ripple(minimize)
             window.Minimized = not window.Minimized
-            Utils:Tween(main, {Size = window.Minimized and UDim2.new(0, windowWidth, 0, 45) or UDim2.new(0, windowWidth, 0, windowHeight)}, 0.3)
+            
+            if window.MinimizeMode == "shrink" then
+                if window.Minimized then
+                    Utils:Tween(main, {Size = UDim2.new(0, shrinkSize, 0, shrinkSize)}, 0.3, Enum.EasingStyle.Back)
+                    tabBar.Visible = false
+                    content.Visible = false
+                    
+                    if window.TitleLabel then
+                        window.TitleLabel.Visible = false
+                    end
+                    if window.IconLabel then
+                        window.IconLabel.Visible = false
+                    end
+                    
+                    if window.CenterLabel then
+                        window.CenterLabel.Visible = true
+                        window.CenterLabel.TextSize = math.floor(shrinkSize * 0.18)
+                    end
+                else
+                    Utils:Tween(main, {Size = UDim2.new(0, windowWidth, 0, windowHeight)}, 0.3, Enum.EasingStyle.Back)
+                    tabBar.Visible = true
+                    content.Visible = true
+                    
+                    if window.TitleLabel then
+                        window.TitleLabel.Visible = true
+                    end
+                    if window.IconLabel then
+                        window.IconLabel.Visible = true
+                    end
+                    
+                    if window.CenterLabel then
+                        window.CenterLabel.Visible = false
+                    end
+                end
+            else
+                Utils:Tween(main, {Size = window.Minimized and UDim2.new(0, windowWidth, 0, 45) or UDim2.new(0, windowWidth, 0, windowHeight)}, 0.3)
+            end
+            
             minimize.Text = window.Minimized and "+" or "-"
         end
     )
@@ -1395,6 +1510,16 @@ function Zonix:Window(config)
             div.Position = UDim2.new(0, 0, 1, -1)
             div.Size = UDim2.new(1, 0, 0, 1)
             div.Parent = section
+            
+            local element = {
+                Frame = section,
+                Name = name,
+                SearchData = name,
+                Tags = {}
+            }
+            
+            table.insert(tab.Elements, element)
+            return element
         end
 
         function tab:Label(text)
@@ -1414,11 +1539,20 @@ function Zonix:Window(config)
             label.TextWrapped = true
             label.Parent = labelFrame
 
-            return {
+            local element = {
+                Frame = labelFrame,
+                Name = text,
+                SearchData = text,
+                Tags = {},
                 Set = function(_, newText)
                     label.Text = newText
+                    element.Name = newText
+                    element.SearchData = newText
                 end
             }
+            
+            table.insert(tab.Elements, element)
+            return element
         end
 
         function tab:Paragraph(title, text)
@@ -1466,6 +1600,17 @@ function Zonix:Window(config)
             local paraPad = Instance.new("UIPadding")
             paraPad.PaddingBottom = UDim.new(0, 10)
             paraPad.Parent = paraFrame
+            
+            local element = {
+                Frame = paraFrame,
+                Name = title,
+                Description = text,
+                SearchData = title .. " " .. text,
+                Tags = {}
+            }
+            
+            table.insert(tab.Elements, element)
+            return element
         end
 
         function tab:Divider()
@@ -1547,6 +1692,16 @@ function Zonix:Window(config)
             if btnConfig.Tooltip then
                 Utils:AddTooltip(btnFrame, btnConfig.Tooltip)
             end
+            
+            local element = {
+                Frame = btnFrame,
+                Name = btnName,
+                SearchData = btnName,
+                Tags = {}
+            }
+            
+            table.insert(tab.Elements, element)
+            return element
         end
 
         function tab:Toggle(togConfig)
@@ -1637,6 +1792,10 @@ function Zonix:Window(config)
             end
 
             local toggleElement = {
+                Frame = togFrame,
+                Name = togName,
+                SearchData = togName,
+                Tags = {},
                 Set = function(_, value)
                     if toggled ~= value then
                         toggle()
@@ -1648,6 +1807,7 @@ function Zonix:Window(config)
                 Zonix.FlaggedElements[flag] = toggleElement
             end
             
+            table.insert(tab.Elements, toggleElement)
             return toggleElement
         end
 
@@ -1808,13 +1968,18 @@ function Zonix:Window(config)
                     end
 
                     pcall(callback, value)
-                end
+                end,
+                Frame = slFrame,
+                Name = slName,
+                SearchData = slName,
+                Tags = {}
             }
             
             if flag then
                 Zonix.FlaggedElements[flag] = sliderElement
             end
             
+            table.insert(tab.Elements, sliderElement)
             return sliderElement
         end
 
@@ -2001,13 +2166,18 @@ function Zonix:Window(config)
                         selected = newDefault
                         ddLabel.Text = ddName .. ": " .. selected
                     end
-                end
+                end,
+                Frame = ddFrame,
+                Name = ddName,
+                SearchData = ddName,
+                Tags = {}
             }
             
             if flag then
                 Zonix.FlaggedElements[flag] = dropdownElement
             end
             
+            table.insert(tab.Elements, dropdownElement)
             return dropdownElement
         end
 
@@ -2111,13 +2281,18 @@ function Zonix:Window(config)
                     end
 
                     pcall(callback, text)
-                end
+                end,
+                Frame = tbFrame,
+                Name = tbName,
+                SearchData = tbName,
+                Tags = {}
             }
             
             if flag then
                 Zonix.FlaggedElements[flag] = textboxElement
             end
             
+            table.insert(tab.Elements, textboxElement)
             return textboxElement
         end
 
@@ -2218,13 +2393,18 @@ function Zonix:Window(config)
                     if flag then
                         Zonix.Flags[flag] = currentKey
                     end
-                end
+                end,
+                Frame = kbFrame,
+                Name = kbName,
+                SearchData = kbName,
+                Tags = {}
             }
             
             if flag then
                 Zonix.FlaggedElements[flag] = keybindElement
             end
             
+            table.insert(tab.Elements, keybindElement)
             return keybindElement
         end
 
@@ -2819,13 +2999,18 @@ function Zonix:Window(config)
                     end
 
                     pcall(callback, color)
-                end
+                end,
+                Frame = cpFrame,
+                Name = cpName,
+                SearchData = cpName,
+                Tags = {}
             }
             
             if flag then
                 Zonix.FlaggedElements[flag] = colorPickerElement
             end
             
+            table.insert(tab.Elements, colorPickerElement)
             return colorPickerElement
         end
 
@@ -2898,6 +3083,16 @@ function Zonix:Window(config)
                     Utils:Tween(cbBtn, {BackgroundColor3 = theme.Accent}, 0.2)
                 end
             )
+            
+            local element = {
+                Frame = cbFrame,
+                Name = cbName,
+                SearchData = cbName,
+                Tags = {}
+            }
+            
+            table.insert(tab.Elements, element)
+            return element
         end
 
         function tab:ProgressBar(pbConfig)
@@ -2964,7 +3159,11 @@ function Zonix:Window(config)
             pbFillCorner.CornerRadius = UDim.new(1, 0)
             pbFillCorner.Parent = pbFill
 
-            return {
+            local progressElement = {
+                Frame = pbFrame,
+                Name = pbName,
+                SearchData = pbName,
+                Tags = {},
                 Set = function(_, value)
                     value = math.clamp(value, 0, 1)
                     pbPercent.Text = math.floor(value * 100) .. "%"
@@ -2979,6 +3178,9 @@ function Zonix:Window(config)
                     end
                 end
             }
+            
+            table.insert(tab.Elements, progressElement)
+            return progressElement
         end
 
         function tab:Checkbox(cbConfig)
@@ -3074,6 +3276,10 @@ function Zonix:Window(config)
             )
 
             local checkboxElement = {
+                Frame = cbFrame,
+                Name = cbName,
+                SearchData = cbName,
+                Tags = {},
                 Set = function(_, value)
                     checked = value
                     if flag then
@@ -3088,6 +3294,7 @@ function Zonix:Window(config)
                 Zonix.FlaggedElements[flag] = checkboxElement
             end
             
+            table.insert(tab.Elements, checkboxElement)
             return checkboxElement
         end
 
@@ -5056,6 +5263,741 @@ function Zonix:Window(config)
             return subTab
         end
 
+        function tab:Search(searchConfig)
+            searchConfig = searchConfig or {}
+            local placeholder = searchConfig.Placeholder or "Search UI elements..."
+            local searchCallback = searchConfig.Callback or function() end
+            local liveSearch = searchConfig.LiveSearch ~= false
+            local caseSensitive = searchConfig.CaseSensitive or false
+            local searchHistory = searchConfig.SaveHistory ~= false
+            local maxHistorySize = searchConfig.MaxHistorySize or 10
+            local customFilter = searchConfig.Filter
+            local showResultCount = searchConfig.ShowResultCount ~= false
+            local highlightColor = searchConfig.HighlightColor or theme.Accent
+            local clearButton = searchConfig.ClearButton ~= false
+            local searchDelay = searchConfig.SearchDelay or 0.3
+            local defaultMode = searchConfig.DefaultMode or "contains"
+            local showModeSelector = searchConfig.ShowModeSelector ~= false
+            local fuzzyThreshold = searchConfig.FuzzyThreshold or 0.6
+            local maxResults = searchConfig.MaxResults or 100
+            local searchInTags = searchConfig.SearchInTags ~= false
+            local hideNonMatching = searchConfig.HideNonMatching or false
+            local position = searchConfig.Position or "order"
+            local customSearch = searchConfig.CustomSearch
+
+            local function levenshteinDistance(str1, str2)
+                local len1, len2 = #str1, #str2
+                local matrix = {}
+                
+                for i = 0, len1 do
+                    matrix[i] = {[0] = i}
+                end
+                for j = 0, len2 do
+                    matrix[0][j] = j
+                end
+                
+                for i = 1, len1 do
+                    for j = 1, len2 do
+                        local cost = (str1:sub(i, i) == str2:sub(j, j)) and 0 or 1
+                        matrix[i][j] = math.min(
+                            matrix[i-1][j] + 1,
+                            matrix[i][j-1] + 1,
+                            matrix[i-1][j-1] + cost
+                        )
+                    end
+                end
+                
+                return matrix[len1][len2]
+            end
+
+            local function fuzzyScore(query, text)
+                if query == "" then return 0 end
+                local distance = levenshteinDistance(query, text)
+                local maxLen = math.max(#query, #text)
+                return 1 - (distance / maxLen)
+            end
+
+            local function matchesQuery(query, searchData, mode)
+                if query == "" then return false, 0 end
+                
+                local score = 0
+                local matches = false
+                
+                if mode == "exact" then
+                    matches = searchData == query
+                    score = matches and 1 or 0
+                    
+                elseif mode == "contains" then
+                    matches = searchData:find(query, 1, true) ~= nil
+                    score = matches and 1 or 0
+                    
+                elseif mode == "startswith" then
+                    matches = searchData:sub(1, #query) == query
+                    score = matches and 1 or 0
+                    
+                elseif mode == "endswith" then
+                    matches = searchData:sub(-#query) == query
+                    score = matches and 1 or 0
+                    
+                elseif mode == "fuzzy" then
+                    score = fuzzyScore(query, searchData)
+                    matches = score >= fuzzyThreshold
+                    
+                elseif mode == "regex" then
+                    local success, result = pcall(function()
+                        return searchData:match(query) ~= nil
+                    end)
+                    matches = success and result
+                    score = matches and 1 or 0
+                end
+                
+                return matches, score
+            end
+
+            local search = {
+                Value = "",
+                Results = {},
+                History = {},
+                Searching = false,
+                CurrentMode = defaultMode
+            }
+
+            local container = Instance.new("Frame")
+            container.BackgroundTransparency = 1
+            container.Size = UDim2.new(1, 0, 0, 0)
+            container.AutomaticSize = Enum.AutomaticSize.Y
+            container.Parent = tabContent
+            
+            if position == "top" then
+                container.LayoutOrder = -999999
+            elseif position == "bottom" then
+                container.LayoutOrder = 999999
+            end
+
+            local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+            local screenSize = workspace.CurrentCamera.ViewportSize
+            local scaleFactor = 1
+            
+            if isMobile then
+                scaleFactor = math.min(screenSize.X / 500, 1)
+            else
+                local baseScreenWidth = 1920
+                if screenSize.X > baseScreenWidth then
+                    scaleFactor = math.min(screenSize.X / baseScreenWidth, 1.5)
+                elseif screenSize.X < 1366 then
+                    scaleFactor = math.max(screenSize.X / 1366, 0.8)
+                end
+            end
+
+            local modeFrame
+            local modeSelector
+            if showModeSelector then
+                local modeHeight = math.floor(30 * scaleFactor)
+                local modeLabelWidth = math.floor(80 * scaleFactor)
+                local modeSelectorWidth = math.floor(140 * scaleFactor)
+                local modeFontSize = math.floor(12 * scaleFactor)
+                local modeTextSize = math.floor(11 * scaleFactor)
+                
+                modeFrame = Instance.new("Frame")
+                modeFrame.BackgroundTransparency = 1
+                modeFrame.Size = UDim2.new(1, 0, 0, modeHeight)
+                modeFrame.Parent = container
+
+                local modeLabel = Instance.new("TextLabel")
+                modeLabel.BackgroundTransparency = 1
+                modeLabel.Position = UDim2.new(0, 0, 0, 0)
+                modeLabel.Size = UDim2.new(0, modeLabelWidth, 1, 0)
+                modeLabel.Font = Enum.Font.GothamBold
+                modeLabel.Text = "Mode:"
+                modeLabel.TextColor3 = theme.Text
+                modeLabel.TextSize = modeFontSize
+                modeLabel.TextXAlignment = Enum.TextXAlignment.Left
+                modeLabel.Parent = modeFrame
+
+                modeSelector = Instance.new("TextButton")
+                modeSelector.BackgroundColor3 = theme.Tertiary
+                modeSelector.BorderSizePixel = 0
+                modeSelector.Position = UDim2.new(0, modeLabelWidth + 5, 0, 0)
+                modeSelector.Size = UDim2.new(0, modeSelectorWidth, 1, 0)
+                modeSelector.Font = Enum.Font.Gotham
+                modeSelector.Text = search.CurrentMode:upper()
+                modeSelector.TextColor3 = theme.Text
+                modeSelector.TextSize = modeTextSize
+                modeSelector.Parent = modeFrame
+
+                local modeCorner = Instance.new("UICorner")
+                modeCorner.CornerRadius = UDim.new(0, math.floor(6 * scaleFactor))
+                modeCorner.Parent = modeSelector
+
+                local modeArrow = Instance.new("TextLabel")
+                modeArrow.BackgroundTransparency = 1
+                modeArrow.Position = UDim2.new(1, -20 * scaleFactor, 0, 0)
+                modeArrow.Size = UDim2.new(0, 20 * scaleFactor, 1, 0)
+                modeArrow.Font = Enum.Font.GothamBold
+                modeArrow.Text = "▼"
+                modeArrow.TextColor3 = theme.TextDark
+                modeArrow.TextSize = math.floor(10 * scaleFactor)
+                modeArrow.Parent = modeSelector
+
+                local modeDropdown = Instance.new("Frame")
+                modeDropdown.BackgroundColor3 = theme.Tertiary
+                modeDropdown.BorderSizePixel = 0
+                modeDropdown.Position = UDim2.new(0, modeLabelWidth + 5, 1, 5)
+                modeDropdown.Size = UDim2.new(0, modeSelectorWidth, 0, 0)
+                modeDropdown.Visible = false
+                modeDropdown.ClipsDescendants = true
+                modeDropdown.ZIndex = 101
+                modeDropdown.Parent = modeFrame
+
+                local dropCorner = Instance.new("UICorner")
+                dropCorner.CornerRadius = UDim.new(0, math.floor(6 * scaleFactor))
+                dropCorner.Parent = modeDropdown
+
+                local dropStroke = Instance.new("UIStroke")
+                dropStroke.Color = theme.Border
+                dropStroke.Thickness = 1
+                dropStroke.Parent = modeDropdown
+
+                local dropList = Instance.new("UIListLayout")
+                dropList.Padding = UDim.new(0, 2)
+                dropList.SortOrder = Enum.SortOrder.LayoutOrder
+                dropList.Parent = modeDropdown
+
+                local dropPadding = Instance.new("UIPadding")
+                dropPadding.PaddingTop = UDim.new(0, 5)
+                dropPadding.PaddingBottom = UDim.new(0, 5)
+                dropPadding.PaddingLeft = UDim.new(0, 5)
+                dropPadding.PaddingRight = UDim.new(0, 5)
+                dropPadding.Parent = modeDropdown
+
+                local modes = {
+                    {name = "contains", desc = "Contains text", icon = "🔍"},
+                    {name = "exact", desc = "Exact match", icon = "🎯"},
+                    {name = "startswith", desc = "Starts with", icon = "▶️"},
+                    {name = "endswith", desc = "Ends with", icon = "◀️"},
+                    {name = "fuzzy", desc = "Fuzzy search", icon = "✨"},
+                    {name = "regex", desc = "Regex pattern", icon = "🔧"}
+                }
+
+                local optionHeight = math.floor(30 * scaleFactor)
+                for i, modeData in ipairs(modes) do
+                    local option = Instance.new("TextButton")
+                    option.BackgroundColor3 = theme.Secondary
+                    option.BorderSizePixel = 0
+                    option.Size = UDim2.new(1, 0, 0, optionHeight)
+                    option.Font = Enum.Font.Gotham
+                    option.Text = "  " .. modeData.icon .. " " .. modeData.desc
+                    option.TextColor3 = theme.Text
+                    option.TextSize = modeTextSize
+                    option.TextXAlignment = Enum.TextXAlignment.Left
+                    option.LayoutOrder = i
+                    option.ZIndex = 102
+                    option.Parent = modeDropdown
+
+                    local optCorner = Instance.new("UICorner")
+                    optCorner.CornerRadius = UDim.new(0, math.floor(4 * scaleFactor))
+                    optCorner.Parent = option
+
+                    option.MouseButton1Click:Connect(function()
+                        search.CurrentMode = modeData.name
+                        modeSelector.Text = modeData.name:upper()
+                        Utils:Tween(modeDropdown, {Size = UDim2.new(0, modeSelectorWidth, 0, 0)}, 0.2)
+                        task.wait(0.2)
+                        modeDropdown.Visible = false
+                        modeArrow.Text = "▼"
+                        
+                        if searchBox.Text ~= "" then
+                            performSearch(searchBox.Text)
+                        end
+                    end)
+
+                    option.MouseEnter:Connect(function()
+                        Utils:Tween(option, {BackgroundColor3 = theme.Accent}, 0.2)
+                    end)
+
+                    option.MouseLeave:Connect(function()
+                        Utils:Tween(option, {BackgroundColor3 = theme.Secondary}, 0.2)
+                    end)
+                end
+
+                modeSelector.MouseButton1Click:Connect(function()
+                    modeDropdown.Visible = not modeDropdown.Visible
+                    if modeDropdown.Visible then
+                        Utils:Tween(modeDropdown, {Size = UDim2.new(0, modeSelectorWidth, 0, #modes * (optionHeight + 2) + 10)}, 0.2)
+                        modeArrow.Text = "▲"
+                    else
+                        Utils:Tween(modeDropdown, {Size = UDim2.new(0, modeSelectorWidth, 0, 0)}, 0.2)
+                        modeArrow.Text = "▼"
+                    end
+                end)
+
+                modeSelector.MouseEnter:Connect(function()
+                    Utils:Tween(modeSelector, {BackgroundColor3 = theme.Border}, 0.2)
+                end)
+
+                modeSelector.MouseLeave:Connect(function()
+                    Utils:Tween(modeSelector, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                end)
+            end
+
+            local mainHeight = math.floor(45 * scaleFactor)
+            local iconSize = math.floor(20 * scaleFactor)
+            local iconPadding = math.floor(12 * scaleFactor)
+            local searchBoxLeft = math.floor(40 * scaleFactor)
+            local textSize = math.floor(13 * scaleFactor)
+            local buttonSize = math.floor(30 * scaleFactor)
+            local buttonOffset = math.floor(40 * scaleFactor)
+            local resultLabelWidth = math.floor(50 * scaleFactor)
+            local resultLabelOffset = clearButton and math.floor(95 * scaleFactor) or math.floor(40 * scaleFactor)
+            
+            local mainFrame = Instance.new("Frame")
+            mainFrame.BackgroundColor3 = theme.Secondary
+            mainFrame.BorderSizePixel = 0
+            mainFrame.Size = UDim2.new(1, 0, 0, mainHeight)
+            mainFrame.Parent = container
+
+            local mainCorner = Instance.new("UICorner")
+            mainCorner.CornerRadius = UDim.new(0, math.floor(8 * scaleFactor))
+            mainCorner.Parent = mainFrame
+
+            local searchIcon = Instance.new("TextLabel")
+            searchIcon.BackgroundTransparency = 1
+            searchIcon.Position = UDim2.new(0, iconPadding, 0.5, 0)
+            searchIcon.AnchorPoint = Vector2.new(0, 0.5)
+            searchIcon.Size = UDim2.new(0, iconSize, 0, iconSize)
+            searchIcon.Font = Enum.Font.GothamBold
+            searchIcon.Text = "🔍"
+            searchIcon.TextColor3 = theme.TextDark
+            searchIcon.TextSize = math.floor(16 * scaleFactor)
+            searchIcon.Parent = mainFrame
+
+            local searchBox = Instance.new("TextBox")
+            searchBox.BackgroundTransparency = 1
+            searchBox.Position = UDim2.new(0, searchBoxLeft, 0, 0)
+            searchBox.Size = UDim2.new(1, clearButton and -(searchBoxLeft + resultLabelOffset + 20) or -(searchBoxLeft + resultLabelOffset - 10), 1, 0)
+            searchBox.Font = Enum.Font.Gotham
+            searchBox.PlaceholderText = placeholder
+            searchBox.PlaceholderColor3 = theme.TextDark
+            searchBox.Text = ""
+            searchBox.TextColor3 = theme.Text
+            searchBox.TextSize = textSize
+            searchBox.TextXAlignment = Enum.TextXAlignment.Left
+            searchBox.ClearTextOnFocus = false
+            searchBox.Parent = mainFrame
+
+            local resultLabel = Instance.new("TextLabel")
+            resultLabel.BackgroundTransparency = 1
+            resultLabel.Position = UDim2.new(1, -resultLabelOffset, 0.5, 0)
+            resultLabel.AnchorPoint = Vector2.new(1, 0.5)
+            resultLabel.Size = UDim2.new(0, resultLabelWidth, 0, iconSize)
+            resultLabel.Font = Enum.Font.Gotham
+            resultLabel.Text = ""
+            resultLabel.TextColor3 = theme.TextDark
+            resultLabel.TextSize = math.floor(11 * scaleFactor)
+            resultLabel.TextXAlignment = Enum.TextXAlignment.Right
+            resultLabel.Visible = showResultCount
+            resultLabel.Parent = mainFrame
+
+            local clearBtn
+            if clearButton then
+                clearBtn = Instance.new("TextButton")
+                clearBtn.BackgroundColor3 = theme.Tertiary
+                clearBtn.BorderSizePixel = 0
+                clearBtn.Position = UDim2.new(1, -buttonOffset, 0.5, 0)
+                clearBtn.AnchorPoint = Vector2.new(1, 0.5)
+                clearBtn.Size = UDim2.new(0, buttonSize, 0, buttonSize)
+                clearBtn.Font = Enum.Font.GothamBold
+                clearBtn.Text = "×"
+                clearBtn.TextColor3 = theme.Text
+                clearBtn.TextSize = math.floor(20 * scaleFactor)
+                clearBtn.Visible = false
+                clearBtn.Parent = mainFrame
+
+                local clearCorner = Instance.new("UICorner")
+                clearCorner.CornerRadius = UDim.new(0, math.floor(6 * scaleFactor))
+                clearCorner.Parent = clearBtn
+
+                clearBtn.MouseButton1Click:Connect(function()
+                    searchBox.Text = ""
+                    search.Value = ""
+                    search.Results = {}
+                    clearBtn.Visible = false
+                    resultLabel.Text = ""
+                    
+                    if hideNonMatching and not customSearch then
+                        for _, element in pairs(tab.Elements) do
+                            if element.Frame and element ~= search then
+                                element.Frame.Visible = true
+                            end
+                        end
+                    end
+                    
+                    searchCallback("", {}, search)
+                end)
+
+                clearBtn.MouseEnter:Connect(function()
+                    Utils:Tween(clearBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                end)
+
+                clearBtn.MouseLeave:Connect(function()
+                    Utils:Tween(clearBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                end)
+            end
+
+            local historyFrame = Instance.new("Frame")
+            historyFrame.BackgroundColor3 = theme.Tertiary
+            historyFrame.BorderSizePixel = 0
+            historyFrame.Position = UDim2.new(0, 0, 1, 5)
+            historyFrame.Size = UDim2.new(1, 0, 0, 0)
+            historyFrame.Visible = false
+            historyFrame.ClipsDescendants = true
+            historyFrame.ZIndex = 100
+            historyFrame.Parent = container
+
+            local historyCorner = Instance.new("UICorner")
+            historyCorner.CornerRadius = UDim.new(0, 8)
+            historyCorner.Parent = historyFrame
+
+            local historyStroke = Instance.new("UIStroke")
+            historyStroke.Color = theme.Border
+            historyStroke.Thickness = 1
+            historyStroke.Parent = historyFrame
+
+            local historyList = Instance.new("UIListLayout")
+            historyList.Padding = UDim.new(0, 2)
+            historyList.SortOrder = Enum.SortOrder.LayoutOrder
+            historyList.Parent = historyFrame
+
+            local historyPadding = Instance.new("UIPadding")
+            historyPadding.PaddingTop = UDim.new(0, 5)
+            historyPadding.PaddingBottom = UDim.new(0, 5)
+            historyPadding.PaddingLeft = UDim.new(0, 5)
+            historyPadding.PaddingRight = UDim.new(0, 5)
+            historyPadding.Parent = historyFrame
+
+            local searchDebounce
+            local function performSearch(query)
+                if searchDebounce then
+                    task.cancel(searchDebounce)
+                end
+
+                searchDebounce = task.delay(searchDelay, function()
+                    search.Searching = true
+                    search.Value = query
+                    search.Results = {}
+
+                    local searchQuery = caseSensitive and query or query:lower()
+                    local resultsWithScores = {}
+                    
+                    if customSearch then
+                        local customResults = customSearch(query, search.CurrentMode)
+                        if customResults then
+                            for _, result in ipairs(customResults) do
+                                table.insert(resultsWithScores, {
+                                    element = result,
+                                    score = result.Score or 1
+                                })
+                            end
+                        end
+                    else
+                        for _, element in pairs(tab.Elements) do
+                        if element.SearchData then
+                            local searchData = caseSensitive and element.SearchData or element.SearchData:lower()
+                            local matches = false
+                            local score = 0
+
+                            if customFilter then
+                                matches = customFilter(query, element)
+                                score = matches and 1 or 0
+                            else
+                                matches, score = matchesQuery(searchQuery, searchData, search.CurrentMode)
+                                
+                                if matches and element.Name then
+                                    local nameData = caseSensitive and element.Name or element.Name:lower()
+                                    local nameMatches, nameScore = matchesQuery(searchQuery, nameData, search.CurrentMode)
+                                    if nameMatches then
+                                        score = score * 1.5
+                                    end
+                                end
+                                
+                                if matches and searchInTags and element.Tags then
+                                    for _, tag in ipairs(element.Tags) do
+                                        local tagData = caseSensitive and tag or tag:lower()
+                                        local tagMatches, tagScore = matchesQuery(searchQuery, tagData, search.CurrentMode)
+                                        if tagMatches then
+                                            score = score + (tagScore * 0.3)
+                                        end
+                                    end
+                                end
+                            end
+
+                            if matches then
+                                table.insert(resultsWithScores, {
+                                    element = element,
+                                    score = score
+                                })
+                            end
+                        end
+                    end
+                    end
+
+                    table.sort(resultsWithScores, function(a, b)
+                        return a.score > b.score
+                    end)
+
+                    for i, result in ipairs(resultsWithScores) do
+                        if i > maxResults then break end
+                        
+                        local element = result.element
+                        table.insert(search.Results, element)
+                        
+                        if element.Frame and highlightColor then
+                            if element.Frame:FindFirstChild("SearchHighlight") then
+                                element.Frame.SearchHighlight:Destroy()
+                            end
+                            
+                            local highlight = Instance.new("UIStroke")
+                            highlight.Name = "SearchHighlight"
+                            
+                            local intensity = math.clamp(result.score, 0.3, 1)
+                            local h, s, v = highlightColor:ToHSV()
+                            highlight.Color = Color3.fromHSV(h, s * intensity, v)
+                            highlight.Thickness = math.floor(2 + (intensity * 2))
+                            highlight.Parent = element.Frame
+                            
+                            local fadeTime = 2 + (result.score * 2)
+                            task.delay(fadeTime, function()
+                                if highlight.Parent then
+                                    Utils:Tween(highlight, {Thickness = 0}, 0.3)
+                                    task.wait(0.3)
+                                    highlight:Destroy()
+                                end
+                            end)
+                        end
+                    end
+
+                    if showResultCount then
+                        if #search.Results > 0 then
+                            local modeStr = search.CurrentMode == "fuzzy" and " (fuzzy)" or ""
+                            resultLabel.Text = #search.Results .. " found" .. modeStr
+                            resultLabel.TextColor3 = theme.Success
+                        elseif query ~= "" then
+                            resultLabel.Text = "No results"
+                            resultLabel.TextColor3 = theme.Error
+                        else
+                            resultLabel.Text = ""
+                        end
+                    end
+
+                    if searchHistory and query ~= "" and #query > 2 then
+                        local exists = false
+                        for _, item in ipairs(search.History) do
+                            if item == query then
+                                exists = true
+                                break
+                            end
+                        end
+                        if not exists then
+                            table.insert(search.History, 1, query)
+                            if #search.History > maxHistorySize then
+                                table.remove(search.History)
+                            end
+                        end
+                    end
+
+                    search.Searching = false
+                    
+                    if hideNonMatching and not customSearch then
+                        if query ~= "" and #search.Results > 0 then
+                            local matchingElements = {}
+                            for _, result in ipairs(search.Results) do
+                                matchingElements[result] = true
+                            end
+                            
+                            for _, element in pairs(tab.Elements) do
+                                if element.Frame and element ~= search then
+                                    if matchingElements[element] then
+                                        element.Frame.Visible = true
+                                    else
+                                        element.Frame.Visible = false
+                                    end
+                                end
+                            end
+                        else
+                            for _, element in pairs(tab.Elements) do
+                                if element.Frame and element ~= search then
+                                    element.Frame.Visible = true
+                                end
+                            end
+                        end
+                    end
+                    
+                    searchCallback(query, search.Results, search)
+                end)
+            end
+
+            function search:Clear()
+                searchBox.Text = ""
+                self.Value = ""
+                self.Results = {}
+                if clearButton then
+                    clearBtn.Visible = false
+                end
+                resultLabel.Text = ""
+                
+                if hideNonMatching and not customSearch then
+                    for _, element in pairs(tab.Elements) do
+                        if element.Frame and element ~= search then
+                            element.Frame.Visible = true
+                        end
+                    end
+                end
+            end
+
+            function search:ClearHistory()
+                self.History = {}
+                historyFrame.Visible = false
+            end
+
+            function search:SetText(text)
+                searchBox.Text = text
+                performSearch(text)
+            end
+
+            function search:Focus()
+                searchBox:CaptureFocus()
+            end
+
+            function search:GetResults()
+                return self.Results
+            end
+            
+            function search:SetMode(mode)
+                local validModes = {"exact", "contains", "startswith", "endswith", "fuzzy", "regex"}
+                for _, validMode in ipairs(validModes) do
+                    if mode == validMode then
+                        self.CurrentMode = mode
+                        if showModeSelector and modeSelector then
+                            modeSelector.Text = mode:upper()
+                        end
+                        if searchBox.Text ~= "" then
+                            performSearch(searchBox.Text)
+                        end
+                        return true
+                    end
+                end
+                return false
+            end
+            
+            function search:GetMode()
+                return self.CurrentMode
+            end
+            
+            function search:AddElementTag(elementName, tag)
+                for _, element in pairs(tab.Elements) do
+                    if element.Name == elementName then
+                        if not element.Tags then
+                            element.Tags = {}
+                        end
+                        table.insert(element.Tags, tag)
+                        return true
+                    end
+                end
+                return false
+            end
+
+            searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+                local text = searchBox.Text
+                if clearButton then
+                    clearBtn.Visible = text ~= ""
+                end
+
+                if liveSearch then
+                    performSearch(text)
+                end
+            end)
+
+            searchBox.FocusLost:Connect(function(enterPressed)
+                if enterPressed and not liveSearch then
+                    performSearch(searchBox.Text)
+                end
+
+                if searchHistory and #search.History > 0 then
+                    task.wait(0.1)
+                    historyFrame.Visible = false
+                end
+            end)
+
+            searchBox.Focused:Connect(function()
+                if searchHistory and #search.History > 0 then
+                    for _, child in pairs(historyFrame:GetChildren()) do
+                        if child:IsA("TextButton") then
+                            child:Destroy()
+                        end
+                    end
+
+                    local totalHeight = 10
+                    for i, query in ipairs(search.History) do
+                        local historyBtn = Instance.new("TextButton")
+                        historyBtn.BackgroundColor3 = theme.Secondary
+                        historyBtn.BorderSizePixel = 0
+                        historyBtn.Size = UDim2.new(1, 0, 0, 30)
+                        historyBtn.Font = Enum.Font.Gotham
+                        historyBtn.Text = "  🕐 " .. query
+                        historyBtn.TextColor3 = theme.Text
+                        historyBtn.TextSize = 12
+                        historyBtn.TextXAlignment = Enum.TextXAlignment.Left
+                        historyBtn.LayoutOrder = i
+                        historyBtn.Parent = historyFrame
+
+                        local btnCorner = Instance.new("UICorner")
+                        btnCorner.CornerRadius = UDim.new(0, 6)
+                        btnCorner.Parent = historyBtn
+
+                        historyBtn.MouseButton1Click:Connect(function()
+                            searchBox.Text = query
+                            performSearch(query)
+                            historyFrame.Visible = false
+                        end)
+
+                        historyBtn.MouseEnter:Connect(function()
+                            Utils:Tween(historyBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                        end)
+
+                        historyBtn.MouseLeave:Connect(function()
+                            Utils:Tween(historyBtn, {BackgroundColor3 = theme.Secondary}, 0.2)
+                        end)
+
+                        totalHeight = totalHeight + 32
+                    end
+
+                    historyFrame.Size = UDim2.new(1, 0, 0, totalHeight)
+                    historyFrame.Visible = true
+                end
+            end)
+
+            for _, element in pairs(tab.Elements) do
+                if element.Frame and element.Name then
+                    element.SearchData = element.Name
+                    if element.Description then
+                        element.SearchData = element.SearchData .. " " .. element.Description
+                    end
+                    if not element.Tags then
+                        element.Tags = {}
+                    end
+                end
+            end
+
+            search.Frame = container
+            search.Name = "Search"
+            search.SearchData = "Search"
+            search.Tags = {}
+            
+            table.insert(tab.Elements, search)
+
+            return search
+        end
+
         function tab:StartInline()
             local inlineContainer = Instance.new("Frame")
             inlineContainer.BackgroundTransparency = 1
@@ -5175,7 +6117,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.3.7 LOADED!                  ║")
+print("║                 Zonix UI v1.4.0 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
