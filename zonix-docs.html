@@ -1,3449 +1,1590 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZONIX UI v1.3.7 - Complete Documentation</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #0a0e27;
-            --bg-secondary: #0f1629;
-            --bg-tertiary: #1a1f3a;
-            --text-primary: #00ffff;
-            --text-secondary: #ff00ff;
-            --text-white: #e0e6ff;
-            --text-gray: #8892b0;
-            --accent-cyan: #00ffff;
-            --accent-magenta: #ff00ff;
-            --accent-yellow: #ffff00;
-            --accent-green: #00ff88;
-            --border-glow: rgba(0, 255, 255, 0.3);
-            --shadow-cyan: 0 0 20px rgba(0, 255, 255, 0.5);
-            --shadow-magenta: 0 0 20px rgba(255, 0, 255, 0.5);
-        }
+<div align="center">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+# ⚡ ZONIX UI v1.4.0
 
-        html {
-            overflow-x: hidden;
-            width: 100%;
-        }
+### The Ultimate Roblox UI Library
 
-        body {
-            font-family: 'Share Tech Mono', monospace;
-            background: var(--bg-primary);
-            color: var(--text-white);
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-            width: 100%;
-            max-width: 100vw;
-        }
+**Modern • Sleek • Feature-Rich • Mobile-Friendly**
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            z-index: -1;
-            animation: gridMove 20s linear infinite;
-        }
+[📖 Documentation](https://zon.su/zonix) • [⬇️ Download](https://hub.zon.su/zonix-ui.lua) • [🌐 Website](https://zon.su)
 
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
+</div>
 
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-        }
+## 🎯 What's New in v1.4.0
 
-        .glitch {
-            position: relative;
-            animation: glitch 0.3s infinite;
-            animation-play-state: paused;
-        }
+### 🆕 NEW COMPONENTS & FEATURES:
 
-        .glitch:hover {
-            animation-play-state: running;
-        }
+- 🔎 **NEW: Advanced Search Component** - Brand new Search component with 6 modes, fuzzy matching, intelligent ranking, and extensive customization!
+- 🔲 **NEW: Shrink Minimize Mode** - Minimize windows to compact 100x100 square OR traditional topbar-only collapse
 
-        .neon {
-            text-shadow: 
-                0 0 5px var(--accent-cyan),
-                0 0 10px var(--accent-cyan),
-                0 0 20px var(--accent-cyan),
-                0 0 40px var(--accent-cyan);
-        }
+### ⚡ SEARCH COMPONENT FEATURES:
 
-        header {
-            position: sticky;
-            top: 0;
-            background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid var(--accent-cyan);
-            box-shadow: var(--shadow-cyan);
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
+- 🔍 **6 Search Modes** - Exact, Contains, Starts With, Ends With, Fuzzy, Regex with visual mode selector
+- ✨ **Fuzzy Matching** - Advanced Levenshtein distance algorithm for typo-tolerant searches ("togle" finds "toggle"!)
+- 📊 **Intelligent Ranking** - Results scored and sorted by relevance with name/tag match boosting
+- 🎨 **Score-Based Highlighting** - Better matches = brighter highlights and longer duration (2-4 seconds)
+- 🏷️ **Tag-Based Search** - Search elements by custom tags with AddElementTag() method
+- 📜 **Search History** - Auto-saves up to 10 recent searches with dropdown quick access
+- ⚡ **Live Search** - Search as you type with configurable debouncing and performance optimization
+- 📱 **Fully Responsive** - Scales perfectly on ALL screen sizes (80% mobile to 150% large desktop)
+- 🎯 **API Methods** - SetMode(), GetMode(), AddElementTag(), Clear(), ClearHistory(), Focus(), GetResults()
+- 👁️ **HideNonMatching Mode** - Focus mode that hides all non-matching elements while searching
+- 📍 **Flexible Positioning** - Place search bar at top, bottom, or in creation order
+- 🔧 **CustomSearch Function** - Search workspace parts, players, or ANY custom data source
+- 🎯 **Enhanced Callback** - Search object now passed as 3rd parameter for method access
 
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
+---
 
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 3px;
-        }
+## 🎯 Features
 
-        .version {
-            font-size: 0.8rem;
-            color: var(--accent-yellow);
-            opacity: 0.8;
-        }
+- 🎨 **3 Built-in Themes** - Dark, Light, and Midnight
+- 📱 **Fully Responsive** - Works perfectly on mobile, tablet, and desktop
+- 🎮 **Touch Support** - Native touch controls for mobile devices
+- 💾 **Config System** - Save and load your settings
+- 🔧 **14 Core Components** - Label, Section, Paragraph, Divider, Button, Checkbox, Toggle, Slider, Dropdown, Textbox, ProgressBar, Keybind, ColorPicker, **Search**
+- ⚡ **Notifications & Prompts** - Built-in user feedback system
+- 🌈 **Custom Themes** - Create your own themes with 13 color properties
+- 🌈 **Rainbow Mode** - Animated rainbow borders and effects
+- 🔑 **Flag System** - Easy access to component values
+- 📋 **Clipboard Support** - Works across all executors
+- ⚙️ **Auto-Detection** - Automatically detects and adapts to your executor
+- 🖼️ **Enhanced Icons** - Emoji and image icons for Window & Tabs
+- ✅ **Checkboxes** - Simple toggle controls
+- 📑 **SubTabs** - Organize content with tabs within tabs (ALL 14 components supported)
+- 📦 **GroupBoxes** - Group UI elements together (ALL 14 components supported)
+- 📏 **Spacing Control** - Add custom spacing between elements
+- ➡️ **In-line Layout** - Place elements side-by-side
+- 🔄 **Nested GroupBoxes** - GroupBox inside GroupBox support
+- 🔍 **Advanced Search** - Real-time search with history and highlighting
+- 🔲 **Minimize Modes** - "collapse" or "shrink" window minimize options
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 0.5rem;
-            z-index: 1001;
-        }
+---
 
-        .hamburger span {
-            width: 28px;
-            height: 3px;
-            background: var(--accent-cyan);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px var(--accent-cyan);
-        }
+## 📦 Installation
 
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
+```lua
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
+```
 
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
+**Alternative GitHub Path:**
+```lua
+local Zonix = loadstring(game:HttpGet("https://raw.githubusercontent.com/Zontrz/zonix-ui/refs/heads/main/main.lua"))()
+```
 
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
+**File Location:** https://hub.zon.su/zonix-ui.lua  
+**GitHub:** https://raw.githubusercontent.com/Zontrz/zonix-ui/refs/heads/main/main.lua  
+**Documentation:** https://zon.su/zonix
 
-        nav {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
+---
 
-        @media (max-width: 768px) {
-            header {
-                padding: 1rem;
-            }
+## 🚀 Quick Start
 
-            .hamburger {
-                display: flex;
-            }
+```lua
+-- Load the library
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
 
-            nav {
-                position: fixed;
-                top: 0;
-                right: 0;
-                height: 100vh;
-                width: 80%;
-                max-width: 350px;
-                background: rgba(10, 14, 39, 0.98);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: 5rem 2rem 2rem;
-                gap: 0;
-                border-left: 2px solid var(--accent-cyan);
-                box-shadow: -5px 0 30px rgba(0, 255, 255, 0.3);
-                transform: translateX(100%);
-                transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                overflow-y: auto;
-            }
-
-            nav.active {
-                transform: translateX(0);
-            }
-
-            nav a {
-                width: 100%;
-                padding: 1rem;
-                border-bottom: 1px solid rgba(0, 255, 255, 0.1);
-                font-size: 1rem;
-            }
-
-            nav a:hover {
-                padding-left: 1.5rem;
-                background: rgba(0, 255, 255, 0.05);
-            }
-
-            .logo {
-                font-size: 1.5rem;
-            }
-        }
-
-        nav a {
-            color: var(--text-white);
-            text-decoration: none;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        nav a::before {
-            content: '>';
-            position: absolute;
-            left: 0;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--accent-cyan);
-            border-color: var(--accent-cyan);
-            padding-left: 1.5rem;
-            box-shadow: var(--shadow-cyan);
-        }
-
-        nav a:hover::before {
-            opacity: 1;
-            left: 0.5rem;
-        }
-
-        .hero {
-            padding: 4rem 2rem;
-            text-align: center;
-            background: radial-gradient(circle at center, rgba(0, 255, 255, 0.1), transparent);
-            position: relative;
-        }
-
-        .hero h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 900;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-magenta), var(--accent-yellow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease infinite;
-            background-size: 200% 200%;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border: 2px solid;
-            border-radius: 4px;
-            text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            background: transparent;
-        }
-
-        .btn-primary {
-            color: var(--accent-cyan);
-            border-color: var(--accent-cyan);
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-cyan);
-            color: var(--bg-primary);
-            box-shadow: var(--shadow-cyan);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            color: var(--accent-magenta);
-            border-color: var(--accent-magenta);
-        }
-
-        .btn-secondary:hover {
-            background: var(--accent-magenta);
-            color: var(--bg-primary);
-            box-shadow: var(--shadow-magenta);
-            transform: translateY(-2px);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .section {
-            margin-bottom: 4rem;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--accent-cyan);
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-cyan), transparent);
-        }
-
-        .section-subtitle {
-            font-size: 1.5rem;
-            color: var(--accent-magenta);
-            margin: 2rem 0 1rem;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .section-subheading {
-            font-size: 1.2rem;
-            color: var(--accent-yellow);
-            margin: 1.5rem 0 0.5rem;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .code-block {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--accent-cyan);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            position: relative;
-            overflow-x: auto;
-            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1);
-        }
-
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-        }
-
-        .code-lang {
-            color: var(--accent-yellow);
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        .copy-btn {
-            background: transparent;
-            border: 1px solid var(--accent-cyan);
-            color: var(--accent-cyan);
-            padding: 0.3rem 0.8rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-        }
-
-        .copy-btn:hover {
-            background: var(--accent-cyan);
-            color: var(--bg-primary);
-        }
-
-        pre {
-            margin: 0;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--text-white);
-        }
-
-        code {
-            font-family: 'Share Tech Mono', monospace;
-        }
-
-        .inline-code {
-            background: rgba(0, 255, 255, 0.1);
-            padding: 0.2rem 0.5rem;
-            border-radius: 3px;
-            color: var(--accent-cyan);
-            font-size: 0.9em;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .feature-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--accent-cyan);
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .feature-card:hover::before {
-            left: 100%;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-cyan);
-            border-color: var(--accent-magenta);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            color: var(--accent-cyan);
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-desc {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 2rem 0;
-            background: var(--bg-secondary);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-        }
-
-        th {
-            background: var(--bg-tertiary);
-            color: var(--accent-cyan);
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-        }
-
-        tr:hover {
-            background: rgba(0, 255, 255, 0.05);
-        }
-
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            border-left: 4px solid;
-        }
-
-        .alert-info {
-            background: rgba(0, 255, 255, 0.1);
-            border-color: var(--accent-cyan);
-            color: var(--text-white);
-        }
-
-        .alert-warning {
-            background: rgba(255, 255, 0, 0.1);
-            border-color: var(--accent-yellow);
-            color: var(--text-white);
-        }
-
-        .alert-success {
-            background: rgba(0, 255, 136, 0.1);
-            border-color: var(--accent-green);
-            color: var(--text-white);
-        }
-
-        .param-table {
-            width: 100%;
-            margin: 1rem 0;
-        }
-
-        .param-table th {
-            background: var(--bg-tertiary);
-            color: var(--accent-magenta);
-        }
-
-        .param-table td:first-child {
-            color: var(--accent-yellow);
-            font-weight: bold;
-        }
-
-        footer {
-            background: var(--bg-secondary);
-            border-top: 2px solid var(--accent-cyan);
-            padding: 3rem 2rem;
-            text-align: center;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--accent-cyan);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-magenta);
-            text-shadow: var(--shadow-magenta);
-        }
-
-        .copyright {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .logo {
-                font-size: 1.5rem;
-                letter-spacing: 2px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            nav {
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            table {
-                font-size: 0.8rem;
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-
-            th, td {
-                padding: 0.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.2rem;
-                letter-spacing: 1px;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .code-block {
-                padding: 1rem;
-            }
-
-            pre {
-                font-size: 0.75rem;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-cyan);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-magenta);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .keyword { color: var(--accent-magenta); }
-        .string { color: var(--accent-green); }
-        .function { color: var(--accent-yellow); }
-        .number { color: var(--accent-cyan); }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="header-content">
-            <div>
-                <div class="logo glitch">ZONIX UI</div>
-                <div class="version">v1.3.7 | By Zontraz</div>
-            </div>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <nav id="nav">
-                <a href="#installation">Installation</a>
-                <a href="#quickstart">Quick Start</a>
-                <a href="#window">Window & Tabs</a>
-                <a href="#components">Components</a>
-                <a href="#utilities">Utilities</a>
-                <a href="#themes">Themes</a>
-            </nav>
-        </div>
-    </header>
-
-    <section class="hero">
-        <h1 class="neon">ZONIX UI v1.3.7</h1>
-        <p>The most advanced UI library for Roblox exploits. Modern. Powerful. Universal.</p>
-        <div class="cta-buttons">
-            <a href="#installation" class="btn btn-primary">GET STARTED</a>
-            <a href="https://hub.zon.su/zonix-ui.lua" class="btn btn-secondary" target="_blank">DOWNLOAD</a>
-        </div>
-    </section>
-
-    <div class="container">
-        <section class="section" id="whats-new">
-            <h2 class="section-title">// WHAT'S NEW IN v1.3.2</h2>
-            <div class="feature-grid">
-                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
-                    <div class="feature-icon">🎨</div>
-                    <div class="feature-title">Enhanced Icon System</div>
-                    <div class="feature-desc">Emoji AND image icons for Window & Tabs with new table format: { Type = "emoji", Value = "🔥" }</div>
-                </div>
-                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
-                    <div class="feature-icon">📦</div>
-                    <div class="feature-title">Complete GroupBox Support</div>
-                    <div class="feature-desc">ALL 13 components now work inside GroupBox containers with proper styling</div>
-                </div>
-                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
-                    <div class="feature-icon">📑</div>
-                    <div class="feature-title">Complete SubTab Support</div>
-                    <div class="feature-desc">ALL 13 components now work inside SubTab containers for advanced organization</div>
-                </div>
-                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
-                    <div class="feature-icon">🎛️</div>
-                    <div class="feature-title">Fixed Sliders</div>
-                    <div class="feature-desc">White draggable circle handles for precise value control</div>
-                </div>
-                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
-                    <div class="feature-icon">📂</div>
-                    <div class="feature-title">Fixed Dropdowns</div>
-                    <div class="feature-desc">Smooth expansion animations with rotating arrow indicators</div>
-                </div>
-                <div class="feature-card" style="border-left: 3px solid var(--accent-green);">
-                    <div class="feature-icon">⚙️</div>
-                    <div class="feature-title">Full Flag Support</div>
-                    <div class="feature-desc">Access values from Button, Checkbox, Toggle, Slider, Dropdown, Textbox, Keybind, ColorPicker via Zonix.Flags</div>
-                </div>
-            </div>
-        </section>
-        
-        <section class="section" id="features">
-            <h2 class="section-title">// CORE FEATURES</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <div class="feature-title">Universal Compatibility</div>
-                    <div class="feature-desc">Works on ALL 40+ executors across Windows, Mac, Android, and iOS - including Potassium, Matcha, Xeno, Solara, Delta, Hydrogen, Wave, Zenith, Volcano, and many more!</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📋</div>
-                    <div class="feature-title">Clipboard Support</div>
-                    <div class="feature-desc">Universal clipboard functionality that works across all executors with automatic fallbacks.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <div class="feature-title">Modern Design</div>
-                    <div class="feature-desc">Sleek, modern UI with smooth animations, tooltips, and customizable themes.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <div class="feature-title">Fully Responsive</div>
-                    <div class="feature-desc">Perfect display on mobile, tablet, and desktop. Touch-friendly and auto-scaling.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💾</div>
-                    <div class="feature-title">Config System</div>
-                    <div class="feature-desc">Save and load configurations easily. Persistent settings across sessions.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌈</div>
-                    <div class="feature-title">Rainbow Mode</div>
-                    <div class="feature-desc">Beautiful animated rainbow effects with customizable speed and intensity.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🏷️</div>
-                    <div class="feature-title">Flag System</div>
-                    <div class="feature-desc">Easy value management with global flags accessible from anywhere.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
-                    <div class="feature-title">Notifications</div>
-                    <div class="feature-desc">Beautiful toast notifications with 4 types: Info, Success, Warning, Error.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💧</div>
-                    <div class="feature-title">Watermarks</div>
-                    <div class="feature-desc">Customizable watermarks displaying executor info and branding.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🖼️</div>
-                    <div class="feature-title">Custom Window Icons</div>
-                    <div class="feature-desc">Add custom rbxassetid images to window topbars with automatic scaling and centering.</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="installation">
-            <h2 class="section-title">// INSTALLATION</h2>
-            <p>Get started with Zonix UI in seconds. Simply load the library using HttpGet:</p>
-
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()</code></pre>
-            </div>
-
-            <p style="margin-top: 1.5rem;"><strong>Alternative GitHub Path:</strong></p>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://raw.githubusercontent.com/Zontrz/zonix-ui/refs/heads/main/main.lua"</span>))()</code></pre>
-            </div>
-
-            <div class="alert alert-info">
-                <strong>💡 AUTO-DETECTION:</strong> The library automatically detects your executor and configures optimal settings!
-            </div>
-
-            <div class="alert alert-success">
-                <strong>✅ SUPPORTED EXECUTORS:</strong><br>
-                <strong>Windows (29):</strong> Potassium, Matcha, Xeno, Photon, DX9WARE V2, Sirhurt, Valex, Seliware, Volt, Velocity, Solara, Matrix Hub, Wave, Lovreware, Isabelle, Zenith, Swift, Volcano, Ronin, Assembly, Bunni.lol, Serotonin, Melatonin, Nucleus, Synapse Z, Yerba, Severe, ChocoSploit, RbxCli<br>
-                <strong>Mac (3):</strong> Cryptic, Hydrogen, Macsploit<br>
-                <strong>Android (5):</strong> Cryptic, Delta, Codex, Krnl, Vega X<br>
-                <strong>iOS (2):</strong> Delta, Krnl<br>
-                <strong>Plus:</strong> Generic executors with standard function support!
-            </div>
-        </section>
-
-        <section class="section" id="quickstart">
-            <h2 class="section-title">// QUICK START</h2>
-            <p>Create your first Zonix UI in just a few lines:</p>
-
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - BASIC EXAMPLE</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
-
-Zonix:<span class="function">Watermark</span>({
-    Text = <span class="string">"My Script | "</span> .. Zonix.Executor
-})
-
-Zonix:<span class="function">Notify</span>({
-    Title = <span class="string">"Script Loaded!"</span>,
-    Content = <span class="string">"Welcome to my script"</span>,
-    Duration = <span class="number">3</span>,
-    Type = <span class="string">"Success"</span>
-})
-
-<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({
-    Name = <span class="string">"My Script"</span>,
+-- Create a window with emoji icon
+local Window = Zonix:Window({
+    Name = "My Script Hub",
     Icon = {
-        Type = <span class="string">"emoji"</span>,
-        Value = <span class="string">"🔥"</span>
+        Type = "emoji",  -- or "image"
+        Value = "🔥"     -- emoji or rbxassetid
     }
 })
 
-<span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({
-    Name = <span class="string">"Main"</span>,
+-- Create a tab with icon
+local Tab = Window:Tab({
+    Name = "Main",
     Icon = {
-        Type = <span class="string">"emoji"</span>,
-        Value = <span class="string">"🏠"</span>
+        Type = "emoji",
+        Value = "🏠"
     }
 })
 
-Tab:<span class="function">Button</span>({
-    Name = <span class="string">"Click Me!"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="function">print</span>(<span class="string">"Button clicked!"</span>)
-    <span class="keyword">end</span>
-})</code></pre>
-            </div>
-        </section>
+-- Add components
+Tab:Button({
+    Name = "Click Me!",
+    Callback = function()
+        print("Button clicked!")
+    end
+})
+```
 
-        <section class="section" id="window">
-            <h2 class="section-title">// WINDOW & TAB CREATION</h2>
+---
 
-            <h3 class="section-subtitle">🪟 Window</h3>
-            <p>Create the main window container for your UI. Windows can be dragged, minimized, and closed. Supports emoji and image icons (emoji characters or rbxassetid).</p>
+## 📚 Table of Contents
 
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({
-    Name = <span class="string">"My Script Name"</span>,
+- [Window Creation](#-window-creation)
+- [Components](#-components)
+  - [Label](#label)
+  - [Section](#section)
+  - [Paragraph](#paragraph)
+  - [Divider](#divider)
+  - [Button](#button)
+  - [Toggle](#toggle)
+  - [Checkbox](#checkbox-new)
+  - [Slider](#slider)
+  - [Dropdown](#dropdown)
+  - [Textbox](#textbox)
+  - [Keybind](#keybind)
+  - [ColorPicker](#colorpicker)
+  - [Search](#search-new-in-v140)
+  - [CopyButton](#copybutton)
+  - [ProgressBar](#progressbar)
+  - [Spacing](#spacing-new)
+  - [GroupBox](#groupbox-new)
+  - [SubTab](#subtab-new)
+  - [In-line Layout](#in-line-layout-new)
+- [Flag System](#-flag-system)
+- [Utilities](#-utilities)
+  - [Notifications](#notifications)
+  - [Prompts](#prompts)
+  - [Themes](#themes)
+  - [Config System](#config-system)
+- [Examples](#-examples)
+- [FAQ](#-faq)
+
+---
+
+## 🪟 Window Creation
+
+### Basic Window
+
+```lua
+local Window = Zonix:Window({
+    Name = "My Script Name",  -- Window title (optional, default: "Zonix UI")
+    Icon = {                  -- Window icon (optional)
+        Type = "emoji",       -- "emoji" or "image"
+        Value = "🔥"          -- emoji character or rbxassetid
+    },
+    MinimizeMode = "collapse" -- Minimize behavior (optional, default: "collapse")
+                              -- Options: "collapse" (bar only) or "shrink" (small square)
+})
+```
+
+**Parameters:**
+- `Name` (string, optional) - The window title (default: "Zonix UI")
+- `Icon` (table, optional) - Window icon configuration
+  - `Type` (string) - Icon type: `"emoji"` (text/emoji) or `"image"` (rbxassetid)
+  - `Value` (string) - Icon value: emoji character (e.g., "🔥") or asset ID (e.g., "rbxassetid://12345")
+- `MinimizeMode` (string, optional) - Minimize behavior (default: "collapse")
+  - `"collapse"` - Collapses window to topbar only (traditional minimize)
+  - `"shrink"` - Shrinks window to small 100x100 square (compact minimize)
+
+**Window Features:**
+- Draggable by clicking and holding the top bar
+- Minimize button (_) - Collapses window based on MinimizeMode setting
+  - **Collapse Mode**: Shrinks to topbar only (traditional)
+  - **Shrink Mode**: Minimizes to small 100x100 square
+- Close button (×) - Destroys the window completely
+- Smooth animations for all interactions
+- Automatic shadow and glow effects
+- Emoji or image icon support (28x28 pixels, centered vertically)
+
+**Icon Examples:**
+```lua
+-- Emoji icon with collapse minimize
+local Window = Zonix:Window({
+    Name = "Cool Script",
     Icon = {
-        Type = <span class="string">"image"</span>,
-        Value = <span class="string">"rbxassetid://90642687165275"</span>
-    }
-})</code></pre>
-            </div>
+        Type = "emoji",
+        Value = "⚡"
+    },
+    MinimizeMode = "collapse"
+})
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The window title (default: "Zonix UI")</td>
-                    </tr>
-                    <tr>
-                        <td>Icon</td>
-                        <td>table</td>
-                        <td>✗</td>
-                        <td>Icon configuration with Type ("emoji" or "image") and Value (emoji character or rbxassetid). Displays as 28x28px in topbar. Example: { Type = "emoji", Value = "🔥" }</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Window Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Draggable by clicking and holding the top bar</li>
-                <li>Minimize button (-) - Collapses window to topbar only</li>
-                <li>Close button (x) - Destroys the window completely</li>
-                <li>Smooth animations for all interactions</li>
-                <li>Automatic shadow and glow effects</li>
-                <li>Emoji or image icon support (28x28 pixels, centered vertically)</li>
-            </ul>
-
-            <h3 class="section-subtitle">📑 Tab</h3>
-            <p>Create tabs within windows to organize your UI components. Tabs support icons and automatic switching.</p>
-
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({
-    Name = <span class="string">"Tab Name"</span>,
+-- Image icon with shrink minimize
+local Window = Zonix:Window({
+    Name = "Premium Script",
     Icon = {
-        Type = <span class="string">"emoji"</span>,  <span class="comment">-- "emoji" or "image"</span>
-        Value = <span class="string">"🏠"</span>     <span class="comment">-- emoji or rbxassetid</span>
+        Type = "image",
+        Value = "rbxassetid://90642687165275"
+    },
+    MinimizeMode = "shrink"
+})
+```
+
+### Creating Tabs
+
+```lua
+local Tab = Window:Tab({
+    Name = "Tab Name",  -- Tab name (optional, default: "Tab")
+    Icon = {            -- Tab icon (optional)
+        Type = "emoji", -- "emoji" or "image"
+        Value = "🏠"    -- emoji or rbxassetid
     }
-})</code></pre>
-            </div>
+})
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The tab name (default: "Tab")</td>
-                    </tr>
-                    <tr>
-                        <td>Icon</td>
-                        <td>table</td>
-                        <td>✗</td>
-                        <td>Icon configuration with Type ("emoji" or "image") and Value (emoji character or rbxassetid). Default: { Type = "emoji", Value = "📄" }</td>
-                    </tr>
-                </tbody>
-            </table>
+**Tab Parameters:**
+- `Name` (string, optional) - Tab display name (default: "Tab")
+- `Icon` (table, optional) - Tab icon configuration (default: "📄" emoji)
+  - `Type` (string) - Icon type: `"emoji"` (text/emoji) or `"image"` (rbxassetid)
+  - `Value` (string) - Icon value: emoji character (e.g., "🏠") or asset ID (e.g., "rbxassetid://12345")
 
-            <h4 class="section-subheading">Tab Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Click to switch between tabs</li>
-                <li>First tab is automatically selected</li>
-                <li>Smooth color transitions on selection</li>
-                <li>Scrollable content area</li>
-                <li>Hover effects for inactive tabs</li>
-                <li>Emoji or image icon support (18x18 pixels)</li>
-            </ul>
-        </section>
+**Tab Features:**
+- Click to switch between tabs
+- First tab is automatically selected
+- Smooth color transitions on selection
+- Scrollable content area
+- Hover effects for inactive tabs
+- Emoji or image icon support
 
-        <section class="section" id="components">
-            <h2 class="section-title">// COMPONENT REFERENCE</h2>
-
-            <h3 class="section-subtitle">📌 Section</h3>
-            <p>Create organized sections with headers and dividers to separate different parts of your UI.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Tab:<span class="function">Section</span>(<span class="string">"Section Name"</span>)</code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>name</td>
-                        <td>string</td>
-                        <td>The section header text</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 class="section-subtitle">🏷️ Label</h3>
-            <p>Display text that can be updated dynamically. Perfect for status displays.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Label = Tab:<span class="function">Label</span>(<span class="string">"This is a label"</span>)
-
-Label:<span class="function">Set</span>(<span class="string">"Updated text"</span>)</code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>text</td>
-                        <td>string</td>
-                        <td>The label text to display</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>newText (string)</td>
-                        <td>Update the label text</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 class="section-subtitle">📄 Paragraph</h3>
-            <p>Multi-line text blocks with title and content. Perfect for descriptions and instructions.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Tab:<span class="function">Paragraph</span>(<span class="string">"Title"</span>, <span class="string">"This is a multi-line paragraph with lots of text that will wrap automatically."</span>)</code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>title</td>
-                        <td>string</td>
-                        <td>The paragraph title</td>
-                    </tr>
-                    <tr>
-                        <td>text</td>
-                        <td>string</td>
-                        <td>The paragraph content</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 class="section-subtitle">➖ Divider</h3>
-            <p>Horizontal line separator for visual organization.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Tab:<span class="function">Divider</span>()</code></pre>
-            </div>
-
-            <h3 class="section-subtitle">🔘 Button</h3>
-            <p>Execute functions on click with optional tooltips and callbacks.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Tab:<span class="function">Button</span>({
-    Name = <span class="string">"Button Name"</span>,
-    Tooltip = <span class="string">"This is what the button does"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="function">print</span>(<span class="string">"Button clicked!"</span>)
-    <span class="keyword">end</span>
-})</code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The button text (default: "Button")</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function to execute on click</td>
-                    </tr>
-                    <tr>
-                        <td>Tooltip</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Optional hover tooltip</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 class="section-subtitle">🔄 Toggle</h3>
-            <p>On/off switches with smooth animations, flag support, and callbacks.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Toggle = Tab:<span class="function">Toggle</span>({
-    Name = <span class="string">"Enable Feature"</span>,
-    Default = <span class="keyword">false</span>,
-    Flag = <span class="string">"MyToggle"</span>,
-    Tooltip = <span class="string">"Turn this feature on/off"</span>,
-    Callback = <span class="keyword">function</span>(value)
-        <span class="function">print</span>(<span class="string">"Toggle:"</span>, value)
-    <span class="keyword">end</span>
+**Tab Icon Examples:**
+```lua
+-- Emoji icons
+local HomeTab = Window:Tab({
+    Name = "Home",
+    Icon = { Type = "emoji", Value = "🏠" }
 })
 
-Toggle:<span class="function">Set</span>(<span class="keyword">true</span>)</code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The toggle label (default: "Toggle")</td>
-                    </tr>
-                    <tr>
-                        <td>Default</td>
-                        <td>boolean</td>
-                        <td>✗</td>
-                        <td>Initial state (default: false)</td>
-                    </tr>
-                    <tr>
-                        <td>Flag</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Global flag name for value access</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function called when toggled, receives value</td>
-                    </tr>
-                    <tr>
-                        <td>Tooltip</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Optional hover tooltip</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>value (boolean)</td>
-                        <td>Set the toggle state programmatically</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 class="section-subtitle">🎚️ Slider</h3>
-            <p>Draggable sliders for value selection with custom ranges and increments.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Slider = Tab:<span class="function">Slider</span>({
-    Name = <span class="string">"Walk Speed"</span>,
-    Min = <span class="number">16</span>,
-    Max = <span class="number">200</span>,
-    Default = <span class="number">16</span>,
-    Increment = <span class="number">1</span>,
-    Flag = <span class="string">"WalkSpeed"</span>,
-    Tooltip = <span class="string">"Adjust your walk speed"</span>,
-    Callback = <span class="keyword">function</span>(value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
-    <span class="keyword">end</span>
+local SettingsTab = Window:Tab({
+    Name = "Settings",
+    Icon = { Type = "emoji", Value = "⚙️" }
 })
 
-Slider:<span class="function">Set</span>(<span class="number">100</span>)</code></pre>
-            </div>
+-- Image icon
+local PremiumTab = Window:Tab({
+    Name = "Premium",
+    Icon = { Type = "image", Value = "rbxassetid://12345" }
+})
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The slider label (default: "Slider")</td>
-                    </tr>
-                    <tr>
-                        <td>Min</td>
-                        <td>number</td>
-                        <td>✗</td>
-                        <td>Minimum value (default: 0)</td>
-                    </tr>
-                    <tr>
-                        <td>Max</td>
-                        <td>number</td>
-                        <td>✗</td>
-                        <td>Maximum value (default: 100)</td>
-                    </tr>
-                    <tr>
-                        <td>Default</td>
-                        <td>number</td>
-                        <td>✗</td>
-                        <td>Initial value (default: Min)</td>
-                    </tr>
-                    <tr>
-                        <td>Increment</td>
-                        <td>number</td>
-                        <td>✗</td>
-                        <td>Step size (default: 1)</td>
-                    </tr>
-                    <tr>
-                        <td>Flag</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Global flag name for value access</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function called when value changes, receives value</td>
-                    </tr>
-                    <tr>
-                        <td>Tooltip</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Optional hover tooltip</td>
-                    </tr>
-                </tbody>
-            </table>
+---
 
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>value (number)</td>
-                        <td>Set the slider value programmatically</td>
-                    </tr>
-                </tbody>
-            </table>
+## 🧩 Components
 
-            <h3 class="section-subtitle">📋 Dropdown</h3>
-            <p>Expandable menus for option selection with dynamic refresh capability.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Dropdown = Tab:<span class="function">Dropdown</span>({
-    Name = <span class="string">"Select Weapon"</span>,
-    Options = {<span class="string">"Sword"</span>, <span class="string">"Gun"</span>, <span class="string">"Bow"</span>},
-    Default = <span class="string">"Sword"</span>,
-    Flag = <span class="string">"WeaponChoice"</span>,
-    Tooltip = <span class="string">"Choose your weapon"</span>,
-    Callback = <span class="keyword">function</span>(value)
-        <span class="function">print</span>(<span class="string">"Selected:"</span>, value)
-    <span class="keyword">end</span>
+### Label
+
+Display static text.
+
+```lua
+local MyLabel = Tab:Label("This is a label")
+
+-- Update dynamically
+MyLabel:Set("Updated text!")
+```
+
+**Methods:**
+- `:Set(text)` - Update label text
+
+---
+
+### Section
+
+Create section headers to organize your UI.
+
+```lua
+Tab:Section("Settings")
+Tab:Section("⚙️ Advanced Options")
+```
+
+---
+
+### Paragraph
+
+Display multi-line text with a title.
+
+```lua
+Tab:Paragraph("About", "This is a paragraph with detailed information. You can use this for descriptions, credits, or any multi-line text.")
+```
+
+---
+
+### Divider
+
+Add visual separation between components.
+
+```lua
+Tab:Divider()
+```
+
+---
+
+### Button
+
+Interactive button with callback.
+
+```lua
+Tab:Button({
+    Name = "Click Me",                    -- Button text (required)
+    Callback = function()                  -- Function to run on click (required)
+        print("Button was clicked!")
+    end
+})
+```
+
+---
+
+### Toggle
+
+On/off switch with state tracking.
+
+```lua
+local MyToggle = Tab:Toggle({
+    Name = "Enable Feature",              -- Toggle name (required)
+    Default = false,                       -- Starting state (optional, default: false)
+    Flag = "MyToggle",                    -- Flag name for value access (optional)
+    Callback = function(value)            -- Function called on change (optional)
+        print("Toggle is now:", value)
+    end
 })
 
-Dropdown:<span class="function">Set</span>(<span class="string">"Gun"</span>)
-Dropdown:<span class="function">Refresh</span>({<span class="string">"New1"</span>, <span class="string">"New2"</span>}, <span class="string">"New1"</span>)</code></pre>
-            </div>
+-- Methods
+MyToggle:Set(true)                        -- Update toggle state
+local state = Zonix.Flags.MyToggle       -- Access current value via flag
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The dropdown label (default: "Dropdown")</td>
-                    </tr>
-                    <tr>
-                        <td>Options</td>
-                        <td>table</td>
-                        <td>✗</td>
-                        <td>Array of option strings (default: {"Option 1", "Option 2"})</td>
-                    </tr>
-                    <tr>
-                        <td>Default</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Initial selected option (default: first option)</td>
-                    </tr>
-                    <tr>
-                        <td>Flag</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Global flag name for value access</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function called when option selected, receives value</td>
-                    </tr>
-                    <tr>
-                        <td>Tooltip</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Optional hover tooltip</td>
-                    </tr>
-                </tbody>
-            </table>
+**Methods:**
+- `:Set(value)` - Set toggle state (true/false)
 
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>option (string)</td>
-                        <td>Set the selected option (must exist in options)</td>
-                    </tr>
-                    <tr>
-                        <td>Refresh</td>
-                        <td>newOptions (table), newDefault (string)</td>
-                        <td>Update dropdown options and optionally set new default</td>
-                    </tr>
-                </tbody>
-            </table>
+---
 
-            <h3 class="section-subtitle">✏️ Textbox</h3>
-            <p>Text input fields with placeholders, validation, and focus indicators.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Textbox = Tab:<span class="function">Textbox</span>({
-    Name = <span class="string">"Enter Text"</span>,
-    Default = <span class="string">""</span>,
-    Placeholder = <span class="string">"Type here..."</span>,
-    Flag = <span class="string">"MyTextbox"</span>,
-    Tooltip = <span class="string">"Enter some text"</span>,
-    Callback = <span class="keyword">function</span>(text)
-        <span class="function">print</span>(<span class="string">"Entered:"</span>, text)
-    <span class="keyword">end</span>
+### Slider
+
+Numeric slider with range.
+
+```lua
+local MySlider = Tab:Slider({
+    Name = "Speed",                       -- Slider name (required)
+    Min = 0,                              -- Minimum value (required)
+    Max = 100,                            -- Maximum value (required)
+    Default = 50,                         -- Starting value (optional, default: Min)
+    Increment = 1,                        -- Step size (optional, default: 1)
+    Flag = "Speed",                       -- Flag name (optional)
+    Callback = function(value)            -- Function called on change (optional)
+        print("Speed set to:", value)
+    end
 })
 
-Textbox:<span class="function">Set</span>(<span class="string">"New text"</span>)</code></pre>
-            </div>
+-- Methods
+MySlider:Set(75)                         -- Update slider value
+local value = Zonix.Flags.Speed         -- Access current value via flag
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The textbox label (default: "Textbox")</td>
-                    </tr>
-                    <tr>
-                        <td>Default</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Initial text value (default: "")</td>
-                    </tr>
-                    <tr>
-                        <td>Placeholder</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Placeholder text when empty (default: "Enter text...")</td>
-                    </tr>
-                    <tr>
-                        <td>Flag</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Global flag name for value access</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function called when text submitted (focus lost), receives text</td>
-                    </tr>
-                    <tr>
-                        <td>Tooltip</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Optional hover tooltip</td>
-                    </tr>
-                </tbody>
-            </table>
+**Methods:**
+- `:Set(value)` - Set slider value
 
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>text (string)</td>
-                        <td>Set the textbox value programmatically</td>
-                    </tr>
-                </tbody>
-            </table>
+---
 
-            <h3 class="section-subtitle">⌨️ Keybind</h3>
-            <p>Keyboard shortcuts with easy rebinding and execution tracking.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Keybind = Tab:<span class="function">Keybind</span>({
-    Name = <span class="string">"Toggle UI"</span>,
-    Default = Enum.KeyCode.RightShift,
-    Flag = <span class="string">"UIToggle"</span>,
-    Tooltip = <span class="string">"Press to toggle UI"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="function">print</span>(<span class="string">"Keybind pressed!"</span>)
-    <span class="keyword">end</span>
+### Dropdown
+
+Selection menu with multiple options.
+
+```lua
+local MyDropdown = Tab:Dropdown({
+    Name = "Select Option",               -- Dropdown name (required)
+    Options = {"Option 1", "Option 2", "Option 3"}, -- Available options (required)
+    Default = "Option 1",                 -- Starting selection (optional)
+    Flag = "Selected",                    -- Flag name (optional)
+    Callback = function(value)            -- Function called on selection (optional)
+        print("Selected:", value)
+    end
 })
 
-Keybind:<span class="function">Set</span>(Enum.KeyCode.F)</code></pre>
-            </div>
+-- Methods
+MyDropdown:Set("Option 2")               -- Change selection
+MyDropdown:Update({"New", "Options", "List"}) -- Replace all options
+local selected = Zonix.Flags.Selected   -- Access current value via flag
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The keybind label (default: "Keybind")</td>
-                    </tr>
-                    <tr>
-                        <td>Default</td>
-                        <td>Enum.KeyCode</td>
-                        <td>✗</td>
-                        <td>Initial key (default: E)</td>
-                    </tr>
-                    <tr>
-                        <td>Flag</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Global flag name for value access</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function called when key pressed</td>
-                    </tr>
-                    <tr>
-                        <td>Tooltip</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Optional hover tooltip</td>
-                    </tr>
-                </tbody>
-            </table>
+**Methods:**
+- `:Set(option)` - Set selected option
+- `:Update(options)` - Replace dropdown options
 
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>keyCode (Enum.KeyCode)</td>
-                        <td>Set the keybind key programmatically</td>
-                    </tr>
-                </tbody>
-            </table>
+---
 
-            <h4 class="section-subheading">Usage Notes:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Click the keybind button, then press any key to rebind</li>
-                <li>Button shows "..." while waiting for input</li>
-                <li>Keybind activates on key press (not while typing in textboxes)</li>
-            </ul>
+### Textbox
 
-            <h3 class="section-subtitle">🎨 Color Picker</h3>
-            <p>Advanced color picker with interactive HSV color wheel, hue slider, and support for multiple color spaces (RGB, HSV, HSL, CMYK, HEX). Features a full-screen modal interface with live preview and clipboard support.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> ColorPicker = Tab:<span class="function">ColorPicker</span>({
-    Name = <span class="string">"Theme Color"</span>,
-    Default = <span class="function">Color3.fromRGB</span>(<span class="number">138</span>, <span class="number">43</span>, <span class="number">226</span>),
-    Flag = <span class="string">"ThemeColor"</span>,
-    Callback = <span class="keyword">function</span>(color)
-        <span class="function">print</span>(<span class="string">"Color changed to:"</span>, color)
-    <span class="keyword">end</span>
+Text input field.
+
+```lua
+local MyTextbox = Tab:Textbox({
+    Name = "Username",                    -- Textbox label (required)
+    Placeholder = "Enter username...",    -- Placeholder text (optional)
+    Default = "",                         -- Starting value (optional, default: "")
+    Flag = "Username",                    -- Flag name (optional)
+    Callback = function(value)            -- Function called on text change (optional)
+        print("Text entered:", value)
+    end
 })
 
-<span class="comment">-- Update color programmatically</span>
-ColorPicker:<span class="function">Set</span>(<span class="function">Color3.fromRGB</span>(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>))</code></pre>
-            </div>
+-- Methods
+MyTextbox:Set("NewText")                 -- Update textbox value
+local text = Zonix.Flags.Username       -- Access current value via flag
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The color picker label (default: "Color")</td>
-                    </tr>
-                    <tr>
-                        <td>Default</td>
-                        <td>Color3</td>
-                        <td>✗</td>
-                        <td>Initial color (default: white)</td>
-                    </tr>
-                    <tr>
-                        <td>Flag</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Global flag name for value access</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function called when color changes, receives Color3 value</td>
-                    </tr>
-                </tbody>
-            </table>
+**Methods:**
+- `:Set(text)` - Set textbox text
 
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>color (Color3)</td>
-                        <td>Set the color value programmatically</td>
-                    </tr>
-                </tbody>
-            </table>
+---
 
-            <h4 class="section-subheading">Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li><strong>Interactive Color Wheel</strong> - Visual HSV color selector with saturation/value gradient</li>
-                <li><strong>Hue Slider</strong> - Full spectrum hue selection bar with draggable cursor</li>
-                <li><strong>Live Preview</strong> - Real-time color preview box showing selected color</li>
-                <li><strong>Multiple Color Formats:</strong>
-                    <ul style="margin-top: 0.5rem;">
-                        <li>RGB (Red, Green, Blue) - Standard RGB values (0-255)</li>
-                        <li>HSV (Hue, Saturation, Value) - Hue in degrees (0-360°), S/V in percentages</li>
-                        <li>HSL (Hue, Saturation, Lightness) - Alternative color representation</li>
-                        <li>CMYK (Cyan, Magenta, Yellow, Key/Black) - Print color model in percentages</li>
-                        <li>HEX - Hexadecimal color code (e.g., #8A2BE2)</li>
-                    </ul>
-                </li>
-                <li><strong>Copy to Clipboard</strong> - Built-in button to instantly copy HEX color codes</li>
-                <li><strong>Modal Interface</strong> - Full-screen overlay with clean, professional design</li>
-                <li><strong>Smooth Interactions</strong> - Drag-to-select color with visual feedback and indicators</li>
-            </ul>
+### Keybind
 
-            <h4 class="section-subheading">Usage Example:</h4>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> BgColor = Tab:<span class="function">ColorPicker</span>({
-    Name = <span class="string">"Background Color"</span>,
-    Default = <span class="function">Color3.fromRGB</span>(<span class="number">15</span>, <span class="number">15</span>, <span class="number">20</span>),
-    Flag = <span class="string">"BgColor"</span>,
-    Callback = <span class="keyword">function</span>(color)
+Key binding component.
+
+```lua
+local MyKeybind = Tab:Keybind({
+    Name = "Toggle UI",                   -- Keybind name (required)
+    Default = Enum.KeyCode.RightShift,    -- Starting key (optional)
+    Flag = "UIToggle",                    -- Flag name (optional)
+    Callback = function(key)              -- Function called on key press (optional)
+        print("Pressed:", key.Name)
+    end
+})
+
+-- Methods
+MyKeybind:Set(Enum.KeyCode.F)            -- Change keybind
+local key = Zonix.Flags.UIToggle        -- Access current key via flag
+```
+
+**Methods:**
+- `:Set(keycode)` - Set keybind
+
+---
+
+### ColorPicker
+
+Advanced color picker with multiple color space support (RGB, HSV, HSL, CMYK, HEX).
+
+```lua
+local MyColor = Tab:ColorPicker({
+    Name = "Theme Color",                      -- ColorPicker name (required)
+    Default = Color3.fromRGB(138, 43, 226),   -- Starting color (optional, default: white)
+    Flag = "ThemeColor",                       -- Flag name (optional)
+    Callback = function(color)                 -- Function called on color change (optional)
+        print("Color changed to:", color)
+    end
+})
+
+-- Methods
+MyColor:Set(Color3.fromRGB(255, 0, 0))        -- Update color
+local color = Zonix.Flags.ThemeColor         -- Access current value via flag
+```
+
+**Features:**
+- **Interactive Color Wheel**: Visual HSV color selector with saturation/value gradient
+- **Hue Slider**: Full spectrum hue selection bar with draggable cursor
+- **Live Preview**: Real-time color preview box showing selected color
+- **Multiple Color Formats**:
+  - **RGB** (Red, Green, Blue) - Standard RGB values (0-255)
+  - **HSV** (Hue, Saturation, Value) - Hue in degrees (0-360°), S/V in percentages
+  - **HSL** (Hue, Saturation, Lightness) - Alternative color representation
+  - **CMYK** (Cyan, Magenta, Yellow, Key/Black) - Print color model in percentages
+  - **HEX** - Hexadecimal color code (e.g., #8A2BE2)
+- **Copy to Clipboard**: Built-in button to instantly copy HEX color codes
+- **Modal Interface**: Full-screen overlay with clean, professional design
+- **Smooth Interactions**: Drag-to-select color with visual feedback and indicators
+
+**Usage Example:**
+```lua
+local BgColor = Tab:ColorPicker({
+    Name = "Background Color",
+    Default = Color3.fromRGB(15, 15, 20),
+    Flag = "BgColor",
+    Callback = function(color)
         game.Lighting.Ambient = color
-    <span class="keyword">end</span>
+    end
 })
 
-<span class="comment">-- Access color via flag</span>
-<span class="keyword">local</span> currentColor = Zonix.Flags.BgColor</code></pre>
-            </div>
-        </section>
+-- Later, update the color programmatically
+BgColor:Set(Color3.fromRGB(25, 25, 35))
+```
 
-        <section class="section" id="utilities">
-            <h2 class="section-title">// UTILITY COMPONENTS</h2>
+**Methods:**
+- `:Set(color)` - Set color (expects Color3)
 
-            <h3 class="section-subtitle">📋 Copy Button</h3>
-            <p>Copy text to clipboard with universal executor support and visual feedback.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Tab:<span class="function">CopyButton</span>({
-    Name = <span class="string">"Copy Discord"</span>,
-    Text = <span class="string">"discord.gg/yourserver"</span>
-})</code></pre>
-            </div>
+---
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The button label (default: "Copy")</td>
-                    </tr>
-                    <tr>
-                        <td>Text</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The text to copy to clipboard (default: "Text to copy")</td>
-                    </tr>
-                </tbody>
-            </table>
+### Search
 
-            <h4 class="section-subheading">Behavior:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Button shows "✓ Copied!" for 2 seconds after clicking</li>
-                <li>Uses universal clipboard functions (works on all executors)</li>
-                <li>Includes ripple animation on click</li>
-            </ul>
+Advanced search component with **6 search modes**, fuzzy matching, intelligent ranking, custom search targets, and extensive customization.
 
-            <h3 class="section-subtitle">📊 Progress Bar</h3>
-            <p>Visual loading indicators with color-coded progress states.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Progress = Tab:<span class="function">ProgressBar</span>({
-    Name = <span class="string">"Loading Progress"</span>,
-    Progress = <span class="number">0</span>
+```lua
+local MySearch = Tab:Search({
+    Placeholder = "Search UI elements...",    -- Placeholder text (optional)
+    DefaultMode = "contains",                 -- Default search mode (optional)
+    ShowModeSelector = true,                  -- Show mode dropdown (optional, default: true)
+    LiveSearch = true,                        -- Search as you type (optional, default: true)
+    CaseSensitive = false,                    -- Case-sensitive search (optional, default: false)
+    SaveHistory = true,                       -- Save search history (optional, default: true)
+    MaxHistorySize = 10,                      -- Max history items (optional, default: 10)
+    ShowResultCount = true,                   -- Show result count (optional, default: true)
+    ClearButton = true,                       -- Show clear button (optional, default: true)
+    SearchDelay = 0.3,                        -- Debounce delay in seconds (optional, default: 0.3)
+    HighlightColor = Color3.fromRGB(88, 101, 242), -- Result highlight color (optional)
+    FuzzyThreshold = 0.6,                     -- Fuzzy match threshold 0-1 (optional, default: 0.6)
+    MaxResults = 100,                         -- Max results to show (optional, default: 100)
+    SearchInTags = true,                      -- Search in element tags (optional, default: true)
+    HideNonMatching = false,                  -- Hide non-matching elements (optional, default: false)
+    Position = "order",                       -- Search bar position (optional, default: "order")
+                                              -- Options: "top", "bottom", "order"
+    CustomSearch = nil,                       -- Custom search function (optional)
+    Callback = function(query, results, search)  -- 'search' parameter added
+        print("Search query:", query)
+        print("Found", #results, "results")
+        print("Current mode:", search:GetMode())
+    end
+})
+```
+
+**Search Modes:**
+1. **🔍 Contains** - Finds text anywhere in element (default, fast)
+2. **🎯 Exact** - Exact text match only (most precise)
+3. **▶️ Starts With** - Matches text at the beginning
+4. **◀️ Ends With** - Matches text at the end
+5. **✨ Fuzzy** - Approximate matching using Levenshtein distance (typo-tolerant)
+6. **🔧 Regex** - Pattern matching with regular expressions (most powerful)
+
+**Advanced Features:**
+- 🎯 **Intelligent Ranking**: Results scored and sorted by relevance
+- 🎨 **Score-Based Highlighting**: Better matches = brighter, longer-lasting highlights
+- 🏷️ **Tag System**: Search and boost results by custom element tags
+- 🎛️ **Visual Mode Selector**: Dropdown to easily switch between search modes
+- ⚡ **Performance Optimized**: Configurable max results and fuzzy threshold
+- 📊 **Result Counter**: Live count with search mode indicator
+- 👁️ **Hide Non-Matching**: Only show matching elements (focus mode)
+- 📍 **Flexible Positioning**: Place search bar at top, bottom, or in order
+- 🔧 **Custom Search**: Search workspace, players, or any custom data
+
+**Methods:**
+- `:Clear()` - Clear search text and results
+- `:ClearHistory()` - Clear search history
+- `:SetText(text)` - Set search text programmatically
+- `:Focus()` - Focus the search input
+- `:GetResults()` - Get current search results array
+- `:SetMode(mode)` - Change search mode ("exact", "contains", "startswith", "endswith", "fuzzy", "regex")
+- `:GetMode()` - Get current search mode
+- `:AddElementTag(elementName, tag)` - Add searchable tag to an element
+
+**Properties:**
+- `.Value` - Current search query string
+- `.Results` - Array of matching elements (sorted by score)
+- `.History` - Array of search history items
+- `.Searching` - Boolean indicating if search is in progress
+- `.CurrentMode` - Current search mode
+
+**Example 1: Basic Search with Positioning**
+```lua
+-- Create search that appears at the top
+local Search = Tab:Search({
+    Placeholder = "Search components...",
+    Position = "top",  -- Force to top of tab
+    DefaultMode = "contains"
 })
 
-Progress:<span class="function">Set</span>(<span class="number">0.5</span>)
-Progress:<span class="function">Set</span>(<span class="number">1.0</span>)</code></pre>
-            </div>
+-- Add your components below - they'll still be searchable!
+Tab:Button({ Name = "Click Me" })
+Tab:Toggle({ Name = "Enable Feature" })
+Tab:Slider({ Name = "Speed" })
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The progress bar label (default: "Progress")</td>
-                    </tr>
-                    <tr>
-                        <td>Progress</td>
-                        <td>number</td>
-                        <td>✗</td>
-                        <td>Initial progress (0 to 1, default: 0)</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>value (number, 0-1)</td>
-                        <td>Update progress value and color</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Color States:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>0-0.5 (0-50%): Red/Error color</li>
-                <li>0.5-1 (50-99%): Orange/Warning color</li>
-                <li>1.0 (100%): Green/Success color</li>
-            </ul>
-
-            <h3 class="section-subtitle">✅ Checkbox</h3>
-            <p>Simple checkbox toggle control with on/off states.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Checkbox = Tab:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Enable Auto-Farm"</span>,
-    Default = <span class="keyword">false</span>,
-    Flag = <span class="string">"AutoFarm"</span>,
-    Callback = <span class="keyword">function</span>(checked)
-        <span class="function">print</span>(<span class="string">"Checkbox:"</span>, checked)
-    <span class="keyword">end</span>
+**Example 2: Hide Non-Matching Elements (Focus Mode)**
+```lua
+-- When searching, hide all elements that don't match
+local Search = Tab:Search({
+    Placeholder = "Search to filter...",
+    Position = "top",
+    HideNonMatching = true,  -- Only show matching elements!
+    Callback = function(query, results)
+        if #results > 0 then
+            print("Showing", #results, "matching elements")
+        else
+            print("No matches - showing all elements")
+        end
+    end
 })
 
-Checkbox:<span class="function">Set</span>(<span class="keyword">true</span>)</code></pre>
-            </div>
+Tab:Section("Player")
+Tab:Slider({ Name = "Walk Speed" })
+Tab:Slider({ Name = "Jump Power" })
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>The checkbox label (default: "Checkbox")</td>
-                    </tr>
-                    <tr>
-                        <td>Default</td>
-                        <td>boolean</td>
-                        <td>✗</td>
-                        <td>Starting state (default: false)</td>
-                    </tr>
-                    <tr>
-                        <td>Flag</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Flag name for accessing value</td>
-                    </tr>
-                    <tr>
-                        <td>Callback</td>
-                        <td>function</td>
-                        <td>✗</td>
-                        <td>Function called when toggled</td>
-                    </tr>
-                </tbody>
-            </table>
+Tab:Section("ESP")
+Tab:Toggle({ Name = "ESP Enabled" })
+Tab:ColorPicker({ Name = "ESP Color" })
 
-            <h4 class="section-subheading">Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Set</td>
-                        <td>value (boolean)</td>
-                        <td>Set checkbox state (true/false)</td>
-                    </tr>
-                </tbody>
-            </table>
+-- Searching "speed" will show ONLY Walk Speed and Jump Power!
+```
 
-            <h4 class="section-subheading">Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Simple on/off visual indicator</li>
-                <li>Similar to toggles but with checkbox styling</li>
-                <li>Perfect for use inside GroupBoxes</li>
-                <li>Flag system integration</li>
-            </ul>
+**Example 3: Search Workspace Parts**
+```lua
+-- Search for parts in workspace instead of UI elements
+local PartSearch = Tab:Search({
+    Placeholder = "Search workspace parts...",
+    Position = "top",
+    CustomSearch = function(query, mode)
+        local results = {}
+        local searchQuery = query:lower()
+        
+        -- Search all parts in workspace by name
+        for _, part in pairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") then
+                local name = part.Name:lower()
+                
+                if name:find(searchQuery, 1, true) then
+                    table.insert(results, {
+                        Name = part.Name,
+                        Object = part,        -- Store the actual part
+                        Position = part.Position,
+                        Score = 1
+                    })
+                end
+            end
+        end
+        
+        return results
+    end,
+    Callback = function(query, results)
+        print("Found", #results, "parts")
+        for _, result in ipairs(results) do
+            print("Part:", result.Name, "at", result.Position)
+        end
+    end
+})
+```
 
-            <h3 class="section-subtitle">📏 Spacing</h3>
-            <p>Add custom vertical spacing between UI components.</p>
+**Example 4: Search Players**
+```lua
+-- Search for players in the game
+local PlayerSearch = Tab:Search({
+    Placeholder = "Search players...",
+    Position = "top",
+    CustomSearch = function(query, mode)
+        local results = {}
+        local searchQuery = query:lower()
+        
+        for _, player in pairs(game.Players:GetPlayers()) do
+            local name = player.Name:lower()
+            local displayName = player.DisplayName:lower()
             
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Tab:<span class="function">Button</span>({ Name = <span class="string">"Button 1"</span> })
+            if name:find(searchQuery, 1, true) or 
+               displayName:find(searchQuery, 1, true) then
+                table.insert(results, {
+                    Name = player.Name,
+                    DisplayName = player.DisplayName,
+                    Player = player,
+                    Score = 1
+                })
+            end
+        end
+        
+        return results
+    end,
+    Callback = function(query, results)
+        if #results > 0 then
+            print("Found players:")
+            for _, result in ipairs(results) do
+                print("- " .. result.Name .. " (" .. result.DisplayName .. ")")
+            end
+        end
+    end
+})
+```
 
-Tab:<span class="function">AddSpacing</span>(<span class="number">10</span>)  <span class="comment">-- Add 10 pixels</span>
+**Example 5: Universal Search (Workspace + Players)**
+```lua
+local UniversalSearch = Tab:Search({
+    Placeholder = "Search everything...",
+    Position = "top",
+    CustomSearch = function(query, mode)
+        local results = {}
+        local searchQuery = query:lower()
+        
+        -- Search workspace parts
+        for _, part in pairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") and part.Name:lower():find(searchQuery, 1, true) then
+                table.insert(results, {
+                    Name = part.Name,
+                    Type = "Part",
+                    Object = part,
+                    Position = part.Position,
+                    Score = 1
+                })
+            end
+        end
+        
+        -- Search players
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Name:lower():find(searchQuery, 1, true) then
+                table.insert(results, {
+                    Name = player.Name,
+                    Type = "Player",
+                    Object = player,
+                    Score = 1
+                })
+            end
+        end
+        
+        return results
+    end,
+    Callback = function(query, results)
+        for _, result in ipairs(results) do
+            if result.Type == "Part" then
+                print("Part:", result.Name, "at", result.Position)
+            else
+                print("Player:", result.Name)
+            end
+        end
+    end
+})
+```
 
-Tab:<span class="function">Button</span>({ Name = <span class="string">"Button 2"</span> })
-
-Tab:<span class="function">AddSpacing</span>(<span class="number">20</span>)  <span class="comment">-- Add 20 pixels</span>
-
-Tab:<span class="function">Button</span>({ Name = <span class="string">"Button 3"</span> })</code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>pixels</td>
-                        <td>number</td>
-                        <td>Amount of vertical spacing in pixels (default: 10)</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Use Cases:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Separate different sections visually</li>
-                <li>Add breathing room between dense UI elements</li>
-                <li>Create visual hierarchy in your interface</li>
-                <li>Works in Tabs, SubTabs, and GroupBoxes</li>
-            </ul>
-
-            <h3 class="section-subtitle">📦 GroupBox</h3>
-            <p>Group related UI elements together with a labeled container.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> FarmGroup = Tab:<span class="function">GroupBox</span>({
-    Name = <span class="string">"Farming Options"</span>,
-    Inline = <span class="keyword">false</span>  <span class="comment">-- Full width (default)</span>
+**Example 6: Using Search Modes**
+```lua
+local Search = Tab:Search({
+    Placeholder = "Search components...",
+    DefaultMode = "fuzzy",  -- Start with fuzzy search
+    FuzzyThreshold = 0.7,   -- 70% similarity required
+    Callback = function(query, results, search)
+        print(string.format("Mode: %s | Found %d results", search:GetMode(), #results))
+    end
 })
 
-FarmGroup:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Auto Collect"</span>,
-    Default = <span class="keyword">true</span>
+-- Switch to exact match
+Search:SetMode("exact")
+
+-- Switch to fuzzy for typo tolerance
+Search:SetMode("fuzzy")
+
+-- Search with regex pattern
+Search:SetMode("regex")
+Search:SetText("^Toggle.*")  -- Find elements starting with "Toggle"
+```
+
+**Example 7: Using Tags**
+```lua
+local Search = Tab:Search({
+    Placeholder = "Search by tags...",
+    SearchInTags = true,
+    Position = "top"
 })
 
-FarmGroup:<span class="function">AddSpacing</span>(<span class="number">5</span>)
+-- Add tags to elements for better searchability
+Search:AddElementTag("Speed Slider", "movement")
+Search:AddElementTag("Speed Slider", "player")
+Search:AddElementTag("Jump Power", "movement")
+Search:AddElementTag("ESP Toggle", "visual")
 
-FarmGroup:<span class="function">Button</span>({
-    Name = <span class="string">"Start Farming"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="function">print</span>(<span class="string">"Started!"</span>)
-    <span class="keyword">end</span>
-})</code></pre>
-            </div>
+-- Now searching "movement" will find both Speed Slider and Jump Power
+-- with "Speed Slider" ranked higher due to name + tag match
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Name</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>GroupBox title (default: "Group")</td>
-                    </tr>
-                    <tr>
-                        <td>Inline</td>
-                        <td>boolean</td>
-                        <td>✗</td>
-                        <td>Use inline layout (48% width, default: false)</td>
-                    </tr>
-                </tbody>
-            </table>
+**Example 8: Fuzzy Search**
+```lua
+-- Fuzzy search is great for typos and approximate matches
+local FuzzySearch = Tab:Search({
+    DefaultMode = "fuzzy",
+    FuzzyThreshold = 0.6,  -- 60% similarity (lower = more lenient)
+    Position = "top",
+    Callback = function(query, results)
+        -- "togle" will match "toggle"
+        -- "sped" will match "speed"
+        -- "colr" will match "color"
+        print("Fuzzy found:", #results, "matches")
+    end
+})
+```
 
-            <h4 class="section-subheading">GroupBox Methods:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Checkbox(config)</td>
-                        <td>Add a checkbox to the group</td>
-                    </tr>
-                    <tr>
-                        <td>Button(config)</td>
-                        <td>Add a button to the group</td>
-                    </tr>
-                    <tr>
-                        <td>AddSpacing(pixels)</td>
-                        <td>Add vertical spacing inside the group</td>
-                    </tr>
-                </tbody>
-            </table>
+**Position Options:**
+- `"top"` - Search bar appears at the very top (regardless of when created)
+- `"bottom"` - Search bar appears at the very bottom (regardless of when created)
+- `"order"` - Search bar appears where you create it in code (default)
 
-            <h4 class="section-subheading">Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Organizes related controls together</li>
-                <li>Labeled header with accent color</li>
-                <li>Supports inline mode for side-by-side layout</li>
-                <li>Can be nested in Tabs and SubTabs</li>
-            </ul>
+**CustomSearch Function Format:**
+```lua
+CustomSearch = function(query, mode)
+    -- query: The search text entered by user
+    -- mode: Current search mode ("contains", "fuzzy", etc.)
+    
+    -- Return array of results
+    return {
+        {
+            Name = "Result 1",         -- Required: Display name
+            Score = 1,                 -- Optional: Relevance score (default 1)
+            -- Add any custom properties you want:
+            Object = workspace.Part,
+            Position = Vector3.new(),
+            CustomData = "anything"
+        }
+    }
+end
+```
 
-            <h3 class="section-subtitle">📑 SubTab</h3>
-            <p>Create tabs within tabs for advanced organization.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> MySubTabs = Tab:<span class="function">SubTab</span>({
-    Tabs = {<span class="string">"General"</span>, <span class="string">"Advanced"</span>, <span class="string">"Settings"</span>}
+**Important Notes:**
+- When using `CustomSearch`, the `HideNonMatching` feature is disabled (custom results don't have UI frames)
+- The callback now receives 3 parameters: `query`, `results`, and `search` object
+- Search can be created before or after elements when using `Position = "top"` or `Position = "bottom"`
+- All 14 UI components are automatically searchable by their Name property
+
+---
+
+### CopyButton
+
+Button that copies text to clipboard.
+
+```lua
+Tab:CopyButton({
+    Name = "Copy Discord Link",           -- Button text (required)
+    Text = "discord.gg/example"           -- Text to copy (required)
+})
+```
+
+**Features:**
+- Automatically copies text when clicked
+- Works across all executors with fallback support
+- Shows success feedback
+
+---
+
+### ProgressBar
+
+Visual progress indicator.
+
+```lua
+local MyProgress = Tab:ProgressBar({
+    Name = "Loading Progress",            -- ProgressBar name (required)
+    Progress = 0.5                        -- Starting progress 0-1 (optional, default: 0)
 })
 
-<span class="comment">-- Access individual sub-tabs</span>
-<span class="keyword">local</span> GeneralTab = MySubTabs.Tabs[<span class="number">1</span>]
-<span class="keyword">local</span> AdvancedTab = MySubTabs.Tabs[<span class="number">2</span>]
-<span class="keyword">local</span> SettingsTab = MySubTabs.Tabs[<span class="number">3</span>]
+-- Methods
+MyProgress:Set(0.75)                     -- Update progress (0 to 1)
+```
 
-<span class="comment">-- Add elements to sub-tabs</span>
-GeneralTab:<span class="function">Button</span>({
-    Name = <span class="string">"Basic Action"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="function">print</span>(<span class="string">"General action!"</span>)
-    <span class="keyword">end</span>
+**Methods:**
+- `:Set(value)` - Set progress (0.0 to 1.0)
+
+---
+
+### Checkbox *(NEW!)*
+
+Simple checkbox toggle control.
+
+```lua
+local MyCheckbox = Tab:Checkbox({
+    Name = "Enable Auto-Farm",            -- Checkbox label (required)
+    Default = false,                      -- Starting state (optional, default: false)
+    Flag = "AutoFarm",                    -- Flag name (optional)
+    Callback = function(checked)          -- Function called on toggle (optional)
+        print("Checkbox is:", checked)
+    end
 })
 
-AdvancedTab:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Advanced Feature"</span>,
-    Default = <span class="keyword">false</span>
-})</code></pre>
-            </div>
+-- Methods
+MyCheckbox:Set(true)                      -- Update checkbox state
+local isChecked = Zonix.Flags.AutoFarm   -- Access current value via flag
+```
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Tabs</td>
-                        <td>table</td>
-                        <td>✓</td>
-                        <td>Array of sub-tab names</td>
-                    </tr>
-                </tbody>
-            </table>
+**Methods:**
+- `:Set(value)` - Set checkbox state (true/false)
 
-            <h4 class="section-subheading">SubTab Methods:</h4>
-            <p style="color: var(--text-gray);">Each sub-tab supports:</p>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Button(config)</td>
-                        <td>Add a button</td>
-                    </tr>
-                    <tr>
-                        <td>Checkbox(config)</td>
-                        <td>Add a checkbox</td>
-                    </tr>
-                    <tr>
-                        <td>AddSpacing(pixels)</td>
-                        <td>Add vertical spacing</td>
-                    </tr>
-                    <tr>
-                        <td>GroupBox(config)</td>
-                        <td>Add a group box</td>
-                    </tr>
-                </tbody>
-            </table>
+**Note:** Checkboxes are similar to toggles but with a different visual style. Use checkboxes for simple on/off options within groups.
 
-            <h4 class="section-subheading">Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Tabs within tabs for complex organization</li>
-                <li>Clean horizontal tab switcher</li>
-                <li>Supports all standard UI components</li>
-                <li>Perfect for organizing settings by category</li>
-            </ul>
+---
 
-            <h3 class="section-subtitle">➡️ In-line Layout</h3>
-            <p>Place GroupBoxes side-by-side instead of stacking vertically.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="comment">-- Start inline layout</span>
-<span class="keyword">local</span> inline = Tab:<span class="function">StartInline</span>()
+### Spacing *(NEW!)*
 
-<span class="comment">-- Add GroupBoxes that will appear side-by-side</span>
-<span class="keyword">local</span> SpeedGroup = Tab:<span class="function">GroupBox</span>({
-    Name = <span class="string">"Speed Settings"</span>,
-    Inline = <span class="keyword">true</span>
+Add custom vertical spacing between components.
+
+```lua
+Tab:AddSpacing(10)                        -- Add 10 pixels of spacing
+Tab:AddSpacing(20)                        -- Add 20 pixels of spacing
+```
+
+**Use Cases:**
+- Separate different sections visually
+- Add breathing room between dense UI elements
+- Create visual hierarchy in your interface
+
+---
+
+### GroupBox *(NEW!)*
+
+Group related UI elements together with a labeled container.
+
+```lua
+local FarmGroup = Tab:GroupBox({
+    Name = "Farming Options",             -- GroupBox title (required)
+    Inline = false                        -- Use inline layout (optional, default: false)
 })
 
-<span class="keyword">local</span> FarmGroup = Tab:<span class="function">GroupBox</span>({
-    Name = <span class="string">"Farming Settings"</span>,
-    Inline = <span class="keyword">true</span>
+-- Add elements to the GroupBox
+FarmGroup:Checkbox({
+    Name = "Auto Collect",
+    Default = true,
+    Callback = function(checked)
+        print("Auto collect:", checked)
+    end
 })
 
-<span class="comment">-- Stop inline layout</span>
-inline.<span class="function">Stop</span>()
+FarmGroup:AddSpacing(5)
 
-<span class="comment">-- Elements below will stack normally</span>
-Tab:<span class="function">Button</span>({
-    Name = <span class="string">"Apply Settings"</span>
-})</code></pre>
-            </div>
+FarmGroup:Button({
+    Name = "Start Farming",
+    Callback = function()
+        print("Farming started!")
+    end
+})
+```
 
-            <h4 class="section-subheading">How it Works:</h4>
-            <ol style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Call <code>Tab:StartInline()</code> to begin horizontal layout</li>
-                <li>Add GroupBoxes with <code>Inline = true</code> (they'll appear side-by-side)</li>
-                <li>Call <code>inline.Stop()</code> to return to normal vertical stacking</li>
-            </ol>
+**GroupBox Methods:**
+- `:Checkbox(config)` - Add a checkbox to the group
+- `:Button(config)` - Add a button to the group
+- `:AddSpacing(pixels)` - Add spacing within the group
 
-            <h4 class="section-subheading">Best Practices:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Use for grouping related controls (e.g., Speed section next to Farming section)</li>
-                <li>Limit to 2 inline groups for optimal mobile compatibility</li>
-                <li>Always call <code>.Stop()</code> to prevent layout issues</li>
-                <li>Each inline GroupBox takes 48% width, leaving 4% for spacing</li>
-            </ul>
+**Inline Option:**
+When `Inline = true`, the GroupBox takes up only 48% width, allowing you to place two GroupBoxes side-by-side using the in-line layout system.
 
-            <h3 class="section-subtitle">💧 Watermark</h3>
-            <p>Display executor info, branding, or status in a persistent watermark.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Zonix:<span class="function">Watermark</span>({
-    Text = <span class="string">"My Script v1.0 | "</span> .. Zonix.Executor
-})</code></pre>
-            </div>
+---
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Text</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Watermark text (default: "Zonix UI v1.3.7 | {Executor}")</td>
-                    </tr>
-                </tbody>
-            </table>
+### SubTab *(NEW!)*
 
-            <h4 class="section-subheading">Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Positioned in top-left corner</li>
-                <li>Supports rainbow mode when enabled</li>
-                <li>Auto-displays executor name via Zonix.Executor</li>
-                <li>Returns watermark object for customization</li>
-            </ul>
+Create tabs within tabs for better organization.
 
-            <h3 class="section-subtitle">🔔 Notifications</h3>
-            <p>Toast notifications with 4 types, icons, and auto-dismiss.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Zonix:<span class="function">Notify</span>({
-    Title = <span class="string">"Success!"</span>,
-    Content = <span class="string">"Operation completed successfully"</span>,
-    Duration = <span class="number">3</span>,
-    Type = <span class="string">"Success"</span>
-})</code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Type</th>
-                        <th>Required</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Title</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Notification title (default: "Notification")</td>
-                    </tr>
-                    <tr>
-                        <td>Content</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>Notification message (default: "")</td>
-                    </tr>
-                    <tr>
-                        <td>Duration</td>
-                        <td>number</td>
-                        <td>✗</td>
-                        <td>Display time in seconds (default: 3)</td>
-                    </tr>
-                    <tr>
-                        <td>Type</td>
-                        <td>string</td>
-                        <td>✗</td>
-                        <td>"Info", "Success", "Warning", or "Error" (default: "Info")</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Notification Types:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Icon</th>
-                        <th>Color</th>
-                        <th>Use Case</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Info</td>
-                        <td>ℹ</td>
-                        <td>Blue</td>
-                        <td>General information, tips</td>
-                    </tr>
-                    <tr>
-                        <td>Success</td>
-                        <td>✓</td>
-                        <td>Green</td>
-                        <td>Successful operations</td>
-                    </tr>
-                    <tr>
-                        <td>Warning</td>
-                        <td>⚠</td>
-                        <td>Orange</td>
-                        <td>Warnings, cautions</td>
-                    </tr>
-                    <tr>
-                        <td>Error</td>
-                        <td>✕</td>
-                        <td>Red</td>
-                        <td>Errors, failures</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Stack vertically in top-right corner</li>
-                <li>Smooth slide-in and slide-out animations</li>
-                <li>Auto-dismiss after duration</li>
-                <li>Color-coded accent bars</li>
-            </ul>
-
-            <h3 class="section-subtitle">💾 Config System</h3>
-            <p>Save and load configurations to persist settings across sessions.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Zonix:<span class="function">SaveConfig</span>(<span class="string">"myconfig"</span>)
-
-Zonix:<span class="function">LoadConfig</span>(<span class="string">"myconfig"</span>)
-
-<span class="keyword">if</span> Zonix.Flags.AutoFarm <span class="keyword">then</span>
-    <span class="function">print</span>(<span class="string">"Auto farm is enabled"</span>)
-<span class="keyword">end</span>
-
-<span class="keyword">local</span> speed = Zonix.Flags.WalkSpeed <span class="keyword">or</span> <span class="number">16</span></code></pre>
-            </div>
-
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>SaveConfig</td>
-                        <td>name (string)</td>
-                        <td>Save current flags to a JSON config file</td>
-                    </tr>
-                    <tr>
-                        <td>LoadConfig</td>
-                        <td>name (string)</td>
-                        <td>Load flags from a JSON config file</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 class="section-subheading">Features:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Saves all flagged component values</li>
-                <li>Stored in workspace/ZonixUI folder (or custom via Settings.ConfigFolder)</li>
-                <li>JSON format for easy editing</li>
-                <li>Shows success notification on save/load</li>
-                <li>Requires executor file system support</li>
-            </ul>
-
-            <div class="alert alert-warning">
-                <strong>⚠️ FILE SYSTEM:</strong> Config saving requires executor file system support (writefile, readfile, etc). Works on most modern executors.
-            </div>
-
-            <h3 class="section-subtitle">🏷️ Flag System</h3>
-            <p>Global value storage accessible from anywhere in your script.</p>
-            
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - FLAG USAGE</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Tab:<span class="function">Toggle</span>({
-    Name = <span class="string">"Auto Farm"</span>,
-    Flag = <span class="string">"AutoFarm"</span>
+```lua
+local MySubTabs = Tab:SubTab({
+    Tabs = {"General", "Advanced", "Settings"}  -- SubTab names (required)
 })
 
-Tab:<span class="function">Slider</span>({
-    Name = <span class="string">"Speed"</span>,
-    Flag = <span class="string">"Speed"</span>
+-- Access individual sub-tabs
+local GeneralTab = MySubTabs.Tabs[1]
+local AdvancedTab = MySubTabs.Tabs[2]
+local SettingsTab = MySubTabs.Tabs[3]
+
+-- Add elements to sub-tabs
+GeneralTab:Button({
+    Name = "Basic Action",
+    Callback = function()
+        print("General action!")
+    end
 })
 
-<span class="keyword">while</span> <span class="keyword">true</span> <span class="keyword">do</span>
-    <span class="keyword">if</span> Zonix.Flags.AutoFarm <span class="keyword">then</span>
-        <span class="keyword">local</span> speed = Zonix.Flags.Speed <span class="keyword">or</span> <span class="number">50</span>
-    <span class="keyword">end</span>
-    <span class="function">wait</span>(<span class="number">1</span>)
-<span class="keyword">end</span></code></pre>
-            </div>
+AdvancedTab:Checkbox({
+    Name = "Advanced Feature",
+    Default = false
+})
 
-            <h4 class="section-subheading">How Flags Work:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Any component with a Flag parameter stores its value in Zonix.Flags</li>
-                <li>Access via: <span class="inline-code">Zonix.Flags.YourFlagName</span></li>
-                <li>Values update automatically when component changes</li>
-                <li>Flags persist through config save/load</li>
-                <li>Use flags instead of storing component references</li>
-            </ul>
+SettingsTab:GroupBox({
+    Name = "Config"
+}):Checkbox({
+    Name = "Save on Exit"
+})
+```
 
-            <h4 class="section-subheading">Supported Components:</h4>
-            <ul style="color: var(--text-gray); margin-left: 2rem;">
-                <li>Toggle: stores boolean value</li>
-                <li>Slider: stores number value</li>
-                <li>Dropdown: stores string value</li>
-                <li>Textbox: stores string value</li>
-                <li>Keybind: stores Enum.KeyCode value</li>
-                <li>ColorPicker: stores Color3 value</li>
-            </ul>
+**SubTab Methods:**
+Each sub-tab supports:
+- `:Button(config)` - Add a button
+- `:Checkbox(config)` - Add a checkbox
+- `:AddSpacing(pixels)` - Add spacing
+- `:GroupBox(config)` - Add a group box
 
-            <div class="alert alert-info">
-                <strong>💡 TIP:</strong> Use flags to access component values from anywhere without storing component references!
-            </div>
-        </section>
+---
 
-        <section class="section" id="themes">
-            <h2 class="section-title">// THEMES & CUSTOMIZATION</h2>
+### In-line Layout *(NEW!)*
 
-            <h3 class="section-subtitle">🎨 Built-in Themes</h3>
-            <p>Zonix UI comes with 3 beautiful built-in themes that can be switched at any time.</p>
+Place elements side-by-side instead of stacking vertically.
 
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - CHANGE THEME</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Zonix.Settings.Theme = <span class="string">"Dark"</span>
-Zonix.Settings.Theme = <span class="string">"Light"</span>
-Zonix.Settings.Theme = <span class="string">"Midnight"</span></code></pre>
-            </div>
+```lua
+-- Start inline layout
+local inline = Tab:StartInline()
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Theme</th>
-                        <th>Background</th>
-                        <th>Accent</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Dark</td>
-                        <td>Deep blue-gray</td>
-                        <td>Purple (#8A2BE2)</td>
-                        <td>Default dark theme, easy on the eyes</td>
-                    </tr>
-                    <tr>
-                        <td>Light</td>
-                        <td>Clean white</td>
-                        <td>Purple (#8A2BE2)</td>
-                        <td>Bright theme for daytime use</td>
-                    </tr>
-                    <tr>
-                        <td>Midnight</td>
-                        <td>Very dark blue</td>
-                        <td>Cyan (#00B4FF)</td>
-                        <td>Ultra-dark theme with cyan accents</td>
-                    </tr>
-                </tbody>
-            </table>
+-- Add GroupBoxes that will appear side-by-side
+local LeftGroup = Tab:GroupBox({
+    Name = "Speed Settings",
+    Inline = true
+})
 
-            <h3 class="section-subtitle">🌈 Rainbow Mode</h3>
-            <p>Enable animated rainbow borders and effects on windows and UI elements.</p>
+local RightGroup = Tab:GroupBox({
+    Name = "Farming Settings",
+    Inline = true
+})
 
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Zonix.Settings.RainbowMode = <span class="keyword">true</span>
-Zonix.Settings.RainbowSpeed = <span class="number">5</span></code></pre>
-            </div>
+-- Stop inline layout
+inline.Stop()
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Setting</th>
-                        <th>Type</th>
-                        <th>Range</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>RainbowMode</td>
-                        <td>boolean</td>
-                        <td>true/false</td>
-                        <td>Enable rainbow effect</td>
-                    </tr>
-                    <tr>
-                        <td>RainbowSpeed</td>
-                        <td>number</td>
-                        <td>1-10</td>
-                        <td>Animation speed (higher = faster)</td>
-                    </tr>
-                </tbody>
-            </table>
+-- Elements below this will stack normally again
+Tab:Button({
+    Name = "Apply Settings"
+})
+```
 
-            <h3 class="section-subtitle">⚙️ All Settings</h3>
-            <p>Complete list of customizable settings for Zonix UI.</p>
+**How it Works:**
+1. Call `Tab:StartInline()` to begin horizontal layout
+2. Add GroupBoxes with `Inline = true` (they'll appear side-by-side)
+3. Call `inline.Stop()` to return to normal vertical stacking
 
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - ALL SETTINGS</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Zonix.Settings.Theme = <span class="string">"Dark"</span>
-Zonix.Settings.RainbowMode = <span class="keyword">false</span>
-Zonix.Settings.RainbowSpeed = <span class="number">5</span>
-Zonix.Settings.AnimationSpeed = <span class="number">0.25</span>
-Zonix.Settings.TooltipsEnabled = <span class="keyword">true</span>
-Zonix.Settings.ConfigFolder = <span class="string">"ZonixUI"</span></code></pre>
-            </div>
+**Best Practices:**
+- Use inline layout for grouping related controls (e.g., Speed section next to Farming section)
+- Limit to 2 inline groups for optimal mobile compatibility
+- Always call `.Stop()` to prevent layout issues
 
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Setting</th>
-                        <th>Type</th>
-                        <th>Default</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Theme</td>
-                        <td>string</td>
-                        <td>"Dark"</td>
-                        <td>Current theme name</td>
-                    </tr>
-                    <tr>
-                        <td>RainbowMode</td>
-                        <td>boolean</td>
-                        <td>false</td>
-                        <td>Enable rainbow effects</td>
-                    </tr>
-                    <tr>
-                        <td>RainbowSpeed</td>
-                        <td>number</td>
-                        <td>5</td>
-                        <td>Rainbow animation speed (1-10)</td>
-                    </tr>
-                    <tr>
-                        <td>AnimationSpeed</td>
-                        <td>number</td>
-                        <td>0.25</td>
-                        <td>UI animation duration in seconds</td>
-                    </tr>
-                    <tr>
-                        <td>TooltipsEnabled</td>
-                        <td>boolean</td>
-                        <td>true</td>
-                        <td>Show hover tooltips</td>
-                    </tr>
-                    <tr>
-                        <td>ConfigFolder</td>
-                        <td>string</td>
-                        <td>"ZonixUI"</td>
-                        <td>Folder name for config files</td>
-                    </tr>
-                </tbody>
-            </table>
+---
 
-            <h3 class="section-subtitle">🎨 Custom Themes</h3>
-            <p>Create your own custom themes with full color control over all UI elements.</p>
+## 🔑 Flag System
 
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - CREATE CUSTOM THEME</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code>Zonix.Themes.MyTheme = {
-    Background = <span class="function">Color3.fromRGB</span>(<span class="number">15</span>, <span class="number">15</span>, <span class="number">20</span>),
-    Secondary = <span class="function">Color3.fromRGB</span>(<span class="number">20</span>, <span class="number">20</span>, <span class="number">27</span>),
-    Tertiary = <span class="function">Color3.fromRGB</span>(<span class="number">25</span>, <span class="number">25</span>, <span class="number">35</span>),
-    Border = <span class="function">Color3.fromRGB</span>(<span class="number">40</span>, <span class="number">40</span>, <span class="number">50</span>),
-    Text = <span class="function">Color3.fromRGB</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>),
-    TextDark = <span class="function">Color3.fromRGB</span>(<span class="number">180</span>, <span class="number">180</span>, <span class="number">190</span>),
-    Accent = <span class="function">Color3.fromRGB</span>(<span class="number">138</span>, <span class="number">43</span>, <span class="number">226</span>),
-    AccentDark = <span class="function">Color3.fromRGB</span>(<span class="number">108</span>, <span class="number">33</span>, <span class="number">186</span>),
-    Success = <span class="function">Color3.fromRGB</span>(<span class="number">67</span>, <span class="number">181</span>, <span class="number">129</span>),
-    Warning = <span class="function">Color3.fromRGB</span>(<span class="number">250</span>, <span class="number">166</span>, <span class="number">26</span>),
-    Error = <span class="function">Color3.fromRGB</span>(<span class="number">237</span>, <span class="number">66</span>, <span class="number">69</span>),
-    Info = <span class="function">Color3.fromRGB</span>(<span class="number">52</span>, <span class="number">152</span>, <span class="number">219</span>),
-    Topbar = <span class="function">Color3.fromRGB</span>(<span class="number">12</span>, <span class="number">12</span>, <span class="number">17</span>)
+The flag system allows you to easily access and monitor component values without storing references. Set a `Flag` parameter on any interactive component, and access its current value via `Zonix.Flags`.
+
+### Components Supporting Flags
+
+| Component | Flag Access | Value Type |
+|-----------|-------------|------------|
+| Button | `Zonix.Flags.YourFlag` | `true` (when clicked) |
+| Checkbox | `Zonix.Flags.YourFlag` | `boolean` |
+| Toggle | `Zonix.Flags.YourFlag` | `boolean` |
+| Slider | `Zonix.Flags.YourFlag` | `number` |
+| Dropdown | `Zonix.Flags.YourFlag` | `string` |
+| Textbox | `Zonix.Flags.YourFlag` | `string` |
+| Keybind | `Zonix.Flags.YourFlag` | `Enum.KeyCode` |
+| ColorPicker | `Zonix.Flags.YourFlag` | `Color3` |
+
+### Example Usage
+
+```lua
+-- Setting flags on components
+Tab:Toggle({
+    Name = "Auto Farm",
+    Flag = "AutoFarm",
+    Default = false
+})
+
+Tab:Slider({
+    Name = "Speed",
+    Flag = "Speed",
+    Min = 0,
+    Max = 100,
+    Default = 50
+})
+
+Tab:Dropdown({
+    Name = "Mode",
+    Flag = "GameMode",
+    Options = {"Easy", "Normal", "Hard"},
+    Default = "Normal"
+})
+
+Tab:Textbox({
+    Name = "Username",
+    Flag = "Username",
+    Default = ""
+})
+
+Tab:Checkbox({
+    Name = "Enable ESP",
+    Flag = "ESP",
+    Default = true
+})
+
+Tab:Keybind({
+    Name = "Toggle UI",
+    Flag = "UIKeybind",
+    Default = Enum.KeyCode.RightShift
+})
+
+Tab:ColorPicker({
+    Name = "ESP Color",
+    Flag = "ESPColor",
+    Default = Color3.fromRGB(255, 0, 0)
+})
+
+-- Accessing flag values
+while task.wait(0.1) do
+    if Zonix.Flags.AutoFarm then
+        local speed = Zonix.Flags.Speed
+        local mode = Zonix.Flags.GameMode
+        local username = Zonix.Flags.Username
+        local espEnabled = Zonix.Flags.ESP
+        local espColor = Zonix.Flags.ESPColor
+        
+        print("Farming at speed:", speed, "in mode:", mode)
+    end
+end
+
+-- Check keybind
+game:GetService("UserInputService").InputBegan:Connect(function(input)
+    if input.KeyCode == Zonix.Flags.UIKeybind then
+        print("UI keybind pressed!")
+    end
+end)
+```
+
+### Flag Best Practices
+
+✅ **DO:**
+- Use descriptive flag names (e.g., `"PlayerSpeed"` not `"s"`)
+- Check if flag exists before accessing: `if Zonix.Flags.MyFlag then`
+- Use flags in loops for real-time value monitoring
+- Set flags on all interactive components for easy config save/load
+
+❌ **DON'T:**
+- Use special characters in flag names
+- Reuse flag names across different components
+- Modify `Zonix.Flags` directly (use component `:Set()` methods)
+
+---
+
+## 🛠️ Utilities
+
+### Notifications
+
+Display temporary messages to the user.
+
+```lua
+Zonix:Notify({
+    Title = "Success!",                   -- Notification title (required)
+    Content = "Operation completed",      -- Notification message (required)
+    Type = "Success",                     -- Type: "Success", "Error", "Warning", "Info" (optional)
+    Duration = 5                          -- Display time in seconds (optional, default: 5)
+})
+```
+
+**Types:**
+- `Success` - Green notification for successful operations
+- `Error` - Red notification for errors
+- `Warning` - Yellow notification for warnings
+- `Info` - Blue notification for information
+
+---
+
+### Prompts
+
+Get user input through dialog boxes.
+
+```lua
+Zonix:Prompt({
+    Title = "Confirm Action",             -- Prompt title (required)
+    Content = "Are you sure?",            -- Prompt message (required)
+    Buttons = {
+        Confirm = {
+            Text = "Yes",                  -- Button text (required)
+            Callback = function()          -- Function to run on click (required)
+                print("User confirmed!")
+            end
+        },
+        Cancel = {
+            Text = "No",                   -- Button text (required)
+            Callback = function()          -- Function to run on click (required)
+                print("User cancelled!")
+            end
+        }
+    }
+})
+```
+
+---
+
+### Themes
+
+#### Built-in Themes
+
+Zonix UI comes with **3 beautiful built-in themes**:
+
+| Theme | Background | Accent | Description |
+|-------|------------|--------|-------------|
+| **Dark** | Deep blue-gray | Purple (#8A2BE2) | Default dark theme, easy on the eyes |
+| **Light** | Clean white | Purple (#8A2BE2) | Bright theme for daytime use |
+| **Midnight** | Very dark blue | Cyan (#00B4FF) | Ultra-dark theme with cyan accents |
+
+#### Switching Themes
+
+```lua
+-- Change theme
+Zonix.Settings.Theme = "Dark"
+Zonix.Settings.Theme = "Light"
+Zonix.Settings.Theme = "Midnight"
+```
+
+#### Rainbow Mode
+
+Enable animated rainbow borders and effects on windows and UI elements:
+
+```lua
+Zonix.Settings.RainbowMode = true
+Zonix.Settings.RainbowSpeed = 5  -- 1-10 (higher = faster)
+```
+
+#### Creating Custom Themes
+
+Create your own custom themes with full color control (13 properties required):
+
+```lua
+Zonix.Themes.MyTheme = {
+    Background = Color3.fromRGB(15, 15, 20),
+    Secondary = Color3.fromRGB(20, 20, 27),
+    Tertiary = Color3.fromRGB(25, 25, 35),
+    Border = Color3.fromRGB(40, 40, 50),
+    Text = Color3.fromRGB(255, 255, 255),
+    TextDark = Color3.fromRGB(180, 180, 190),
+    Accent = Color3.fromRGB(138, 43, 226),
+    AccentDark = Color3.fromRGB(108, 33, 186),
+    Success = Color3.fromRGB(67, 181, 129),
+    Warning = Color3.fromRGB(250, 166, 26),
+    Error = Color3.fromRGB(237, 66, 69),
+    Info = Color3.fromRGB(52, 152, 219),
+    Topbar = Color3.fromRGB(12, 12, 17)
 }
 
-Zonix.Settings.Theme = <span class="string">"MyTheme"</span></code></pre>
-            </div>
+-- Use your custom theme
+Zonix.Settings.Theme = "MyTheme"
+```
 
-            <h4 class="section-subheading">Theme Color Properties:</h4>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Type</th>
-                        <th>Usage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Background</td>
-                        <td>Color3</td>
-                        <td>Main window background</td>
-                    </tr>
-                    <tr>
-                        <td>Secondary</td>
-                        <td>Color3</td>
-                        <td>Tab bar, component backgrounds</td>
-                    </tr>
-                    <tr>
-                        <td>Tertiary</td>
-                        <td>Color3</td>
-                        <td>Component interiors (textbox, slider track)</td>
-                    </tr>
-                    <tr>
-                        <td>Border</td>
-                        <td>Color3</td>
-                        <td>Window borders, dividers</td>
-                    </tr>
-                    <tr>
-                        <td>Text</td>
-                        <td>Color3</td>
-                        <td>Primary text color</td>
-                    </tr>
-                    <tr>
-                        <td>TextDark</td>
-                        <td>Color3</td>
-                        <td>Secondary text, placeholders</td>
-                    </tr>
-                    <tr>
-                        <td>Accent</td>
-                        <td>Color3</td>
-                        <td>Primary accent (buttons, toggles, etc)</td>
-                    </tr>
-                    <tr>
-                        <td>AccentDark</td>
-                        <td>Color3</td>
-                        <td>Accent hover state</td>
-                    </tr>
-                    <tr>
-                        <td>Success</td>
-                        <td>Color3</td>
-                        <td>Success notifications, 100% progress</td>
-                    </tr>
-                    <tr>
-                        <td>Warning</td>
-                        <td>Color3</td>
-                        <td>Warning notifications</td>
-                    </tr>
-                    <tr>
-                        <td>Error</td>
-                        <td>Color3</td>
-                        <td>Error notifications, close button</td>
-                    </tr>
-                    <tr>
-                        <td>Info</td>
-                        <td>Color3</td>
-                        <td>Info notifications</td>
-                    </tr>
-                    <tr>
-                        <td>Topbar</td>
-                        <td>Color3</td>
-                        <td>Window topbar background</td>
-                    </tr>
-                </tbody>
-            </table>
+**Theme Color Properties:**
 
-            <div class="alert alert-info">
-                <strong>💡 TIP:</strong> All 13 color properties are required when creating a custom theme!
-            </div>
-        </section>
+| Property | Usage |
+|----------|-------|
+| `Background` | Main window background |
+| `Secondary` | Tab bar, component backgrounds |
+| `Tertiary` | Component interiors (textbox, slider track) |
+| `Border` | Window borders, dividers |
+| `Text` | Primary text color |
+| `TextDark` | Secondary text, placeholders |
+| `Accent` | Buttons, active elements |
+| `AccentDark` | Hover states |
+| `Success` | Success notifications |
+| `Warning` | Warning notifications |
+| `Error` | Error notifications |
+| `Info` | Info notifications |
+| `Topbar` | Window topbar background |
 
-        <section class="section" id="executors">
-            <h2 class="section-title">// EXECUTOR SUPPORT</h2>
-            <p>Zonix UI automatically detects and supports ALL current executors with universal function mapping:</p>
+#### All Settings
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Executor</th>
-                        <th>Status</th>
-                        <th>Clipboard</th>
-                        <th>File System</th>
-                        <th>Auto-Detect</th>
-                    </tr>
-                </thead>
-                                <tbody>
-                    <tr style="background: rgba(0, 255, 255, 0.05);">
-                        <td colspan="5" style="color: var(--accent-cyan); font-weight: bold; text-align: center;">🪟 WINDOWS EXECUTORS</td>
-                    </tr>
-                    <tr>
-                        <td>Wave</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Seliware</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Volt</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Potassium</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Volcano</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Bunni.lol</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>ChocoSploit</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Velocity</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Solara</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Xeno</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Valex</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>SirHurt</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Synapse Z</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Serotonin</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Matcha</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Photon</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>DX9WARE V2</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Matrix Hub</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Ronin</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Isabelle</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Melatonin</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Yerba</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Severe</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>RbxCli</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
+Complete list of customizable settings:
 
-                    <tr style="background: rgba(0, 255, 0, 0.05);">
-                        <td colspan="5" style="color: var(--accent-green); font-weight: bold; text-align: center;">📱 ANDROID EXECUTORS</td>
-                    </tr>
-                    <tr>
-                        <td>Delta</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Cryptic</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Codex</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Vega X</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>KRNL (Android)</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
+```lua
+Zonix.Settings.Theme = "Dark"
+Zonix.Settings.RainbowMode = false
+Zonix.Settings.RainbowSpeed = 5
+Zonix.Settings.AnimationSpeed = 0.25
+Zonix.Settings.TooltipsEnabled = true
+Zonix.Settings.ConfigFolder = "ZonixUI"
+```
 
-                    <tr style="background: rgba(255, 0, 255, 0.05);">
-                        <td colspan="5" style="color: var(--accent-magenta); font-weight: bold; text-align: center;">🍎 MAC EXECUTORS</td>
-                    </tr>
-                    <tr>
-                        <td>Hydrogen</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Cryptic (Mac)</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>Macsploit</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `Theme` | string | "Dark" | Current theme name |
+| `RainbowMode` | boolean | false | Enable rainbow effects |
+| `RainbowSpeed` | number | 5 | Rainbow animation speed (1-10) |
+| `AnimationSpeed` | number | 0.25 | UI animation duration in seconds |
+| `TooltipsEnabled` | boolean | true | Show hover tooltips |
+| `ConfigFolder` | string | "ZonixUI" | Folder name for config files |
 
-                    <tr style="background: rgba(255, 255, 0, 0.05);">
-                        <td colspan="5" style="color: var(--accent-yellow); font-weight: bold; text-align: center;">📲 iOS EXECUTORS</td>
-                    </tr>
-                    <tr>
-                        <td>Delta (iOS)</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                    <tr>
-                        <td>KRNL (iOS)</td>
-                        <td style="color: var(--accent-green);">✅ Fully Supported</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
+---
 
-                    <tr style="background: rgba(255, 255, 255, 0.05);">
-                        <td colspan="5" style="color: var(--text-white); font-weight: bold; text-align: center;">🌐 UNIVERSAL SUPPORT</td>
-                    </tr>
-                    <tr>
-                        <td>Generic Executors</td>
-                        <td style="color: var(--accent-green);">✅ Supported</td>
-                        <td style="color: var(--accent-yellow);">⚠️ Limited</td>
-                        <td style="color: var(--accent-yellow);">⚠️ Limited</td>
-                        <td style="color: var(--accent-green);">✅</td>
-                    </tr>
-                </tbody>
-            </table>
+### Config System
 
-            <div class="alert alert-info">
-                <strong>💡 AUTO-DETECTION:</strong> Zonix UI uses getexecutorname(), identifyexecutor(), and feature detection to identify your executor automatically!
-            </div>
+Save and load your UI configurations.
 
-            <div class="alert alert-success">
-                <strong>✅ UNIVERSAL FUNCTIONS:</strong> The library tries multiple function name variations for maximum compatibility:<br>
-                • Clipboard: setclipboard, toclipboard, writeclipboard, set_clipboard, setrbxclipboard<br>
-                • GUI Parent: gethui, get_hidden_gui (fallback: CoreGui)<br>
-                • Files: isfile, readfile, writefile, makefolder, listfiles
-            </div>
+#### Saving Configuration
 
-            <h3 class="section-subtitle">🔍 Executor Info Access</h3>
-            <p>Access detected executor information from anywhere in your script:</p>
+```lua
+Zonix:SaveConfig("MyConfig")
+```
 
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="function">print</span>(<span class="string">"Executor:"</span>, Zonix.Executor)
+**What gets saved:**
+- All component values (toggles, sliders, textboxes, etc.)
+- Color picker selections
+- Dropdown selections
+- Keybinds
 
-<span class="function">print</span>(<span class="string">"Version:"</span>, Zonix.Version)
+#### Loading Configuration
 
-<span class="function">print</span>(<span class="string">"Creator:"</span>, Zonix.Creator)
+```lua
+Zonix:LoadConfig("MyConfig")
+```
 
-<span class="function">print</span>(<span class="string">"Website:"</span>, Zonix.Website)</code></pre>
-            </div>
-        </section>
+**Note:** Configs are saved per-game using `game.PlaceId` to prevent conflicts.
 
-        <section class="section" id="examples">
-            <h2 class="section-title">// COMPLETE EXAMPLES</h2>
+---
 
-            <h3 class="section-subtitle">Example 1: Full Featured Script</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - COMPLETE SCRIPT</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
+## 💡 Examples
 
-Zonix:<span class="function">Watermark</span>({ Text = <span class="string">"My Script | "</span> .. Zonix.Executor })
+### Example 1: Simple Script
 
-<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"Advanced Script"</span> })
+```lua
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
+local Window = Zonix:Window({ Name = "Simple Script" })
+local Tab = Window:Tab({ Name = "Main", Icon = "🏠" })
 
-<span class="keyword">local</span> Combat = Window:<span class="function">Tab</span>({ Name = <span class="string">"Combat"</span>, Icon = <span class="string">"⚔️"</span> })
-Combat:<span class="function">Section</span>(<span class="string">"Combat Features"</span>)
+local WalkSpeed = 16
 
-Combat:<span class="function">Toggle</span>({
-    Name = <span class="string">"Auto Attack"</span>,
-    Flag = <span class="string">"AutoAttack"</span>,
-    Callback = <span class="keyword">function</span>(v)
-        <span class="keyword">while</span> v <span class="keyword">do</span>
-            <span class="function">wait</span>(<span class="number">1</span>)
-        <span class="keyword">end</span>
-    <span class="keyword">end</span>
+Tab:Slider({
+    Name = "WalkSpeed",
+    Min = 16,
+    Max = 200,
+    Default = 16,
+    Callback = function(value)
+        WalkSpeed = value
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+    end
 })
 
-Combat:<span class="function">Slider</span>({
-    Name = <span class="string">"Attack Speed"</span>,
-    Min = <span class="number">1</span>,
-    Max = <span class="number">10</span>,
-    Default = <span class="number">5</span>,
-    Flag = <span class="string">"AttackSpeed"</span>
-})
-
-<span class="keyword">local</span> Player = Window:<span class="function">Tab</span>({ Name = <span class="string">"Player"</span>, Icon = <span class="string">"👤"</span> })
-Player:<span class="function">Section</span>(<span class="string">"Player Modifications"</span>)
-
-Player:<span class="function">Slider</span>({
-    Name = <span class="string">"Walk Speed"</span>,
-    Min = <span class="number">16</span>,
-    Max = <span class="number">200</span>,
-    Default = <span class="number">16</span>,
-    Flag = <span class="string">"WalkSpeed"</span>,
-    Callback = <span class="keyword">function</span>(v)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v
-    <span class="keyword">end</span>
-})
-
-<span class="keyword">local</span> Settings = Window:<span class="function">Tab</span>({ Name = <span class="string">"Settings"</span>, Icon = <span class="string">"⚙️"</span> })
-Settings:<span class="function">Section</span>(<span class="string">"Configuration"</span>)
-
-Settings:<span class="function">Button</span>({
-    Name = <span class="string">"Save Config"</span>,
-    Callback = <span class="keyword">function</span>()
-        Zonix:<span class="function">SaveConfig</span>(<span class="string">"myconfig"</span>)
-    <span class="keyword">end</span>
-})
-
-Settings:<span class="function">Button</span>({
-    Name = <span class="string">"Load Config"</span>,
-    Callback = <span class="keyword">function</span>()
-        Zonix:<span class="function">LoadConfig</span>(<span class="string">"myconfig"</span>)
-    <span class="keyword">end</span>
-})
-
-Zonix:<span class="function">Notify</span>({
-    Title = <span class="string">"Script Loaded!"</span>,
-    Content = <span class="string">"All features ready"</span>,
-    Duration = <span class="number">3</span>,
-    Type = <span class="string">"Success"</span>
-})</code></pre>
-            </div>
-
-            <h3 class="section-subtitle">Example 2: Progress Bar Demo</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - PROGRESS BAR</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
-<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"Progress Demo"</span> })
-<span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({ Name = <span class="string">"Main"</span>, Icon = <span class="string">"📊"</span> })
-
-<span class="keyword">local</span> Progress = Tab:<span class="function">ProgressBar</span>({
-    Name = <span class="string">"Loading"</span>,
-    Progress = <span class="number">0</span>
-})
-
-Tab:<span class="function">Button</span>({
-    Name = <span class="string">"Start Loading"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="keyword">for</span> i = <span class="number">0</span>, <span class="number">10</span> <span class="keyword">do</span>
-            <span class="function">wait</span>(<span class="number">0.3</span>)
-            Progress:<span class="function">Set</span>(i / <span class="number">10</span>)
-        <span class="keyword">end</span>
-        Zonix:<span class="function">Notify</span>({
-            Title = <span class="string">"Complete!"</span>,
-            Content = <span class="string">"Loading finished"</span>,
-            Type = <span class="string">"Success"</span>
+Tab:Button({
+    Name = "Reset WalkSpeed",
+    Callback = function()
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        Zonix:Notify({
+            Title = "Reset",
+            Content = "WalkSpeed reset to default",
+            Type = "Info"
         })
-    <span class="keyword">end</span>
-})</code></pre>
-            </div>
-
-            <h3 class="section-subtitle">Example 3: Dynamic Components</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - DYNAMIC UPDATES</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
-<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"Dynamic UI"</span> })
-<span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({ Name = <span class="string">"Main"</span>, Icon = <span class="string">"🎮"</span> })
-
-<span class="keyword">local</span> Label = Tab:<span class="function">Label</span>(<span class="string">"Status: Idle"</span>)
-<span class="keyword">local</span> Slider = Tab:<span class="function">Slider</span>({ Name = <span class="string">"Value"</span>, Min = <span class="number">0</span>, Max = <span class="number">100</span>, Default = <span class="number">50</span> })
-<span class="keyword">local</span> Toggle = Tab:<span class="function">Toggle</span>({ Name = <span class="string">"Feature"</span>, Default = <span class="keyword">false</span> })
-
-Tab:<span class="function">Button</span>({
-    Name = <span class="string">"Update All"</span>,
-    Callback = <span class="keyword">function</span>()
-        Label:<span class="function">Set</span>(<span class="string">"Status: Updated!"</span>)
-        Slider:<span class="function">Set</span>(<span class="number">75</span>)
-        Toggle:<span class="function">Set</span>(<span class="keyword">true</span>)
-    <span class="keyword">end</span>
-})</code></pre>
-            </div>
-
-            <h3 class="section-subtitle">Example 4: All Components</h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - EVERY COMPONENT</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
-<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"All Components"</span> })
-<span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({ Name = <span class="string">"Main"</span>, Icon = <span class="string">"🎨"</span> })
-
-Tab:<span class="function">Section</span>(<span class="string">"Text Components"</span>)
-Tab:<span class="function">Label</span>(<span class="string">"This is a label"</span>)
-Tab:<span class="function">Paragraph</span>(<span class="string">"About"</span>, <span class="string">"This is a paragraph with multiple lines of text."</span>)
-Tab:<span class="function">Divider</span>()
-
-Tab:<span class="function">Section</span>(<span class="string">"Interactive Components"</span>)
-Tab:<span class="function">Button</span>({ Name = <span class="string">"Click Me"</span>, Callback = <span class="keyword">function</span>() <span class="function">print</span>(<span class="string">"Clicked"</span>) <span class="keyword">end</span> })
-Tab:<span class="function">Toggle</span>({ Name = <span class="string">"Enable Feature"</span>, Flag = <span class="string">"Feature"</span> })
-Tab:<span class="function">Slider</span>({ Name = <span class="string">"Value"</span>, Min = <span class="number">0</span>, Max = <span class="number">100</span>, Flag = <span class="string">"Value"</span> })
-Tab:<span class="function">Dropdown</span>({ Name = <span class="string">"Option"</span>, Options = {<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>}, Flag = <span class="string">"Option"</span> })
-Tab:<span class="function">Textbox</span>({ Name = <span class="string">"Input"</span>, Placeholder = <span class="string">"Type..."</span>, Flag = <span class="string">"Input"</span> })
-Tab:<span class="function">Keybind</span>({ Name = <span class="string">"Hotkey"</span>, Default = Enum.KeyCode.E, Flag = <span class="string">"Hotkey"</span> })
-Tab:<span class="function">ColorPicker</span>({ Name = <span class="string">"Color"</span>, Flag = <span class="string">"Color"</span> })
-Tab:<span class="function">Divider</span>()
-
-Tab:<span class="function">Section</span>(<span class="string">"Utility Components"</span>)
-Tab:<span class="function">CopyButton</span>({ Name = <span class="string">"Copy URL"</span>, Text = <span class="string">"https://hub.zon.su"</span> })
-Tab:<span class="function">ProgressBar</span>({ Name = <span class="string">"Progress"</span>, Progress = <span class="number">0.75</span> })</code></pre>
-            </div>
-
-            <h3 class="section-subtitle">Example 5: New v1.3.2 Features <span style="color: var(--accent-green);">✨</span></h3>
-            <div class="code-block">
-                <div class="code-header">
-                    <span class="code-lang">LUA - v1.3.2 FEATURES SHOWCASE</span>
-                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
-                </div>
-                <pre><code><span class="keyword">local</span> Zonix = <span class="function">loadstring</span>(<span class="function">game:HttpGet</span>(<span class="string">"https://hub.zon.su/zonix-ui.lua"</span>))()
-<span class="keyword">local</span> Window = Zonix:<span class="function">Window</span>({ Name = <span class="string">"v1.3.2 Features"</span>, Icon = { Type = <span class="string">"emoji"</span>, Value = <span class="string">"🔥"</span> } })
-<span class="keyword">local</span> Tab = Window:<span class="function">Tab</span>({ Name = <span class="string">"New Features"</span>, Icon = <span class="string">"✨"</span> })
-
-<span class="comment">-- Checkboxes</span>
-Tab:<span class="function">Section</span>(<span class="string">"Checkboxes"</span>)
-Tab:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Auto Farm"</span>,
-    Default = <span class="keyword">true</span>,
-    Flag = <span class="string">"AutoFarm"</span>,
-    Callback = <span class="keyword">function</span>(checked)
-        <span class="function">print</span>(<span class="string">"Auto Farm:"</span>, checked)
-    <span class="keyword">end</span>
+    end
 })
+```
 
-Tab:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Auto Collect"</span>,
-    Default = <span class="keyword">false</span>,
-    Flag = <span class="string">"AutoCollect"</span>
-})
+### Example 2: Progress Loading
 
-Tab:<span class="function">AddSpacing</span>(<span class="number">10</span>)  <span class="comment">-- Add spacing</span>
+```lua
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
+local Window = Zonix:Window({ Name = "Loader" })
+local Tab = Window:Tab({ Name = "Load", Icon = "⏳" })
 
-<span class="comment">-- SubTabs</span>
-Tab:<span class="function">Section</span>(<span class="string">"SubTabs Example"</span>)
-<span class="keyword">local</span> MySubTabs = Tab:<span class="function">SubTab</span>({
-    Tabs = {<span class="string">"General"</span>, <span class="string">"Advanced"</span>, <span class="string">"Settings"</span>}
-})
+local Progress = Tab:ProgressBar({ Name = "Loading...", Progress = 0 })
 
-<span class="comment">-- General SubTab</span>
-MySubTabs.Tabs[<span class="number">1</span>]:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Enable Notifications"</span>,
-    Default = <span class="keyword">true</span>
-})
-
-MySubTabs.Tabs[<span class="number">1</span>]:<span class="function">AddSpacing</span>(<span class="number">5</span>)
-
-MySubTabs.Tabs[<span class="number">1</span>]:<span class="function">Button</span>({
-    Name = <span class="string">"Test Button"</span>,
-    Callback = <span class="keyword">function</span>()
-        Zonix:<span class="function">Notify</span>({
-            Title = <span class="string">"SubTab Test"</span>,
-            Content = <span class="string">"Button in General tab clicked!"</span>,
-            Type = <span class="string">"Success"</span>
+Tab:Button({
+    Name = "Start Loading",
+    Callback = function()
+        for i = 0, 10 do
+            wait(0.3)
+            Progress:Set(i / 10)
+        end
+        Zonix:Notify({
+            Title = "Complete!",
+            Content = "Loading finished",
+            Type = "Success"
         })
-    <span class="keyword">end</span>
+    end
+})
+```
+
+### Example 3: Dynamic Components
+
+```lua
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
+local Window = Zonix:Window({ Name = "Dynamic UI" })
+local Tab = Window:Tab({ Name = "Main", Icon = "🎮" })
+
+local Label = Tab:Label("Status: Idle")
+local Slider = Tab:Slider({ Name = "Value", Min = 0, Max = 100, Default = 50 })
+local Toggle = Tab:Toggle({ Name = "Feature", Default = false })
+
+Tab:Button({
+    Name = "Update All",
+    Callback = function()
+        Label:Set("Status: Updated!")
+        Slider:Set(75)
+        Toggle:Set(true)
+    end
+})
+```
+
+### Example 4: All Components Showcase
+
+```lua
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
+local Window = Zonix:Window({ Name = "All Components" })
+local Tab = Window:Tab({ Name = "Main", Icon = "🎨" })
+
+Tab:Section("Text Components")
+Tab:Label("This is a label")
+Tab:Paragraph("About", "This is a paragraph with multiple lines of text.")
+Tab:Divider()
+
+Tab:Section("Interactive Components")
+Tab:Button({ Name = "Click Me", Callback = function() print("Clicked") end })
+Tab:Toggle({ Name = "Enable Feature", Flag = "Feature" })
+Tab:Slider({ Name = "Value", Min = 0, Max = 100, Flag = "Value" })
+Tab:Dropdown({ Name = "Option", Options = {"A", "B", "C"}, Flag = "Option" })
+Tab:Textbox({ Name = "Input", Placeholder = "Type...", Flag = "Input" })
+Tab:Keybind({ Name = "Hotkey", Default = Enum.KeyCode.E, Flag = "Hotkey" })
+Tab:ColorPicker({ Name = "Color", Flag = "Color" })
+Tab:Divider()
+
+Tab:Section("Utility Components")
+Tab:CopyButton({ Name = "Copy URL", Text = "https://hub.zon.su" })
+Tab:ProgressBar({ Name = "Progress", Progress = 0.75 })
+```
+
+### Example 5: New v1.3 Features Showcase
+
+```lua
+local Zonix = loadstring(game:HttpGet("https://hub.zon.su/zonix-ui.lua"))()
+local Window = Zonix:Window({ Name = "v1.3 Features", Icon = "rbxassetid://90642687165275" })
+local Tab = Window:Tab({ Name = "New Features", Icon = "✨" })
+
+-- Checkboxes
+Tab:Section("Checkboxes")
+Tab:Checkbox({
+    Name = "Auto Farm",
+    Default = true,
+    Flag = "AutoFarm",
+    Callback = function(checked)
+        print("Auto Farm:", checked)
+    end
 })
 
-<span class="comment">-- Advanced SubTab</span>
-MySubTabs.Tabs[<span class="number">2</span>]:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Debug Mode"</span>,
-    Default = <span class="keyword">false</span>
+Tab:Checkbox({
+    Name = "Auto Collect",
+    Default = false,
+    Flag = "AutoCollect"
 })
 
-<span class="comment">-- Settings SubTab</span>
-MySubTabs.Tabs[<span class="number">3</span>]:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Save on Exit"</span>,
-    Default = <span class="keyword">true</span>
+Tab:AddSpacing(10)  -- Add spacing
+
+-- SubTabs
+Tab:Section("SubTabs Example")
+local MySubTabs = Tab:SubTab({
+    Tabs = {"General", "Advanced", "Settings"}
 })
 
-Tab:<span class="function">AddSpacing</span>(<span class="number">15</span>)
-
-<span class="comment">-- In-line Layout with GroupBoxes</span>
-Tab:<span class="function">Section</span>(<span class="string">"In-line GroupBoxes"</span>)
-<span class="keyword">local</span> inline = Tab:<span class="function">StartInline</span>()
-
-<span class="keyword">local</span> SpeedGroup = Tab:<span class="function">GroupBox</span>({
-    Name = <span class="string">"Speed Settings"</span>,
-    Inline = <span class="keyword">true</span>
+-- General SubTab
+MySubTabs.Tabs[1]:Checkbox({
+    Name = "Enable Notifications",
+    Default = true
 })
 
-SpeedGroup:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Speed Enabled"</span>,
-    Default = <span class="keyword">false</span>
+MySubTabs.Tabs[1]:AddSpacing(5)
+
+MySubTabs.Tabs[1]:Button({
+    Name = "Test Button",
+    Callback = function()
+        Zonix:Notify({
+            Title = "SubTab Test",
+            Content = "Button in General tab clicked!",
+            Type = "Success"
+        })
+    end
 })
 
-SpeedGroup:<span class="function">AddSpacing</span>(<span class="number">3</span>)
-
-SpeedGroup:<span class="function">Button</span>({
-    Name = <span class="string">"Apply Speed"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="function">print</span>(<span class="string">"Speed applied!"</span>)
-    <span class="keyword">end</span>
+-- Advanced SubTab
+MySubTabs.Tabs[2]:Checkbox({
+    Name = "Debug Mode",
+    Default = false
 })
 
-<span class="keyword">local</span> FarmGroup = Tab:<span class="function">GroupBox</span>({
-    Name = <span class="string">"Farm Settings"</span>,
-    Inline = <span class="keyword">true</span>
+-- Settings SubTab
+MySubTabs.Tabs[3]:Checkbox({
+    Name = "Save on Exit",
+    Default = true
 })
 
-FarmGroup:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Auto Farm"</span>,
-    Default = <span class="keyword">true</span>
+Tab:AddSpacing(15)
+
+-- In-line Layout with GroupBoxes
+Tab:Section("In-line GroupBoxes")
+local inline = Tab:StartInline()
+
+local SpeedGroup = Tab:GroupBox({
+    Name = "Speed Settings",
+    Inline = true
 })
 
-FarmGroup:<span class="function">AddSpacing</span>(<span class="number">3</span>)
-
-FarmGroup:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Sell Items"</span>,
-    Default = <span class="keyword">false</span>
+SpeedGroup:Checkbox({
+    Name = "Speed Enabled",
+    Default = false
 })
 
-inline.<span class="function">Stop</span>()  <span class="comment">-- Stop inline layout</span>
+SpeedGroup:AddSpacing(3)
 
-Tab:<span class="function">AddSpacing</span>(<span class="number">10</span>)
-
-<span class="comment">-- Regular GroupBox (full width)</span>
-<span class="keyword">local</span> MiscGroup = Tab:<span class="function">GroupBox</span>({
-    Name = <span class="string">"Miscellaneous"</span>
+SpeedGroup:Button({
+    Name = "Apply Speed",
+    Callback = function()
+        print("Speed applied!")
+    end
 })
 
-MiscGroup:<span class="function">Checkbox</span>({
-    Name = <span class="string">"Anti-AFK"</span>,
-    Default = <span class="keyword">true</span>
+local FarmGroup = Tab:GroupBox({
+    Name = "Farm Settings",
+    Inline = true
 })
 
-MiscGroup:<span class="function">AddSpacing</span>(<span class="number">5</span>)
+FarmGroup:Checkbox({
+    Name = "Auto Farm",
+    Default = true
+})
 
-MiscGroup:<span class="function">Button</span>({
-    Name = <span class="string">"Rejoin Server"</span>,
-    Callback = <span class="keyword">function</span>()
-        <span class="function">game:GetService</span>(<span class="string">"TeleportService"</span>):<span class="function">Teleport</span>(game.PlaceId)
-    <span class="keyword">end</span>
-})</code></pre>
-            </div>
-        </section>
+FarmGroup:AddSpacing(3)
 
-        <section class="section" id="faq">
-            <h2 class="section-title">// FREQUENTLY ASKED QUESTIONS</h2>
+FarmGroup:Checkbox({
+    Name = "Sell Items",
+    Default = false
+})
 
-            <div class="alert alert-info">
-                <strong>Q: Does this work on mobile?</strong><br>
-                A: Yes! Zonix UI is fully responsive and works perfectly on mobile, tablet, and desktop with touch support.
-            </div>
+inline.Stop()  -- Stop inline layout
 
-            <div class="alert alert-info">
-                <strong>Q: Which executor is best?</strong><br>
-                A: Zonix UI works on ALL executors. Choose based on your needs, platform, and preferences.
-            </div>
+Tab:AddSpacing(10)
 
-            <div class="alert alert-info">
-                <strong>Q: Does clipboard work on all executors?</strong><br>
-                A: Zonix UI tries multiple clipboard function names and works on most executors with automatic fallbacks.
-            </div>
+-- Regular GroupBox (full width)
+local MiscGroup = Tab:GroupBox({
+    Name = "Miscellaneous"
+})
 
-            <div class="alert alert-success">
-                <strong>Q: How do I save my settings?</strong><br>
-                A: Use <span class="inline-code">Zonix:SaveConfig("name")</span> to save and <span class="inline-code">Zonix:LoadConfig("name")</span> to load configurations.
-            </div>
+MiscGroup:Checkbox({
+    Name = "Anti-AFK",
+    Default = true
+})
 
-            <div class="alert alert-info">
-                <strong>Q: Can I use multiple windows?</strong><br>
-                A: Yes! Create multiple windows with different names and they'll work independently.
-            </div>
+MiscGroup:AddSpacing(5)
 
-            <div class="alert alert-success">
-                <strong>Q: How do I access component values?</strong><br>
-                A: Use flags! Set a <span class="inline-code">Flag</span> parameter on components and access via <span class="inline-code">Zonix.Flags.YourFlag</span>
-            </div>
+MiscGroup:Button({
+    Name = "Rejoin Server",
+    Callback = function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId)
+    end
+})
+```
 
-            <div class="alert alert-warning">
-                <strong>Q: Will this get me banned?</strong><br>
-                A: Using any exploit carries risk. Zonix UI itself won't get you banned, but the scripts you run might. Always use on alt accounts.
-            </div>
+---
 
-            <div class="alert alert-info">
-                <strong>Q: How do I update the library?</strong><br>
-                A: Simply reload the script with the latest version from hub.zon.su. Your configs will be preserved if using the same config names.
-            </div>
+## ❓ FAQ
 
-            <div class="alert alert-info">
-                <strong>Q: Can I customize the UI colors?</strong><br>
-                A: Yes! Create custom themes by defining all 13 color properties in <span class="inline-code">Zonix.Themes.YourTheme</span>
-            </div>
+<details>
+<summary><b>Q: Does this work on mobile?</b></summary>
+<br>
+A: Yes! Zonix UI is fully responsive and works perfectly on mobile, tablet, and desktop with touch support.
+</details>
 
-            <div class="alert alert-success">
-                <strong>Q: How do I hide/show the UI?</strong><br>
-                A: Use a keybind component to toggle visibility, or manually destroy the window via the close button (×)
-            </div>
-        </section>
-    </div>
+<details>
+<summary><b>Q: Which executor is best?</b></summary>
+<br>
+A: Zonix UI works on ALL executors. Choose based on your needs, platform, and preferences.
+</details>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="https://zon.su" target="_blank">Website</a>
-                <a href="https://hub.zon.su/zonix-ui.lua" target="_blank">Download</a>
-                <a href="#installation">Installation</a>
-                <a href="#components">Components</a>
-                <a href="#utilities">Utilities</a>
-                <a href="#examples">Examples</a>
-            </div>
-            <div class="copyright">
-                <p>&copy; <span id="copyright-year"></span> <strong class="neon">ZONIX UI v1.3.7</strong></p>
-                <p>Created by <strong>Zontraz</strong> | <a href="https://zon.su" style="color: var(--accent-cyan);">zon.su</a></p>
-            </div>
-        </div>
-    </footer>
+<details>
+<summary><b>Q: Does clipboard work on all executors?</b></summary>
+<br>
+A: Zonix UI tries multiple clipboard function names and works on most executors with automatic fallbacks.
+</details>
 
-    <script>
-        function copyCode(button) {
-            const codeBlock = button.closest('.code-block');
-            const code = codeBlock.querySelector('pre code').textContent;
-            
-            navigator.clipboard.writeText(code).then(() => {
-                const originalText = button.textContent;
-                button.textContent = 'COPIED!';
-                button.style.background = 'var(--accent-green)';
-                button.style.color = 'var(--bg-primary)';
-                
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = 'transparent';
-                    button.style.color = 'var(--accent-cyan)';
-                }, 2000);
-            });
-        }
+<details>
+<summary><b>Q: How do I save my settings?</b></summary>
+<br>
+A: Use <code>Zonix:SaveConfig("name")</code> to save and <code>Zonix:LoadConfig("name")</code> to load configurations.
+</details>
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-                const nav = document.getElementById('nav');
-                const hamburger = document.getElementById('hamburger');
-                if (nav && hamburger) {
-                    nav.classList.remove('active');
-                    hamburger.classList.remove('active');
-                }
-            });
-        });
+<details>
+<summary><b>Q: Can I use multiple windows?</b></summary>
+<br>
+A: Yes! Create multiple windows with different names and they'll work independently.
+</details>
 
-        const hamburger = document.getElementById('hamburger');
-        const nav = document.getElementById('nav');
+<details>
+<summary><b>Q: How do I access component values?</b></summary>
+<br>
+A: Use flags! Set a <code>Flag</code> parameter on components and access via <code>Zonix.Flags.YourFlag</code>
+</details>
 
-        if (hamburger && nav) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                nav.classList.toggle('active');
-            });
+<details>
+<summary><b>Q: Will this get me banned?</b></summary>
+<br>
+A: Using any exploit carries risk. Zonix UI itself won't get you banned, but the scripts you run might. Always use on alt accounts.
+</details>
 
-            document.addEventListener('click', (e) => {
-                if (!hamburger.contains(e.target) && !nav.contains(e.target)) {
-                    hamburger.classList.remove('active');
-                    nav.classList.remove('active');
-                }
-            });
-        }
-    </script>
+<details>
+<summary><b>Q: How do I update the library?</b></summary>
+<br>
+A: Simply reload the script with the latest version from hub.zon.su. Your configs will be preserved if using the same config names.
+</details>
 
-    <script>
-        document.getElementById('copyright-year').textContent = new Date().getFullYear();
-    </script>
-</body>
-</html>
+<details>
+<summary><b>Q: Can I customize the UI colors?</b></summary>
+<br>
+A: Yes! Create custom themes by defining all 13 color properties in <code>Zonix.Themes.YourTheme</code> then set <code>Zonix.Settings.Theme = "YourTheme"</code>
+</details>
