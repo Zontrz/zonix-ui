@@ -129,7 +129,7 @@ Tab:Button({
   - [Textbox](#textbox)
   - [Keybind](#keybind)
   - [ColorPicker](#colorpicker)
-  - [Search](#search-new-in-v140) ⭐ **NEW!**
+  - [Search](#search)
   - [CopyButton](#copybutton)
   - [ProgressBar](#progressbar)
   - [Checkbox](#checkbox-new)
