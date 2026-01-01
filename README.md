@@ -10,8 +10,6 @@
 
 </div>
 
----
-
 ## 🎯 What's New in v1.4.0
 
 ### 🆕 NEW COMPONENTS & FEATURES:
