@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ ZONIX UI v1.3.7
+# ⚡ ZONIX UI v1.4.0
 
 ### The Ultimate Roblox UI Library
 
@@ -10,16 +10,28 @@
 
 </div>
 
----
+## 🎯 What's New in v1.4.0
 
-## 🎯 What's New in v1.3.2
+### 🆕 NEW COMPONENTS & FEATURES:
 
-- 🎨 **Enhanced Icon System** - Emoji and image icons for Window & Tabs
-- 📦 **Complete GroupBox Components** - ALL 13 components now work inside GroupBox
-- 📑 **Complete SubTab Components** - ALL 13 components now work inside SubTabs
-- 🎛️ **Fixed Sliders** - White draggable circle handles for precise control
-- 📂 **Fixed Dropdowns** - Smooth expansion animations with rotating arrows
-- ⚙️ **Full Flag Support** - Access values from Button, Checkbox, Toggle, Slider, Dropdown, Textbox, Keybind, ColorPicker
+- 🔎 **NEW: Advanced Search Component** - Brand new Search component with 6 modes, fuzzy matching, intelligent ranking, and extensive customization!
+- 🔲 **NEW: Shrink Minimize Mode** - Minimize windows to compact 100x100 square OR traditional topbar-only collapse
+
+### ⚡ SEARCH COMPONENT FEATURES:
+
+- 🔍 **6 Search Modes** - Exact, Contains, Starts With, Ends With, Fuzzy, Regex with visual mode selector
+- ✨ **Fuzzy Matching** - Advanced Levenshtein distance algorithm for typo-tolerant searches ("togle" finds "toggle"!)
+- 📊 **Intelligent Ranking** - Results scored and sorted by relevance with name/tag match boosting
+- 🎨 **Score-Based Highlighting** - Better matches = brighter highlights and longer duration (2-4 seconds)
+- 🏷️ **Tag-Based Search** - Search elements by custom tags with AddElementTag() method
+- 📜 **Search History** - Auto-saves up to 10 recent searches with dropdown quick access
+- ⚡ **Live Search** - Search as you type with configurable debouncing and performance optimization
+- 📱 **Fully Responsive** - Scales perfectly on ALL screen sizes (80% mobile to 150% large desktop)
+- 🎯 **API Methods** - SetMode(), GetMode(), AddElementTag(), Clear(), ClearHistory(), Focus(), GetResults()
+- 👁️ **HideNonMatching Mode** - Focus mode that hides all non-matching elements while searching
+- 📍 **Flexible Positioning** - Place search bar at top, bottom, or in creation order
+- 🔧 **CustomSearch Function** - Search workspace parts, players, or ANY custom data source
+- 🎯 **Enhanced Callback** - Search object now passed as 3rd parameter for method access
 
 ---
 
@@ -29,7 +41,7 @@
 - 📱 **Fully Responsive** - Works perfectly on mobile, tablet, and desktop
 - 🎮 **Touch Support** - Native touch controls for mobile devices
 - 💾 **Config System** - Save and load your settings
-- 🔧 **13 Core Components** - Label, Section, Paragraph, Divider, Button, Checkbox, Toggle, Slider, Dropdown, Textbox, ProgressBar, Keybind, ColorPicker
+- 🔧 **14 Core Components** - Label, Section, Paragraph, Divider, Button, Checkbox, Toggle, Slider, Dropdown, Textbox, ProgressBar, Keybind, ColorPicker, **Search**
 - ⚡ **Notifications & Prompts** - Built-in user feedback system
 - 🌈 **Custom Themes** - Create your own themes with 13 color properties
 - 🌈 **Rainbow Mode** - Animated rainbow borders and effects
@@ -38,11 +50,13 @@
 - ⚙️ **Auto-Detection** - Automatically detects and adapts to your executor
 - 🖼️ **Enhanced Icons** - Emoji and image icons for Window & Tabs
 - ✅ **Checkboxes** - Simple toggle controls
-- 📑 **SubTabs** - Organize content with tabs within tabs (ALL 13 components supported)
-- 📦 **GroupBoxes** - Group UI elements together (ALL 13 components supported)
+- 📑 **SubTabs** - Organize content with tabs within tabs (ALL 14 components supported)
+- 📦 **GroupBoxes** - Group UI elements together (ALL 14 components supported)
 - 📏 **Spacing Control** - Add custom spacing between elements
 - ➡️ **In-line Layout** - Place elements side-by-side
 - 🔄 **Nested GroupBoxes** - GroupBox inside GroupBox support
+- 🔍 **Advanced Search** - Real-time search with history and highlighting
+- 🔲 **Minimize Modes** - "collapse" or "shrink" window minimize options
 
 ---
 
@@ -114,6 +128,7 @@ Tab:Button({
   - [Textbox](#textbox)
   - [Keybind](#keybind)
   - [ColorPicker](#colorpicker)
+  - [Search](#search-new-in-v140)
   - [CopyButton](#copybutton)
   - [ProgressBar](#progressbar)
   - [Spacing](#spacing-new)
@@ -141,7 +156,9 @@ local Window = Zonix:Window({
     Icon = {                  -- Window icon (optional)
         Type = "emoji",       -- "emoji" or "image"
         Value = "🔥"          -- emoji character or rbxassetid
-    }
+    },
+    MinimizeMode = "collapse" -- Minimize behavior (optional, default: "collapse")
+                              -- Options: "collapse" (bar only) or "shrink" (small square)
 })
 ```
 
@@ -150,10 +167,15 @@ local Window = Zonix:Window({
 - `Icon` (table, optional) - Window icon configuration
   - `Type` (string) - Icon type: `"emoji"` (text/emoji) or `"image"` (rbxassetid)
   - `Value` (string) - Icon value: emoji character (e.g., "🔥") or asset ID (e.g., "rbxassetid://12345")
+- `MinimizeMode` (string, optional) - Minimize behavior (default: "collapse")
+  - `"collapse"` - Collapses window to topbar only (traditional minimize)
+  - `"shrink"` - Shrinks window to small 100x100 square (compact minimize)
 
 **Window Features:**
 - Draggable by clicking and holding the top bar
-- Minimize button (_) - Collapses window to topbar only
+- Minimize button (_) - Collapses window based on MinimizeMode setting
+  - **Collapse Mode**: Shrinks to topbar only (traditional)
+  - **Shrink Mode**: Minimizes to small 100x100 square
 - Close button (×) - Destroys the window completely
 - Smooth animations for all interactions
 - Automatic shadow and glow effects
@@ -161,22 +183,24 @@ local Window = Zonix:Window({
 
 **Icon Examples:**
 ```lua
--- Emoji icon
+-- Emoji icon with collapse minimize
 local Window = Zonix:Window({
     Name = "Cool Script",
     Icon = {
         Type = "emoji",
         Value = "⚡"
-    }
+    },
+    MinimizeMode = "collapse"
 })
 
--- Image icon
+-- Image icon with shrink minimize
 local Window = Zonix:Window({
     Name = "Premium Script",
     Icon = {
         Type = "image",
         Value = "rbxassetid://90642687165275"
-    }
+    },
+    MinimizeMode = "shrink"
 })
 ```
 
@@ -469,6 +493,328 @@ BgColor:Set(Color3.fromRGB(25, 25, 35))
 
 **Methods:**
 - `:Set(color)` - Set color (expects Color3)
+
+---
+
+### Search
+
+Advanced search component with **6 search modes**, fuzzy matching, intelligent ranking, custom search targets, and extensive customization.
+
+```lua
+local MySearch = Tab:Search({
+    Placeholder = "Search UI elements...",    -- Placeholder text (optional)
+    DefaultMode = "contains",                 -- Default search mode (optional)
+    ShowModeSelector = true,                  -- Show mode dropdown (optional, default: true)
+    LiveSearch = true,                        -- Search as you type (optional, default: true)
+    CaseSensitive = false,                    -- Case-sensitive search (optional, default: false)
+    SaveHistory = true,                       -- Save search history (optional, default: true)
+    MaxHistorySize = 10,                      -- Max history items (optional, default: 10)
+    ShowResultCount = true,                   -- Show result count (optional, default: true)
+    ClearButton = true,                       -- Show clear button (optional, default: true)
+    SearchDelay = 0.3,                        -- Debounce delay in seconds (optional, default: 0.3)
+    HighlightColor = Color3.fromRGB(88, 101, 242), -- Result highlight color (optional)
+    FuzzyThreshold = 0.6,                     -- Fuzzy match threshold 0-1 (optional, default: 0.6)
+    MaxResults = 100,                         -- Max results to show (optional, default: 100)
+    SearchInTags = true,                      -- Search in element tags (optional, default: true)
+    HideNonMatching = false,                  -- Hide non-matching elements (optional, default: false)
+    Position = "order",                       -- Search bar position (optional, default: "order")
+                                              -- Options: "top", "bottom", "order"
+    CustomSearch = nil,                       -- Custom search function (optional)
+    Callback = function(query, results, search)  -- 'search' parameter added
+        print("Search query:", query)
+        print("Found", #results, "results")
+        print("Current mode:", search:GetMode())
+    end
+})
+```
+
+**Search Modes:**
+1. **🔍 Contains** - Finds text anywhere in element (default, fast)
+2. **🎯 Exact** - Exact text match only (most precise)
+3. **▶️ Starts With** - Matches text at the beginning
+4. **◀️ Ends With** - Matches text at the end
+5. **✨ Fuzzy** - Approximate matching using Levenshtein distance (typo-tolerant)
+6. **🔧 Regex** - Pattern matching with regular expressions (most powerful)
+
+**Advanced Features:**
+- 🎯 **Intelligent Ranking**: Results scored and sorted by relevance
+- 🎨 **Score-Based Highlighting**: Better matches = brighter, longer-lasting highlights
+- 🏷️ **Tag System**: Search and boost results by custom element tags
+- 🎛️ **Visual Mode Selector**: Dropdown to easily switch between search modes
+- ⚡ **Performance Optimized**: Configurable max results and fuzzy threshold
+- 📊 **Result Counter**: Live count with search mode indicator
+- 👁️ **Hide Non-Matching**: Only show matching elements (focus mode)
+- 📍 **Flexible Positioning**: Place search bar at top, bottom, or in order
+- 🔧 **Custom Search**: Search workspace, players, or any custom data
+
+**Methods:**
+- `:Clear()` - Clear search text and results
+- `:ClearHistory()` - Clear search history
+- `:SetText(text)` - Set search text programmatically
+- `:Focus()` - Focus the search input
+- `:GetResults()` - Get current search results array
+- `:SetMode(mode)` - Change search mode ("exact", "contains", "startswith", "endswith", "fuzzy", "regex")
+- `:GetMode()` - Get current search mode
+- `:AddElementTag(elementName, tag)` - Add searchable tag to an element
+
+**Properties:**
+- `.Value` - Current search query string
+- `.Results` - Array of matching elements (sorted by score)
+- `.History` - Array of search history items
+- `.Searching` - Boolean indicating if search is in progress
+- `.CurrentMode` - Current search mode
+
+**Example 1: Basic Search with Positioning**
+```lua
+-- Create search that appears at the top
+local Search = Tab:Search({
+    Placeholder = "Search components...",
+    Position = "top",  -- Force to top of tab
+    DefaultMode = "contains"
+})
+
+-- Add your components below - they'll still be searchable!
+Tab:Button({ Name = "Click Me" })
+Tab:Toggle({ Name = "Enable Feature" })
+Tab:Slider({ Name = "Speed" })
+```
+
+**Example 2: Hide Non-Matching Elements (Focus Mode)**
+```lua
+-- When searching, hide all elements that don't match
+local Search = Tab:Search({
+    Placeholder = "Search to filter...",
+    Position = "top",
+    HideNonMatching = true,  -- Only show matching elements!
+    Callback = function(query, results)
+        if #results > 0 then
+            print("Showing", #results, "matching elements")
+        else
+            print("No matches - showing all elements")
+        end
+    end
+})
+
+Tab:Section("Player")
+Tab:Slider({ Name = "Walk Speed" })
+Tab:Slider({ Name = "Jump Power" })
+
+Tab:Section("ESP")
+Tab:Toggle({ Name = "ESP Enabled" })
+Tab:ColorPicker({ Name = "ESP Color" })
+
+-- Searching "speed" will show ONLY Walk Speed and Jump Power!
+```
+
+**Example 3: Search Workspace Parts**
+```lua
+-- Search for parts in workspace instead of UI elements
+local PartSearch = Tab:Search({
+    Placeholder = "Search workspace parts...",
+    Position = "top",
+    CustomSearch = function(query, mode)
+        local results = {}
+        local searchQuery = query:lower()
+        
+        -- Search all parts in workspace by name
+        for _, part in pairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") then
+                local name = part.Name:lower()
+                
+                if name:find(searchQuery, 1, true) then
+                    table.insert(results, {
+                        Name = part.Name,
+                        Object = part,        -- Store the actual part
+                        Position = part.Position,
+                        Score = 1
+                    })
+                end
+            end
+        end
+        
+        return results
+    end,
+    Callback = function(query, results)
+        print("Found", #results, "parts")
+        for _, result in ipairs(results) do
+            print("Part:", result.Name, "at", result.Position)
+        end
+    end
+})
+```
+
+**Example 4: Search Players**
+```lua
+-- Search for players in the game
+local PlayerSearch = Tab:Search({
+    Placeholder = "Search players...",
+    Position = "top",
+    CustomSearch = function(query, mode)
+        local results = {}
+        local searchQuery = query:lower()
+        
+        for _, player in pairs(game.Players:GetPlayers()) do
+            local name = player.Name:lower()
+            local displayName = player.DisplayName:lower()
+            
+            if name:find(searchQuery, 1, true) or 
+               displayName:find(searchQuery, 1, true) then
+                table.insert(results, {
+                    Name = player.Name,
+                    DisplayName = player.DisplayName,
+                    Player = player,
+                    Score = 1
+                })
+            end
+        end
+        
+        return results
+    end,
+    Callback = function(query, results)
+        if #results > 0 then
+            print("Found players:")
+            for _, result in ipairs(results) do
+                print("- " .. result.Name .. " (" .. result.DisplayName .. ")")
+            end
+        end
+    end
+})
+```
+
+**Example 5: Universal Search (Workspace + Players)**
+```lua
+local UniversalSearch = Tab:Search({
+    Placeholder = "Search everything...",
+    Position = "top",
+    CustomSearch = function(query, mode)
+        local results = {}
+        local searchQuery = query:lower()
+        
+        -- Search workspace parts
+        for _, part in pairs(workspace:GetDescendants()) do
+            if part:IsA("BasePart") and part.Name:lower():find(searchQuery, 1, true) then
+                table.insert(results, {
+                    Name = part.Name,
+                    Type = "Part",
+                    Object = part,
+                    Position = part.Position,
+                    Score = 1
+                })
+            end
+        end
+        
+        -- Search players
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Name:lower():find(searchQuery, 1, true) then
+                table.insert(results, {
+                    Name = player.Name,
+                    Type = "Player",
+                    Object = player,
+                    Score = 1
+                })
+            end
+        end
+        
+        return results
+    end,
+    Callback = function(query, results)
+        for _, result in ipairs(results) do
+            if result.Type == "Part" then
+                print("Part:", result.Name, "at", result.Position)
+            else
+                print("Player:", result.Name)
+            end
+        end
+    end
+})
+```
+
+**Example 6: Using Search Modes**
+```lua
+local Search = Tab:Search({
+    Placeholder = "Search components...",
+    DefaultMode = "fuzzy",  -- Start with fuzzy search
+    FuzzyThreshold = 0.7,   -- 70% similarity required
+    Callback = function(query, results, search)
+        print(string.format("Mode: %s | Found %d results", search:GetMode(), #results))
+    end
+})
+
+-- Switch to exact match
+Search:SetMode("exact")
+
+-- Switch to fuzzy for typo tolerance
+Search:SetMode("fuzzy")
+
+-- Search with regex pattern
+Search:SetMode("regex")
+Search:SetText("^Toggle.*")  -- Find elements starting with "Toggle"
+```
+
+**Example 7: Using Tags**
+```lua
+local Search = Tab:Search({
+    Placeholder = "Search by tags...",
+    SearchInTags = true,
+    Position = "top"
+})
+
+-- Add tags to elements for better searchability
+Search:AddElementTag("Speed Slider", "movement")
+Search:AddElementTag("Speed Slider", "player")
+Search:AddElementTag("Jump Power", "movement")
+Search:AddElementTag("ESP Toggle", "visual")
+
+-- Now searching "movement" will find both Speed Slider and Jump Power
+-- with "Speed Slider" ranked higher due to name + tag match
+```
+
+**Example 8: Fuzzy Search**
+```lua
+-- Fuzzy search is great for typos and approximate matches
+local FuzzySearch = Tab:Search({
+    DefaultMode = "fuzzy",
+    FuzzyThreshold = 0.6,  -- 60% similarity (lower = more lenient)
+    Position = "top",
+    Callback = function(query, results)
+        -- "togle" will match "toggle"
+        -- "sped" will match "speed"
+        -- "colr" will match "color"
+        print("Fuzzy found:", #results, "matches")
+    end
+})
+```
+
+**Position Options:**
+- `"top"` - Search bar appears at the very top (regardless of when created)
+- `"bottom"` - Search bar appears at the very bottom (regardless of when created)
+- `"order"` - Search bar appears where you create it in code (default)
+
+**CustomSearch Function Format:**
+```lua
+CustomSearch = function(query, mode)
+    -- query: The search text entered by user
+    -- mode: Current search mode ("contains", "fuzzy", etc.)
+    
+    -- Return array of results
+    return {
+        {
+            Name = "Result 1",         -- Required: Display name
+            Score = 1,                 -- Optional: Relevance score (default 1)
+            -- Add any custom properties you want:
+            Object = workspace.Part,
+            Position = Vector3.new(),
+            CustomData = "anything"
+        }
+    }
+end
+```
+
+**Important Notes:**
+- When using `CustomSearch`, the `HideNonMatching` feature is disabled (custom results don't have UI frames)
+- The callback now receives 3 parameters: `query`, `results`, and `search` object
+- Search can be created before or after elements when using `Position = "top"` or `Position = "bottom"`
+- All 14 UI components are automatically searchable by their Name property
 
 ---
 
