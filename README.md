@@ -115,6 +115,8 @@ Tab:Button({
 ## 📚 Table of Contents
 
 - [Window Creation](#-window-creation)
+  - [Basic Window](#basic-window)
+  - [Creating Tabs](#creating-tabs)
 - [Components](#-components)
   - [Label](#label)
   - [Section](#section)
@@ -122,15 +124,15 @@ Tab:Button({
   - [Divider](#divider)
   - [Button](#button)
   - [Toggle](#toggle)
-  - [Checkbox](#checkbox-new)
   - [Slider](#slider)
   - [Dropdown](#dropdown)
   - [Textbox](#textbox)
   - [Keybind](#keybind)
   - [ColorPicker](#colorpicker)
-  - [Search](#search-new-in-v140)
+  - [Search](#search-new-in-v140) ⭐ **NEW!**
   - [CopyButton](#copybutton)
   - [ProgressBar](#progressbar)
+  - [Checkbox](#checkbox-new)
   - [Spacing](#spacing-new)
   - [GroupBox](#groupbox-new)
   - [SubTab](#subtab-new)
