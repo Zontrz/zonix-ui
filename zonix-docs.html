@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZONIX UI v1.4.1 - Complete Documentation</title>
+    <title>ZONIX UI v1.4.2 - Complete Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -696,7 +696,7 @@
         <div class="header-content">
             <div>
                 <div class="logo glitch">ZONIX UI</div>
-                <div class="version">v1.4.1 | By Zontraz</div>
+                <div class="version">v1.4.2 | By Zontraz</div>
             </div>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -715,7 +715,7 @@
     </header>
 
     <section class="hero">
-        <h1 class="neon">ZONIX UI v1.4.1</h1>
+        <h1 class="neon">ZONIX UI v1.4.2</h1>
         <p>The most advanced UI library for Roblox exploits. Modern. Powerful. Universal.</p>
         <div class="cta-buttons">
             <a href="#installation" class="btn btn-primary">GET STARTED</a>
@@ -2695,7 +2695,7 @@ Tab:<span class="function">Button</span>({
                         <td>Text</td>
                         <td>string</td>
                         <td>✗</td>
-                        <td>Watermark text (default: "Zonix UI v1.4.1 | {Executor}")</td>
+                        <td>Watermark text (default: "Zonix UI v1.4.2 | {Executor}")</td>
                     </tr>
                 </tbody>
             </table>
@@ -2957,6 +2957,81 @@ Zonix.Settings.Theme = <span class="string">"Midnight"</span></code></pre>
                     </tr>
                 </tbody>
             </table>
+
+            <h3 class="section-subtitle">🔄 Dynamic Theme Updates</h3>
+            <p>Use <span class="inline-code">UpdateTheme()</span> to dynamically change themes and immediately update all UI elements.</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">LUA - UPDATE THEME</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code><span class="comment">-- Update to a built-in theme</span>
+Zonix:UpdateTheme(<span class="string">"Dark"</span>)
+Zonix:UpdateTheme(<span class="string">"Light"</span>)
+Zonix:UpdateTheme(<span class="string">"Midnight"</span>)
+
+<span class="comment">-- Update to a custom theme table</span>
+Zonix:UpdateTheme({
+    Background = Color3.fromRGB(<span class="number">15</span>, <span class="number">15</span>, <span class="number">20</span>),
+    Secondary = Color3.fromRGB(<span class="number">20</span>, <span class="number">20</span>, <span class="number">27</span>),
+    Tertiary = Color3.fromRGB(<span class="number">25</span>, <span class="number">25</span>, <span class="number">35</span>),
+    Border = Color3.fromRGB(<span class="number">40</span>, <span class="number">40</span>, <span class="number">50</span>),
+    Text = Color3.fromRGB(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>),
+    TextDark = Color3.fromRGB(<span class="number">180</span>, <span class="number">180</span>, <span class="number">190</span>),
+    Accent = Color3.fromRGB(<span class="number">255</span>, <span class="number">100</span>, <span class="number">50</span>),  <span class="comment">-- Custom orange accent</span>
+    AccentDark = Color3.fromRGB(<span class="number">200</span>, <span class="number">70</span>, <span class="number">30</span>),
+    Success = Color3.fromRGB(<span class="number">67</span>, <span class="number">181</span>, <span class="number">129</span>),
+    Warning = Color3.fromRGB(<span class="number">250</span>, <span class="number">166</span>, <span class="number">26</span>),
+    Error = Color3.fromRGB(<span class="number">237</span>, <span class="number">66</span>, <span class="number">69</span>),
+    Info = Color3.fromRGB(<span class="number">52</span>, <span class="number">152</span>, <span class="number">219</span>),
+    Topbar = Color3.fromRGB(<span class="number">12</span>, <span class="number">12</span>, <span class="number">17</span>)
+})
+
+<span class="comment">-- Update just the accent color</span>
+Zonix:SetAccent(Color3.fromRGB(<span class="number">255</span>, <span class="number">0</span>, <span class="number">128</span>))  <span class="comment">-- Hot pink accent</span></code></pre>
+            </div>
+
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>themeNameOrTable</td>
+                        <td>string or table</td>
+                        <td>Theme name ("Dark", "Light", "Midnight") or a custom theme table</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>UpdateTheme Features:</strong></p>
+            <ul>
+                <li>✅ Instantly updates ALL UI elements (tabs, buttons, toggles, dropdowns, etc.)</li>
+                <li>✅ Updates active states (selected tabs, enabled toggles, hover effects)</li>
+                <li>✅ Automatically updates registered theme elements</li>
+                <li>✅ Shows a notification when theme changes</li>
+                <li>✅ Preserves window state and component values</li>
+            </ul>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">EXAMPLE - THEME SELECTOR DROPDOWN</span>
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                </div>
+                <pre><code>Tab:Dropdown({
+    Name = <span class="string">"Theme"</span>,
+    Options = {<span class="string">"Dark"</span>, <span class="string">"Light"</span>, <span class="string">"Midnight"</span>},
+    Default = <span class="string">"Dark"</span>,
+    Callback = <span class="keyword">function</span>(theme)
+        Zonix:UpdateTheme(theme)
+    <span class="keyword">end</span>
+})</code></pre>
+            </div>
 
             <h3 class="section-subtitle">🌈 Rainbow Mode</h3>
             <p>Enable animated rainbow borders and effects on windows and UI elements.</p>
@@ -3840,7 +3915,7 @@ MiscGroup:<span class="function">Button</span>({
                 <a href="#examples">Examples</a>
             </div>
             <div class="copyright">
-                <p>&copy; <span id="copyright-year"></span> <strong class="neon">ZONIX UI v1.4.1</strong></p>
+                <p>&copy; <span id="copyright-year"></span> <strong class="neon">ZONIX UI v1.4.2</strong></p>
                 <p>Created by <strong>Zontraz</strong> | <a href="https://zon.su" style="color: var(--accent-cyan);">zon.su</a></p>
             </div>
         </div>
