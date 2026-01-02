@@ -172,14 +172,12 @@ local function FindFunc(...)
 end
 
 local function DetectExecutor()
-    -- Try built-in executor identification functions first
     if getexecutorname then
         return getexecutorname() or "Unknown"
     elseif identifyexecutor then
         return identifyexecutor() or "Unknown"
     end
 
-    -- Windows Executors
     if KRNL_LOADED then
         return "KRNL"
     elseif getgenv().Potassium then
@@ -239,7 +237,6 @@ local function DetectExecutor()
     elseif getgenv().ChocoSploit then
         return "ChocoSploit"
     elseif getgenv().RbxCli then
-        -- Mac Executors
         return "RbxCli"
     elseif Hydrogen or getgenv().Hydrogen then
         return "Hydrogen"
@@ -255,8 +252,6 @@ local function DetectExecutor()
     elseif getgenv().Codex then
         return "Codex"
     elseif getgenv().VegaX then
-        -- iOS Executors (iOS and Android Delta share similar detection)
-        -- Additional fallback checks
         return "Vega X"
     elseif issentinel and issentinel() then
         return "Sentinel"
