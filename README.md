@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ ZONIX UI v1.4.1
+# ⚡ ZONIX UI v1.4.2
 
 ### The Ultimate Roblox UI Library
 
@@ -1192,6 +1192,60 @@ Zonix UI comes with **3 beautiful built-in themes**:
 Zonix.Settings.Theme = "Dark"
 Zonix.Settings.Theme = "Light"
 Zonix.Settings.Theme = "Midnight"
+```
+
+#### Dynamic Theme Updates
+
+Use `UpdateTheme()` to dynamically change themes and immediately update all UI elements:
+
+```lua
+-- Update to a built-in theme
+Zonix:UpdateTheme("Dark")
+Zonix:UpdateTheme("Light")
+Zonix:UpdateTheme("Midnight")
+
+-- Update to a custom theme table
+Zonix:UpdateTheme({
+    Background = Color3.fromRGB(15, 15, 20),
+    Secondary = Color3.fromRGB(20, 20, 27),
+    Tertiary = Color3.fromRGB(25, 25, 35),
+    Border = Color3.fromRGB(40, 40, 50),
+    Text = Color3.fromRGB(255, 255, 255),
+    TextDark = Color3.fromRGB(180, 180, 190),
+    Accent = Color3.fromRGB(255, 100, 50),  -- Custom orange accent
+    AccentDark = Color3.fromRGB(200, 70, 30),
+    Success = Color3.fromRGB(67, 181, 129),
+    Warning = Color3.fromRGB(250, 166, 26),
+    Error = Color3.fromRGB(237, 66, 69),
+    Info = Color3.fromRGB(52, 152, 219),
+    Topbar = Color3.fromRGB(12, 12, 17)
+})
+
+-- Update just the accent color
+Zonix:SetAccent(Color3.fromRGB(255, 0, 128))  -- Hot pink accent
+```
+
+**UpdateTheme Parameters:**
+- `themeNameOrTable` (string or table) - Theme name ("Dark", "Light", "Midnight") or a custom theme table
+
+**Features:**
+- ✅ Instantly updates ALL UI elements (tabs, buttons, toggles, dropdowns, etc.)
+- ✅ Updates active states (selected tabs, enabled toggles, hover effects)
+- ✅ Automatically updates registered theme elements
+- ✅ Shows a notification when theme changes
+- ✅ Preserves window state and component values
+
+**Example: Theme Selector Dropdown**
+
+```lua
+Tab:Dropdown({
+    Name = "Theme",
+    Options = {"Dark", "Light", "Midnight"},
+    Default = "Dark",
+    Callback = function(theme)
+        Zonix:UpdateTheme(theme)
+    end
+})
 ```
 
 #### Rainbow Mode
