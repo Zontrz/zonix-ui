@@ -1,6 +1,6 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.4.0                           ║
+    ║                    Zonix UI v1.4.1                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
@@ -243,7 +243,6 @@ local function DetectExecutor()
     elseif getgenv().Macsploit then
         return "Macsploit"
     elseif getgenv().CrypticMac then
-        -- Android Executors
         return "Cryptic (Mac)"
     elseif delta or getgenv().delta then
         return "Delta"
@@ -291,7 +290,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.4.0",
+    Version = "1.4.1",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -299,7 +298,8 @@ local Zonix = {
     FlaggedElements = {},
     Windows = {},
     Notifications = {},
-    Themes = {}
+    Themes = {},
+    ThemeElements = {}
 }
 
 Zonix.Themes.Dark = {
@@ -861,6 +861,119 @@ function Zonix:Watermark(config)
     end
 
     return watermark
+end
+
+-- ═══════════════════════════════════════════════════════════════
+--                         THEME MANAGEMENT
+-- ═══════════════════════════════════════════════════════════════
+
+function Zonix:RegisterThemeElement(element, properties)
+    table.insert(Zonix.ThemeElements, {
+        Element = element,
+        Properties = properties
+    })
+end
+
+function Zonix:GetCurrentTheme()
+    return Utils:GetTheme()
+end
+
+function Zonix:SetAccent(color)
+    local currentTheme = Utils:GetTheme()
+    local themeName = Zonix.Settings.Theme or "Dark"
+    
+    if themeName == "Custom" or not Zonix.Themes[themeName] then
+        if not Zonix.Themes.Custom then
+            Zonix.Themes.Custom = {}
+            for k, v in pairs(currentTheme) do
+                Zonix.Themes.Custom[k] = v
+            end
+        end
+        Zonix.Themes.Custom.Accent = color
+    else
+        Zonix.Themes.Custom = {}
+        for k, v in pairs(currentTheme) do
+            Zonix.Themes.Custom[k] = v
+        end
+        Zonix.Themes.Custom.Accent = color
+        Zonix.Settings.Theme = "Custom"
+    end
+    
+    Zonix:UpdateTheme("Custom")
+end
+
+local function ColorMatches(color1, color2)
+    if not color1 or not color2 then return false end
+    local diff = math.abs(color1.R - color2.R) + math.abs(color1.G - color2.G) + math.abs(color1.B - color2.B)
+    return diff < 0.01
+end
+
+local function UpdateGuiTree(gui, oldTheme, newTheme)
+    local colorMappings = {
+        BackgroundColor3 = {"Background", "Primary", "Secondary", "Tertiary", "Topbar"},
+        TextColor3 = {"Text", "SubText", "Accent"},
+        BorderColor3 = {"Border"},
+        Color = {"Border", "Accent"},
+        ImageColor3 = {"Accent", "Text"},
+        PlaceholderColor3 = {"SubText"}
+    }
+    
+    for _, child in ipairs(gui:GetDescendants()) do
+        for property, themeKeys in pairs(colorMappings) do
+            local success, currentColor = pcall(function() return child[property] end)
+            if success and typeof(currentColor) == "Color3" then
+                for _, themeKey in ipairs(themeKeys) do
+                    if oldTheme[themeKey] and ColorMatches(currentColor, oldTheme[themeKey]) then
+                        if newTheme[themeKey] then
+                            child[property] = newTheme[themeKey]
+                        end
+                        break
+                    end
+                end
+            end
+        end
+    end
+end
+
+function Zonix:UpdateTheme(newTheme)
+    local oldTheme = Utils:GetTheme()
+    
+    if type(newTheme) == "string" then
+        Zonix.Settings.Theme = newTheme
+    elseif type(newTheme) == "table" then
+        Zonix.Settings.Theme = "Custom"
+        Zonix.Themes.Custom = newTheme
+    end
+    
+    local theme = Utils:GetTheme()
+    
+    for _, entry in ipairs(Zonix.ThemeElements) do
+        local element = entry.Element
+        local properties = entry.Properties
+        
+        if element and element.Parent then
+            for property, themeKey in pairs(properties) do
+                if theme[themeKey] then
+                    pcall(function()
+                        element[property] = theme[themeKey]
+                    end)
+                end
+            end
+        end
+    end
+    
+    for _, window in ipairs(Zonix.Windows) do
+        if window and window.Parent then
+            UpdateGuiTree(window, oldTheme, theme)
+        end
+    end
+    
+    Zonix:Notify({
+        Title = "Theme Updated",
+        Content = "UI theme has been changed to " .. (type(newTheme) == "string" and newTheme or "Custom"),
+        Duration = 2,
+        Type = "Info"
+    })
 end
 
 -- ═══════════════════════════════════════════════════════════════
@@ -6112,7 +6225,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.4.0 LOADED!                  ║")
+print("║                 Zonix UI v1.4.1 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
