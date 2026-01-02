@@ -1,6 +1,6 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.4.1                           ║
+    ║                    Zonix UI v1.4.2                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
@@ -290,7 +290,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.4.1",
+    Version = "1.4.2",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -6356,7 +6356,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.4.1 LOADED!                  ║")
+print("║                 Zonix UI v1.4.2 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
