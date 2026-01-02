@@ -1,6 +1,6 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.4.2                           ║
+    ║                    Zonix UI v1.4.1                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
@@ -290,7 +290,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.4.2",
+    Version = "1.4.1",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -299,7 +299,8 @@ local Zonix = {
     Windows = {},
     Notifications = {},
     Themes = {},
-    ThemeElements = {}
+    ThemeElements = {},
+    PromptOpen = false
 }
 
 Zonix.Themes.Dark = {
@@ -581,7 +582,7 @@ function Zonix:Notify(config)
     container.Parent = gui
 
     local notif = Instance.new("Frame")
-    SetThemedProperty(notif, "BackgroundColor3", "Secondary")
+    notif.BackgroundColor3 = theme.Secondary
     notif.BorderSizePixel = 0
     notif.Position = UDim2.new(0, 400, 0, #Zonix.Notifications * 95)
     notif.Size = UDim2.new(1, 0, 0, 85)
@@ -592,13 +593,12 @@ function Zonix:Notify(config)
     corner.Parent = notif
 
     local stroke = Instance.new("UIStroke")
-    SetThemedProperty(stroke, "Color", "Border")
+    stroke.Color = theme.Border
     stroke.Thickness = 1
     stroke.Parent = notif
 
-    local accentColor =
-        type == "Success" and theme.Success or type == "Warning" and theme.Warning or type == "Error" and theme.Error or
-        theme.Info
+    local accentKey = type == "Success" and "Success" or type == "Warning" and "Warning" or type == "Error" and "Error" or "Info"
+    local accentColor = theme[accentKey]
 
     local accent = Instance.new("Frame")
     accent.BackgroundColor3 = accentColor
@@ -626,7 +626,7 @@ function Zonix:Notify(config)
     titleLabel.Size = UDim2.new(1, -70, 0, 20)
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.Text = title
-    SetThemedProperty(titleLabel, "TextColor3", "Text")
+    titleLabel.TextColor3 = theme.Text
     titleLabel.TextSize = 14
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = notif
@@ -637,7 +637,7 @@ function Zonix:Notify(config)
     contentLabel.Size = UDim2.new(1, -70, 0, 40)
     contentLabel.Font = Enum.Font.Gotham
     contentLabel.Text = content
-    SetThemedProperty(contentLabel, "TextColor3", "TextDark")
+    contentLabel.TextColor3 = theme.TextDark
     contentLabel.TextSize = 12
     contentLabel.TextWrapped = true
     contentLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -670,6 +670,11 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 function Zonix:Prompt(config)
+    if Zonix.PromptOpen then
+        return
+    end
+    Zonix.PromptOpen = true
+    
     config = config or {}
     local title = config.Title or "Confirmation"
     local content = config.Content or ""
@@ -714,7 +719,7 @@ function Zonix:Prompt(config)
 
     local prompt = Instance.new("Frame")
     prompt.AnchorPoint = Vector2.new(0.5, 0.5)
-    SetThemedProperty(prompt, "BackgroundColor3", "Secondary")
+    prompt.BackgroundColor3 = theme.Secondary
     prompt.BorderSizePixel = 0
     prompt.Position = UDim2.new(0.5, 0, 0.5, 0)
     prompt.Size = UDim2.new(0, 0, 0, 0)
@@ -726,7 +731,7 @@ function Zonix:Prompt(config)
     corner.Parent = prompt
 
     local stroke = Instance.new("UIStroke")
-    SetThemedProperty(stroke, "Color", "Border")
+    stroke.Color = theme.Border
     stroke.Thickness = 1
     stroke.Parent = prompt
 
@@ -740,7 +745,7 @@ function Zonix:Prompt(config)
     titleLabel.Size = UDim2.new(1, -padding * 2, 0, 25)
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.Text = title
-    SetThemedProperty(titleLabel, "TextColor3", "Text")
+    titleLabel.TextColor3 = theme.Text
     titleLabel.TextSize = titleSize
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.ZIndex = 1001
@@ -752,7 +757,7 @@ function Zonix:Prompt(config)
     contentLabel.Size = UDim2.new(1, -padding * 2, 0, promptHeight - (padding * 2 + 100))
     contentLabel.Font = Enum.Font.Gotham
     contentLabel.Text = content
-    SetThemedProperty(contentLabel, "TextColor3", "TextDark")
+    contentLabel.TextColor3 = theme.TextDark
     contentLabel.TextSize = contentSize
     contentLabel.TextWrapped = true
     contentLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -779,6 +784,7 @@ function Zonix:Prompt(config)
         Utils:Tween(overlay, {BackgroundTransparency = 1}, 0.2)
         task.wait(0.2)
         gui:Destroy()
+        Zonix.PromptOpen = false
     end
 
     local buttonCount = 0
@@ -799,7 +805,7 @@ function Zonix:Prompt(config)
         button.Size = UDim2.new(0, buttonWidth, 1, 0)
         button.Font = Enum.Font.GothamBold
         button.Text = buttonText
-        button.TextColor3 = name == "Confirm" and Color3.fromRGB(255, 255, 255) or theme.Text
+        button.TextColor3 = theme.Text
         button.TextSize = buttonTextSize
         button.ZIndex = 1002
         button.Parent = buttonContainer
@@ -818,7 +824,7 @@ function Zonix:Prompt(config)
         end)
 
         button.MouseLeave:Connect(function()
-            ThemedTween(button, {}, 0.2, {BackgroundColor3 = name == "Confirm" and "Accent" or "Tertiary"})
+            Utils:Tween(button, {BackgroundColor3 = name == "Confirm" and theme.Accent or theme.Tertiary}, 0.2)
         end)
     end
 
@@ -1297,9 +1303,9 @@ function Zonix:Window(config)
     close.Size = UDim2.new(0, 30, 0, 30)
     close.Font = Enum.Font.GothamBold
     close.Text = "X"
-    close.TextColor3 = Color3.fromRGB(255, 255, 255)
     close.TextSize = 20
     close.Parent = controls
+    SetThemedProperty(close, "TextColor3", "Text")
 
     local closeCorner = Instance.new("UICorner")
     closeCorner.CornerRadius = UDim.new(0, 6)
@@ -1816,7 +1822,7 @@ function Zonix:Window(config)
             btn.Size = UDim2.new(0, 100, 0, 28)
             btn.Font = Enum.Font.GothamBold
             btn.Text = "Execute"
-            btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            SetThemedProperty(btn, "TextColor3", "Text")
             btn.TextSize = 12
             btn.ClipsDescendants = true
             btn.Parent = btnFrame
@@ -3233,7 +3239,7 @@ function Zonix:Window(config)
             cbBtn.Size = UDim2.new(0, 80, 0, 28)
             cbBtn.Font = Enum.Font.GothamBold
             cbBtn.Text = "📋 Copy"
-            cbBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            SetThemedProperty(cbBtn, "TextColor3", "Text")
             cbBtn.TextSize = 11
             cbBtn.ClipsDescendants = true
             cbBtn.Parent = cbFrame
@@ -3571,7 +3577,7 @@ function Zonix:Window(config)
                 btnFrame.Size = UDim2.new(1, 0, 0, 38)
                 btnFrame.Font = Enum.Font.GothamBold
                 btnFrame.Text = btnName
-                btnFrame.TextColor3 = Color3.fromRGB(255, 255, 255)
+                SetThemedProperty(btnFrame, "TextColor3", "Text")
                 btnFrame.TextSize = 13
                 btnFrame.ClipsDescendants = true
                 btnFrame.Parent = gbContent
@@ -4488,7 +4494,7 @@ function Zonix:Window(config)
                     btnFrame.Size = UDim2.new(1, 0, 0, 38)
                     btnFrame.Font = Enum.Font.GothamBold
                     btnFrame.Text = btnName
-                    btnFrame.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    SetThemedProperty(btnFrame, "TextColor3", "Text")
                     btnFrame.TextSize = 13
                     btnFrame.ClipsDescendants = true
                     btnFrame.Parent = stTabContent
@@ -6350,7 +6356,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.4.2 LOADED!                  ║")
+print("║                 Zonix UI v1.4.1 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
