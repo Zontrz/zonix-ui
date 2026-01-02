@@ -1,6 +1,6 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.4.1                           ║
+    ║                    Zonix UI v1.4.2                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
@@ -290,7 +290,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.4.1",
+    Version = "1.4.2",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -489,14 +489,14 @@ function Utils:AddTooltip(element, text)
 
             tooltip = Instance.new("TextLabel")
             tooltip.Name = "Tooltip"
-            tooltip.BackgroundColor3 = theme.Tertiary
+            SetThemedProperty(tooltip, "BackgroundColor3", "Tertiary")
             tooltip.BorderSizePixel = 0
             tooltip.Position = UDim2.new(0, Mouse.X + 10, 0, Mouse.Y + 10)
             tooltip.Size = UDim2.new(0, 200, 0, 0)
             tooltip.AutomaticSize = Enum.AutomaticSize.Y
             tooltip.Font = Enum.Font.Gotham
             tooltip.Text = " " .. text .. " "
-            tooltip.TextColor3 = theme.Text
+            SetThemedProperty(tooltip, "TextColor3", "Text")
             tooltip.TextSize = 11
             tooltip.TextWrapped = true
             tooltip.ZIndex = 1000
@@ -507,7 +507,7 @@ function Utils:AddTooltip(element, text)
             corner.Parent = tooltip
 
             local stroke = Instance.new("UIStroke")
-            stroke.Color = theme.Border
+            SetThemedProperty(stroke, "Color", "Border")
             stroke.Thickness = 1
             stroke.Parent = tooltip
 
@@ -581,7 +581,7 @@ function Zonix:Notify(config)
     container.Parent = gui
 
     local notif = Instance.new("Frame")
-    notif.BackgroundColor3 = theme.Secondary
+    SetThemedProperty(notif, "BackgroundColor3", "Secondary")
     notif.BorderSizePixel = 0
     notif.Position = UDim2.new(0, 400, 0, #Zonix.Notifications * 95)
     notif.Size = UDim2.new(1, 0, 0, 85)
@@ -592,7 +592,7 @@ function Zonix:Notify(config)
     corner.Parent = notif
 
     local stroke = Instance.new("UIStroke")
-    stroke.Color = theme.Border
+    SetThemedProperty(stroke, "Color", "Border")
     stroke.Thickness = 1
     stroke.Parent = notif
 
@@ -626,7 +626,7 @@ function Zonix:Notify(config)
     titleLabel.Size = UDim2.new(1, -70, 0, 20)
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.Text = title
-    titleLabel.TextColor3 = theme.Text
+    SetThemedProperty(titleLabel, "TextColor3", "Text")
     titleLabel.TextSize = 14
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = notif
@@ -637,7 +637,7 @@ function Zonix:Notify(config)
     contentLabel.Size = UDim2.new(1, -70, 0, 40)
     contentLabel.Font = Enum.Font.Gotham
     contentLabel.Text = content
-    contentLabel.TextColor3 = theme.TextDark
+    SetThemedProperty(contentLabel, "TextColor3", "TextDark")
     contentLabel.TextSize = 12
     contentLabel.TextWrapped = true
     contentLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -714,7 +714,7 @@ function Zonix:Prompt(config)
 
     local prompt = Instance.new("Frame")
     prompt.AnchorPoint = Vector2.new(0.5, 0.5)
-    prompt.BackgroundColor3 = theme.Secondary
+    SetThemedProperty(prompt, "BackgroundColor3", "Secondary")
     prompt.BorderSizePixel = 0
     prompt.Position = UDim2.new(0.5, 0, 0.5, 0)
     prompt.Size = UDim2.new(0, 0, 0, 0)
@@ -726,7 +726,7 @@ function Zonix:Prompt(config)
     corner.Parent = prompt
 
     local stroke = Instance.new("UIStroke")
-    stroke.Color = theme.Border
+    SetThemedProperty(stroke, "Color", "Border")
     stroke.Thickness = 1
     stroke.Parent = prompt
 
@@ -740,7 +740,7 @@ function Zonix:Prompt(config)
     titleLabel.Size = UDim2.new(1, -padding * 2, 0, 25)
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.Text = title
-    titleLabel.TextColor3 = theme.Text
+    SetThemedProperty(titleLabel, "TextColor3", "Text")
     titleLabel.TextSize = titleSize
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.ZIndex = 1001
@@ -752,7 +752,7 @@ function Zonix:Prompt(config)
     contentLabel.Size = UDim2.new(1, -padding * 2, 0, promptHeight - (padding * 2 + 100))
     contentLabel.Font = Enum.Font.Gotham
     contentLabel.Text = content
-    contentLabel.TextColor3 = theme.TextDark
+    SetThemedProperty(contentLabel, "TextColor3", "TextDark")
     contentLabel.TextSize = contentSize
     contentLabel.TextWrapped = true
     contentLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -818,7 +818,7 @@ function Zonix:Prompt(config)
         end)
 
         button.MouseLeave:Connect(function()
-            Utils:Tween(button, {BackgroundColor3 = name == "Confirm" and theme.Accent or theme.Tertiary}, 0.2)
+            ThemedTween(button, {}, 0.2, {BackgroundColor3 = name == "Confirm" and "Accent" or "Tertiary"})
         end)
     end
 
@@ -837,7 +837,7 @@ function Zonix:Watermark(config)
     local gui = CreateGui()
 
     local watermark = Instance.new("Frame")
-    watermark.BackgroundColor3 = theme.Secondary
+    SetThemedProperty(watermark, "BackgroundColor3", "Secondary")
     watermark.BorderSizePixel = 0
     watermark.Position = UDim2.new(0, 10, 0, 10)
     watermark.Size = UDim2.new(0, 250, 0, 35)
@@ -848,7 +848,7 @@ function Zonix:Watermark(config)
     corner.Parent = watermark
 
     local stroke = Instance.new("UIStroke")
-    stroke.Color = theme.Border
+    SetThemedProperty(stroke, "Color", "Border")
     stroke.Thickness = 1
     stroke.Parent = watermark
 
@@ -857,7 +857,7 @@ function Zonix:Watermark(config)
     label.Size = UDim2.new(1, 0, 1, 0)
     label.Font = Enum.Font.GothamBold
     label.Text = text
-    label.TextColor3 = theme.Text
+    SetThemedProperty(label, "TextColor3", "Text")
     label.TextSize = 12
     label.Parent = watermark
 
@@ -878,6 +878,30 @@ end
 -- ═══════════════════════════════════════════════════════════════
 --                         THEME MANAGEMENT
 -- ═══════════════════════════════════════════════════════════════
+
+local function SetThemedProperty(element, property, themeKey)
+    local theme = Utils:GetTheme()
+    if theme[themeKey] then
+        element[property] = theme[themeKey]
+        element:SetAttribute("Theme_" .. property, themeKey)
+    end
+end
+
+local function ThemedTween(element, properties, duration, themeKeys)
+    local theme = Utils:GetTheme()
+    local tweenProps = {}
+    
+    for property, themeKey in pairs(themeKeys) do
+        if theme[themeKey] then
+            tweenProps[property] = theme[themeKey]
+            element:SetAttribute("Theme_" .. property, themeKey)
+        end
+    end
+    
+    if next(tweenProps) then
+        Utils:Tween(element, tweenProps, duration)
+    end
+end
 
 function Zonix:RegisterThemeElement(element, properties)
     table.insert(Zonix.ThemeElements, {
@@ -918,73 +942,8 @@ function Zonix:SetAccent(color)
     Zonix:UpdateTheme("Custom")
 end
 
-local function ColorMatches(color1, color2)
-    if not color1 or not color2 then return false end
-    local diff = math.abs(color1.R - color2.R) + math.abs(color1.G - color2.G) + math.abs(color1.B - color2.B)
-    return diff < 0.01
-end
-
-local function UpdateGuiTree(gui, oldTheme, newTheme)
-    local colorMappings = {
-        BackgroundColor3 = {"Accent", "AccentDark", "Success", "Warning", "Error", "Info", "Background", "Secondary", "Tertiary", "Topbar"},
-        TextColor3 = {"Accent", "AccentDark", "Text", "TextDark"},
-        BorderColor3 = {"Accent", "Border"},
-        Color = {"Accent", "AccentDark", "Border"},
-        ImageColor3 = {"Accent", "AccentDark", "Text"},
-        PlaceholderColor3 = {"TextDark", "Text"},
-        ScrollBarImageColor3 = {"Accent", "AccentDark"}
-    }
-    
-    for _, child in ipairs(gui:GetDescendants()) do
-        for property, themeKeys in pairs(colorMappings) do
-            local success, currentColor = pcall(function() return child[property] end)
-            if success and typeof(currentColor) == "Color3" then
-                for _, themeKey in ipairs(themeKeys) do
-                    if oldTheme[themeKey] and ColorMatches(currentColor, oldTheme[themeKey]) then
-                        if newTheme[themeKey] then
-                            pcall(function()
-                                child[property] = newTheme[themeKey]
-                            end)
-                        end
-                        break
-                    end
-                end
-            end
-        end
-        
-        if child:IsA("UIGradient") and child.Color then
-            local keypoints = child.Color.Keypoints
-            local newKeypoints = {}
-            local changed = false
-            
-            for _, keypoint in ipairs(keypoints) do
-                local newColor = keypoint.Value
-                
-                for themeKey, oldColor in pairs(oldTheme) do
-                    if typeof(oldColor) == "Color3" and ColorMatches(keypoint.Value, oldColor) then
-                        if newTheme[themeKey] then
-                            newColor = newTheme[themeKey]
-                            changed = true
-                            break
-                        end
-                    end
-                end
-                
-                table.insert(newKeypoints, ColorSequenceKeypoint.new(keypoint.Time, newColor))
-            end
-            
-            if changed then
-                pcall(function()
-                    child.Color = ColorSequence.new(newKeypoints)
-                end)
-            end
-        end
-    end
-end
 
 function Zonix:UpdateTheme(newTheme)
-    local oldTheme = Utils:GetTheme()
-    
     if type(newTheme) == "string" then
         Zonix.Settings.Theme = newTheme
     elseif type(newTheme) == "table" then
@@ -1023,7 +982,47 @@ function Zonix:UpdateTheme(newTheme)
     
     for _, window in ipairs(Zonix.Windows) do
         if window and window.Parent then
-            UpdateGuiTree(window, oldTheme, theme)
+            for _, element in ipairs(window:GetDescendants()) do
+                for _, property in ipairs({"BackgroundColor3", "TextColor3", "BorderColor3", "ImageColor3", "PlaceholderColor3", "ScrollBarImageColor3"}) do
+                    local themeKey = element:GetAttribute("Theme_" .. property)
+                    if themeKey and theme[themeKey] then
+                        pcall(function()
+                            element[property] = theme[themeKey]
+                        end)
+                    end
+                end
+                
+                if element:IsA("UIStroke") then
+                    local themeKey = element:GetAttribute("Theme_Color")
+                    if themeKey and theme[themeKey] then
+                        pcall(function()
+                            element.Color = theme[themeKey]
+                        end)
+                    end
+                end
+                
+                if element:IsA("UIGradient") and element.Color then
+                    local keypoints = element.Color.Keypoints
+                    local newKeypoints = {}
+                    local changed = false
+                    
+                    for i, keypoint in ipairs(keypoints) do
+                        local themeKey = element:GetAttribute("Theme_Gradient_" .. i)
+                        if themeKey and theme[themeKey] then
+                            table.insert(newKeypoints, ColorSequenceKeypoint.new(keypoint.Time, theme[themeKey]))
+                            changed = true
+                        else
+                            table.insert(newKeypoints, keypoint)
+                        end
+                    end
+                    
+                    if changed then
+                        pcall(function()
+                            element.Color = ColorSequence.new(newKeypoints)
+                        end)
+                    end
+                end
+            end
         end
     end
     
@@ -1098,7 +1097,7 @@ function Zonix:Window(config)
     local main = Instance.new("Frame")
     main.Name = "Main"
     main.AnchorPoint = Vector2.new(0.5, 0.5)
-    main.BackgroundColor3 = theme.Background
+    SetThemedProperty(main, "BackgroundColor3", "Background")
     main.BorderSizePixel = 0
     main.Position = UDim2.new(0.5, 0, 0.5, 0)
     main.Size = UDim2.new(0, windowWidth, 0, windowHeight)
@@ -1150,7 +1149,7 @@ function Zonix:Window(config)
     mainCorner.Parent = main
 
     local mainStroke = Instance.new("UIStroke")
-    mainStroke.Color = theme.Border
+    SetThemedProperty(mainStroke, "Color", "Border")
     mainStroke.Thickness = 1
     mainStroke.Parent = main
 
@@ -1166,7 +1165,7 @@ function Zonix:Window(config)
     shadow.Parent = main
 
     local topbar = Instance.new("Frame")
-    topbar.BackgroundColor3 = theme.Topbar
+    SetThemedProperty(topbar, "BackgroundColor3", "Topbar")
     topbar.BorderSizePixel = 0
     topbar.Size = UDim2.new(1, 0, 0, 45)
     topbar.Parent = main
@@ -1176,7 +1175,7 @@ function Zonix:Window(config)
     topCorner.Parent = topbar
 
     local topFix = Instance.new("Frame")
-    topFix.BackgroundColor3 = theme.Topbar
+    SetThemedProperty(topFix, "BackgroundColor3", "Topbar")
     topFix.BorderSizePixel = 0
     topFix.Position = UDim2.new(0, 0, 1, -12)
     topFix.Size = UDim2.new(1, 0, 0, 12)
@@ -1199,7 +1198,7 @@ function Zonix:Window(config)
             iconLabel.Size = UDim2.new(0, 28, 0, 28)
             iconLabel.Font = Enum.Font.GothamBold
             iconLabel.Text = iconValue
-            iconLabel.TextColor3 = theme.Text
+            SetThemedProperty(iconLabel, "TextColor3", "Text")
             iconLabel.TextSize = 20
             iconLabel.TextXAlignment = Enum.TextXAlignment.Center
             iconLabel.TextYAlignment = Enum.TextYAlignment.Center
@@ -1211,7 +1210,7 @@ function Zonix:Window(config)
             title.Size = UDim2.new(0.7, -48, 1, 0)
             title.Font = Enum.Font.GothamBold
             title.Text = windowName
-            title.TextColor3 = theme.Text
+            SetThemedProperty(title, "TextColor3", "Text")
             title.TextSize = 16
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Parent = topbar
@@ -1237,7 +1236,7 @@ function Zonix:Window(config)
             title.Size = UDim2.new(0.7, -48, 1, 0)
             title.Font = Enum.Font.GothamBold
             title.Text = windowName
-            title.TextColor3 = theme.Text
+            SetThemedProperty(title, "TextColor3", "Text")
             title.TextSize = 16
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Parent = topbar
@@ -1254,7 +1253,7 @@ function Zonix:Window(config)
         title.Size = UDim2.new(0.7, 0, 1, 0)
         title.Font = Enum.Font.GothamBold
         title.Text = windowName
-        title.TextColor3 = theme.Text
+        SetThemedProperty(title, "TextColor3", "Text")
         title.TextSize = 16
         title.TextXAlignment = Enum.TextXAlignment.Left
         title.Parent = topbar
@@ -1279,12 +1278,12 @@ function Zonix:Window(config)
     controlsList.Parent = controls
 
     local minimize = Instance.new("TextButton")
-    minimize.BackgroundColor3 = theme.Tertiary
+    SetThemedProperty(minimize, "BackgroundColor3", "Tertiary")
     minimize.BorderSizePixel = 0
     minimize.Size = UDim2.new(0, 30, 0, 30)
     minimize.Font = Enum.Font.GothamBold
     minimize.Text = "-"
-    minimize.TextColor3 = theme.Text
+    SetThemedProperty(minimize, "TextColor3", "Text")
     minimize.TextSize = 18
     minimize.Parent = controls
 
@@ -1293,7 +1292,7 @@ function Zonix:Window(config)
     minCorner.Parent = minimize
 
     local close = Instance.new("TextButton")
-    close.BackgroundColor3 = theme.Error
+    SetThemedProperty(close, "BackgroundColor3", "Error")
     close.BorderSizePixel = 0
     close.Size = UDim2.new(0, 30, 0, 30)
     close.Font = Enum.Font.GothamBold
@@ -1313,7 +1312,7 @@ function Zonix:Window(config)
     centerLabel.Size = UDim2.new(0.8, 0, 0, 30)
     centerLabel.Font = Enum.Font.GothamBold
     centerLabel.Text = getInitials(windowName)
-    centerLabel.TextColor3 = theme.Text
+    SetThemedProperty(centerLabel, "TextColor3", "Text")
     centerLabel.TextSize = 18
     centerLabel.TextXAlignment = Enum.TextXAlignment.Center
     centerLabel.TextYAlignment = Enum.TextYAlignment.Center
@@ -1323,7 +1322,7 @@ function Zonix:Window(config)
     window.CenterLabel = centerLabel
 
     local tabBar = Instance.new("Frame")
-    tabBar.BackgroundColor3 = theme.Secondary
+    SetThemedProperty(tabBar, "BackgroundColor3", "Secondary")
     tabBar.BorderSizePixel = 0
     tabBar.Position = UDim2.new(0, 0, 0, 45)
     tabBar.Size = UDim2.new(0, 160, 1, -45)
@@ -1396,13 +1395,13 @@ function Zonix:Window(config)
 
     minimize.MouseEnter:Connect(
         function()
-            Utils:Tween(minimize, {BackgroundColor3 = theme.Border}, 0.2)
+            ThemedTween(minimize, {}, 0.2, {BackgroundColor3 = "Border"})
         end
     )
 
     minimize.MouseLeave:Connect(
         function()
-            Utils:Tween(minimize, {BackgroundColor3 = theme.Tertiary}, 0.2)
+            ThemedTween(minimize, {}, 0.2, {BackgroundColor3 = "Tertiary"})
         end
     )
 
@@ -1423,7 +1422,7 @@ function Zonix:Window(config)
 
     close.MouseLeave:Connect(
         function()
-            Utils:Tween(close, {BackgroundColor3 = theme.Error}, 0.2)
+            ThemedTween(close, {}, 0.2, {BackgroundColor3 = "Error"})
         end
     )
 
@@ -1457,12 +1456,12 @@ function Zonix:Window(config)
         }
 
         local tabBtn = Instance.new("TextButton")
-        tabBtn.BackgroundColor3 = theme.Tertiary
+        SetThemedProperty(tabBtn, "BackgroundColor3", "Tertiary")
         tabBtn.BorderSizePixel = 0
         tabBtn.Size = UDim2.new(1, 0, 0, 40)
         tabBtn.Font = Enum.Font.GothamBold
         tabBtn.Text = ""
-        tabBtn.TextColor3 = theme.TextDark
+        SetThemedProperty(tabBtn, "TextColor3", "TextDark")
         tabBtn.TextSize = 13
         tabBtn.TextXAlignment = Enum.TextXAlignment.Left
         tabBtn.Parent = tabBar
@@ -1501,7 +1500,7 @@ function Zonix:Window(config)
             textLabel.AutomaticSize = Enum.AutomaticSize.X
             textLabel.Font = Enum.Font.GothamBold
             textLabel.Text = tabName
-            textLabel.TextColor3 = theme.TextDark
+            SetThemedProperty(textLabel, "TextColor3", "TextDark")
             textLabel.TextSize = 13
             textLabel.TextXAlignment = Enum.TextXAlignment.Left
             textLabel.Parent = tabLayout
@@ -1513,7 +1512,7 @@ function Zonix:Window(config)
             iconText.Size = UDim2.new(0, 20, 1, 0)
             iconText.Font = Enum.Font.GothamBold
             iconText.Text = iconValue
-            iconText.TextColor3 = theme.TextDark
+            SetThemedProperty(iconText, "TextColor3", "TextDark")
             iconText.TextSize = 16
             iconText.TextXAlignment = Enum.TextXAlignment.Left
             iconText.Parent = tabLayout
@@ -1524,7 +1523,7 @@ function Zonix:Window(config)
             textLabel.AutomaticSize = Enum.AutomaticSize.X
             textLabel.Font = Enum.Font.GothamBold
             textLabel.Text = tabName
-            textLabel.TextColor3 = theme.TextDark
+            SetThemedProperty(textLabel, "TextColor3", "TextDark")
             textLabel.TextSize = 13
             textLabel.TextXAlignment = Enum.TextXAlignment.Left
             textLabel.Parent = tabLayout
@@ -1538,7 +1537,7 @@ function Zonix:Window(config)
         tabContent.BorderSizePixel = 0
         tabContent.Size = UDim2.new(1, 0, 1, 0)
         tabContent.ScrollBarThickness = 4
-        tabContent.ScrollBarImageColor3 = theme.Accent
+        SetThemedProperty(tabContent, "ScrollBarImageColor3", "Accent")
         tabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
         tabContent.Visible = false
         tabContent.Parent = content
@@ -1569,10 +1568,10 @@ function Zonix:Window(config)
                     t.Active = false
                     for _, btn in pairs(tabBar:GetChildren()) do
                         if btn:IsA("TextButton") then
-                            Utils:Tween(btn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                            ThemedTween(btn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                             for _, child in pairs(btn:GetDescendants()) do
                                 if child:IsA("TextLabel") then
-                                    Utils:Tween(child, {TextColor3 = theme.TextDark}, 0.2)
+                                    ThemedTween(child, {}, 0.2, {TextColor3 = "TextDark"})
                                 end
                             end
                         end
@@ -1585,12 +1584,12 @@ function Zonix:Window(config)
                 end
 
                 tab.Active = true
-                Utils:Tween(tabBtn, {BackgroundColor3 = theme.Accent}, 0.2)
+                ThemedTween(tabBtn, {}, 0.2, {BackgroundColor3 = "Accent"})
                 if tab.TextLabel then
-                    Utils:Tween(tab.TextLabel, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.2)
+                    ThemedTween(tab.TextLabel, {}, 0.2, {TextColor3 = "Text"})
                 end
                 if tab.IconText then
-                    Utils:Tween(tab.IconText, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.2)
+                    ThemedTween(tab.IconText, {}, 0.2, {TextColor3 = "Text"})
                 end
                 tabContent.Visible = true
             end
@@ -1599,7 +1598,7 @@ function Zonix:Window(config)
         tabBtn.MouseEnter:Connect(
             function()
                 if not tab.Active then
-                    Utils:Tween(tabBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                    ThemedTween(tabBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                 end
             end
         )
@@ -1607,7 +1606,7 @@ function Zonix:Window(config)
         tabBtn.MouseLeave:Connect(
             function()
                 if not tab.Active then
-                    Utils:Tween(tabBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                    ThemedTween(tabBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                 end
             end
         )
@@ -1623,10 +1622,10 @@ function Zonix:Window(config)
                         t.Active = false
                         for _, btn in pairs(tabBar:GetChildren()) do
                             if btn:IsA("TextButton") then
-                                Utils:Tween(btn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                                ThemedTween(btn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                                 for _, child in pairs(btn:GetDescendants()) do
                                     if child:IsA("TextLabel") then
-                                        Utils:Tween(child, {TextColor3 = theme.TextDark}, 0.2)
+                                        ThemedTween(child, {}, 0.2, {TextColor3 = "TextDark"})
                                     end
                                 end
                             end
@@ -1639,12 +1638,12 @@ function Zonix:Window(config)
                     end
 
                     tab.Active = true
-                    Utils:Tween(tabBtn, {BackgroundColor3 = theme.Accent}, 0.2)
+                    ThemedTween(tabBtn, {}, 0.2, {BackgroundColor3 = "Accent"})
                     if tab.TextLabel then
-                        Utils:Tween(tab.TextLabel, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.2)
+                        ThemedTween(tab.TextLabel, {}, 0.2, {TextColor3 = "Text"})
                     end
                     if tab.IconText then
-                        Utils:Tween(tab.IconText, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.2)
+                        ThemedTween(tab.IconText, {}, 0.2, {TextColor3 = "Text"})
                     end
                     tabContent.Visible = true
                 end
@@ -1666,13 +1665,13 @@ function Zonix:Window(config)
             label.Size = UDim2.new(1, 0, 1, 0)
             label.Font = Enum.Font.GothamBold
             label.Text = name
-            label.TextColor3 = theme.Text
+            SetThemedProperty(label, "TextColor3", "Text")
             label.TextSize = 14
             label.TextXAlignment = Enum.TextXAlignment.Left
             label.Parent = section
 
             local div = Instance.new("Frame")
-            div.BackgroundColor3 = theme.Border
+            SetThemedProperty(div, "BackgroundColor3", "Border")
             div.BorderSizePixel = 0
             div.Position = UDim2.new(0, 0, 1, -1)
             div.Size = UDim2.new(1, 0, 0, 1)
@@ -1700,7 +1699,7 @@ function Zonix:Window(config)
             label.Size = UDim2.new(1, 0, 1, 0)
             label.Font = Enum.Font.Gotham
             label.Text = text
-            label.TextColor3 = theme.TextDark
+            SetThemedProperty(label, "TextColor3", "TextDark")
             label.TextSize = 13
             label.TextXAlignment = Enum.TextXAlignment.Left
             label.TextWrapped = true
@@ -1724,7 +1723,7 @@ function Zonix:Window(config)
 
         function tab:Paragraph(title, text)
             local paraFrame = Instance.new("Frame")
-            paraFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(paraFrame, "BackgroundColor3", "Secondary")
             paraFrame.BorderSizePixel = 0
             paraFrame.Size = UDim2.new(1, 0, 0, 0)
             paraFrame.AutomaticSize = Enum.AutomaticSize.Y
@@ -1735,7 +1734,7 @@ function Zonix:Window(config)
             paraCorner.Parent = paraFrame
 
             local paraStroke = Instance.new("UIStroke")
-            paraStroke.Color = theme.Border
+            SetThemedProperty(paraStroke, "Color", "Border")
             paraStroke.Thickness = 1
             paraStroke.Parent = paraFrame
 
@@ -1745,7 +1744,7 @@ function Zonix:Window(config)
             paraTitle.Size = UDim2.new(1, -20, 0, 20)
             paraTitle.Font = Enum.Font.GothamBold
             paraTitle.Text = title
-            paraTitle.TextColor3 = theme.Text
+            SetThemedProperty(paraTitle, "TextColor3", "Text")
             paraTitle.TextSize = 13
             paraTitle.TextXAlignment = Enum.TextXAlignment.Left
             paraTitle.Parent = paraFrame
@@ -1757,7 +1756,7 @@ function Zonix:Window(config)
             paraText.AutomaticSize = Enum.AutomaticSize.Y
             paraText.Font = Enum.Font.Gotham
             paraText.Text = text
-            paraText.TextColor3 = theme.TextDark
+            SetThemedProperty(paraText, "TextColor3", "TextDark")
             paraText.TextSize = 12
             paraText.TextWrapped = true
             paraText.TextXAlignment = Enum.TextXAlignment.Left
@@ -1782,7 +1781,7 @@ function Zonix:Window(config)
 
         function tab:Divider()
             local div = Instance.new("Frame")
-            div.BackgroundColor3 = theme.Border
+            SetThemedProperty(div, "BackgroundColor3", "Border")
             div.BorderSizePixel = 0
             div.Size = UDim2.new(1, 0, 0, 1)
             div.Parent = tabContent
@@ -1795,7 +1794,7 @@ function Zonix:Window(config)
                 end
 
             local btnFrame = Instance.new("Frame")
-            btnFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(btnFrame, "BackgroundColor3", "Secondary")
             btnFrame.BorderSizePixel = 0
             btnFrame.Size = UDim2.new(1, 0, 0, 40)
             btnFrame.Parent = tabContent
@@ -1805,12 +1804,12 @@ function Zonix:Window(config)
             btnCorner.Parent = btnFrame
 
             local btnStroke = Instance.new("UIStroke")
-            btnStroke.Color = theme.Border
+            SetThemedProperty(btnStroke, "Color", "Border")
             btnStroke.Thickness = 1
             btnStroke.Parent = btnFrame
 
             local btn = Instance.new("TextButton")
-            btn.BackgroundColor3 = theme.Accent
+            SetThemedProperty(btn, "BackgroundColor3", "Accent")
             btn.BorderSizePixel = 0
             btn.AnchorPoint = Vector2.new(1, 0.5)
             btn.Position = UDim2.new(1, -10, 0.5, 0)
@@ -1832,7 +1831,7 @@ function Zonix:Window(config)
             btnLabel.Size = UDim2.new(1, -120, 1, 0)
             btnLabel.Font = Enum.Font.GothamBold
             btnLabel.Text = btnName
-            btnLabel.TextColor3 = theme.Text
+            SetThemedProperty(btnLabel, "TextColor3", "Text")
             btnLabel.TextSize = 13
             btnLabel.TextXAlignment = Enum.TextXAlignment.Left
             btnLabel.Parent = btnFrame
@@ -1846,13 +1845,13 @@ function Zonix:Window(config)
 
             btn.MouseEnter:Connect(
                 function()
-                    Utils:Tween(btn, {BackgroundColor3 = theme.AccentDark}, 0.2)
+                    ThemedTween(btn, {}, 0.2, {BackgroundColor3 = "AccentDark"})
                 end
             )
 
             btn.MouseLeave:Connect(
                 function()
-                    Utils:Tween(btn, {BackgroundColor3 = theme.Accent}, 0.2)
+                    ThemedTween(btn, {}, 0.2, {BackgroundColor3 = "Accent"})
                 end
             )
 
@@ -1880,7 +1879,7 @@ function Zonix:Window(config)
                 end
 
             local togFrame = Instance.new("Frame")
-            togFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(togFrame, "BackgroundColor3", "Secondary")
             togFrame.BorderSizePixel = 0
             togFrame.Size = UDim2.new(1, 0, 0, 40)
             togFrame.Parent = tabContent
@@ -1890,7 +1889,7 @@ function Zonix:Window(config)
             togCorner.Parent = togFrame
 
             local togStroke = Instance.new("UIStroke")
-            togStroke.Color = theme.Border
+            SetThemedProperty(togStroke, "Color", "Border")
             togStroke.Thickness = 1
             togStroke.Parent = togFrame
 
@@ -1900,26 +1899,26 @@ function Zonix:Window(config)
             togLabel.Size = UDim2.new(1, -70, 1, 0)
             togLabel.Font = Enum.Font.GothamBold
             togLabel.Text = togName
-            togLabel.TextColor3 = theme.Text
+            SetThemedProperty(togLabel, "TextColor3", "Text")
             togLabel.TextSize = 13
             togLabel.TextXAlignment = Enum.TextXAlignment.Left
             togLabel.Parent = togFrame
 
             local togBtn = Instance.new("TextButton")
             togBtn.AnchorPoint = Vector2.new(1, 0.5)
-            togBtn.BackgroundColor3 = default and theme.Accent or theme.Tertiary
             togBtn.BorderSizePixel = 0
             togBtn.Position = UDim2.new(1, -10, 0.5, 0)
             togBtn.Size = UDim2.new(0, 45, 0, 24)
             togBtn.Text = ""
             togBtn.Parent = togFrame
+            SetThemedProperty(togBtn, "BackgroundColor3", default and "Accent" or "Tertiary")
 
             local togBtnCorner = Instance.new("UICorner")
             togBtnCorner.CornerRadius = UDim.new(1, 0)
             togBtnCorner.Parent = togBtn
 
             local togCircle = Instance.new("Frame")
-            togCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            SetThemedProperty(togCircle, "BackgroundColor3", "Text")
             togCircle.BorderSizePixel = 0
             togCircle.Position = default and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
             togCircle.Size = UDim2.new(0, 20, 0, 20)
@@ -1942,7 +1941,7 @@ function Zonix:Window(config)
                     Zonix.Flags[flag] = toggled
                 end
 
-                Utils:Tween(togBtn, {BackgroundColor3 = toggled and theme.Accent or theme.Tertiary}, 0.2)
+                ThemedTween(togBtn, {}, 0.2, {BackgroundColor3 = toggled and "Accent" or "Tertiary"})
                 Utils:Tween(
                     togCircle,
                     {Position = toggled and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)},
@@ -1990,7 +1989,7 @@ function Zonix:Window(config)
                 end
 
             local slFrame = Instance.new("Frame")
-            slFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(slFrame, "BackgroundColor3", "Secondary")
             slFrame.BorderSizePixel = 0
             slFrame.Size = UDim2.new(1, 0, 0, 55)
             slFrame.Parent = tabContent
@@ -2000,7 +1999,7 @@ function Zonix:Window(config)
             slCorner.Parent = slFrame
 
             local slStroke = Instance.new("UIStroke")
-            slStroke.Color = theme.Border
+            SetThemedProperty(slStroke, "Color", "Border")
             slStroke.Thickness = 1
             slStroke.Parent = slFrame
 
@@ -2010,7 +2009,7 @@ function Zonix:Window(config)
             slLabel.Size = UDim2.new(1, -70, 0, 20)
             slLabel.Font = Enum.Font.GothamBold
             slLabel.Text = slName
-            slLabel.TextColor3 = theme.Text
+            SetThemedProperty(slLabel, "TextColor3", "Text")
             slLabel.TextSize = 13
             slLabel.TextXAlignment = Enum.TextXAlignment.Left
             slLabel.Parent = slFrame
@@ -2022,13 +2021,13 @@ function Zonix:Window(config)
             slValue.Size = UDim2.new(0, 50, 0, 20)
             slValue.Font = Enum.Font.GothamBold
             slValue.Text = tostring(default)
-            slValue.TextColor3 = theme.Accent
+            SetThemedProperty(slValue, "TextColor3", "Accent")
             slValue.TextSize = 13
             slValue.TextXAlignment = Enum.TextXAlignment.Right
             slValue.Parent = slFrame
 
             local slBack = Instance.new("Frame")
-            slBack.BackgroundColor3 = theme.Tertiary
+            SetThemedProperty(slBack, "BackgroundColor3", "Tertiary")
             slBack.BorderSizePixel = 0
             slBack.Position = UDim2.new(0, 10, 0, 32)
             slBack.Size = UDim2.new(1, -20, 0, 6)
@@ -2039,7 +2038,7 @@ function Zonix:Window(config)
             slBackCorner.Parent = slBack
 
             local slFill = Instance.new("Frame")
-            slFill.BackgroundColor3 = theme.Accent
+            SetThemedProperty(slFill, "BackgroundColor3", "Accent")
             slFill.BorderSizePixel = 0
             slFill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
             slFill.Parent = slBack
@@ -2160,7 +2159,7 @@ function Zonix:Window(config)
                 end
 
             local ddFrame = Instance.new("Frame")
-            ddFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(ddFrame, "BackgroundColor3", "Secondary")
             ddFrame.BorderSizePixel = 0
             ddFrame.Size = UDim2.new(1, 0, 0, 40)
             ddFrame.ClipsDescendants = true
@@ -2171,7 +2170,7 @@ function Zonix:Window(config)
             ddCorner.Parent = ddFrame
 
             local ddStroke = Instance.new("UIStroke")
-            ddStroke.Color = theme.Border
+            SetThemedProperty(ddStroke, "Color", "Border")
             ddStroke.Thickness = 1
             ddStroke.Parent = ddFrame
 
@@ -2181,7 +2180,7 @@ function Zonix:Window(config)
             ddLabel.Size = UDim2.new(1, -40, 0, 40)
             ddLabel.Font = Enum.Font.GothamBold
             ddLabel.Text = ddName .. ": " .. default
-            ddLabel.TextColor3 = theme.Text
+            SetThemedProperty(ddLabel, "TextColor3", "Text")
             ddLabel.TextSize = 13
             ddLabel.TextXAlignment = Enum.TextXAlignment.Left
             ddLabel.Parent = ddFrame
@@ -2193,7 +2192,7 @@ function Zonix:Window(config)
             ddBtn.Size = UDim2.new(0, 30, 0, 30)
             ddBtn.Font = Enum.Font.GothamBold
             ddBtn.Text = "▼"
-            ddBtn.TextColor3 = theme.TextDark
+            SetThemedProperty(ddBtn, "TextColor3", "TextDark")
             ddBtn.TextSize = 12
             ddBtn.Parent = ddFrame
 
@@ -2216,12 +2215,12 @@ function Zonix:Window(config)
 
             for _, opt in ipairs(options) do
                 local optBtn = Instance.new("TextButton")
-                optBtn.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
                 optBtn.BorderSizePixel = 0
                 optBtn.Size = UDim2.new(1, 0, 0, 30)
                 optBtn.Font = Enum.Font.Gotham
                 optBtn.Text = "  " .. opt
-                optBtn.TextColor3 = theme.TextDark
+                SetThemedProperty(optBtn, "TextColor3", "TextDark")
                 optBtn.TextSize = 12
                 optBtn.TextXAlignment = Enum.TextXAlignment.Left
                 optBtn.Parent = optList
@@ -2241,18 +2240,39 @@ function Zonix:Window(config)
 
                 optBtn.MouseEnter:Connect(
                     function()
-                        Utils:Tween(optBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                        ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                     end
                 )
 
                 optBtn.MouseLeave:Connect(
                     function()
-                        Utils:Tween(optBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                        ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                     end
                 )
             end
 
             ddBtn.MouseButton1Click:Connect(
+                function()
+                    opened = not opened
+
+                    if opened then
+                        Utils:Tween(ddFrame, {Size = UDim2.new(1, 0, 0, 40 + #options * 32)}, 0.3)
+                        Utils:Tween(ddBtn, {Rotation = 180}, 0.3)
+                    else
+                        Utils:Tween(ddFrame, {Size = UDim2.new(1, 0, 0, 40)}, 0.3)
+                        Utils:Tween(ddBtn, {Rotation = 0}, 0.3)
+                    end
+                end
+            )
+            
+            local ddClickBtn = Instance.new("TextButton")
+            ddClickBtn.BackgroundTransparency = 1
+            ddClickBtn.Size = UDim2.new(1, 0, 0, 40)
+            ddClickBtn.Text = ""
+            ddClickBtn.ZIndex = 0
+            ddClickBtn.Parent = ddFrame
+            
+            ddClickBtn.MouseButton1Click:Connect(
                 function()
                     opened = not opened
 
@@ -2293,12 +2313,12 @@ function Zonix:Window(config)
 
                     for _, opt in ipairs(options) do
                         local optBtn = Instance.new("TextButton")
-                        optBtn.BackgroundColor3 = theme.Tertiary
+                        SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
                         optBtn.BorderSizePixel = 0
                         optBtn.Size = UDim2.new(1, 0, 0, 30)
                         optBtn.Font = Enum.Font.Gotham
                         optBtn.Text = "  " .. opt
-                        optBtn.TextColor3 = theme.TextDark
+                        SetThemedProperty(optBtn, "TextColor3", "TextDark")
                         optBtn.TextSize = 12
                         optBtn.TextXAlignment = Enum.TextXAlignment.Left
                         optBtn.Parent = optList
@@ -2318,13 +2338,13 @@ function Zonix:Window(config)
 
                         optBtn.MouseEnter:Connect(
                             function()
-                                Utils:Tween(optBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                                ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                             end
                         )
 
                         optBtn.MouseLeave:Connect(
                             function()
-                                Utils:Tween(optBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                                ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                             end
                         )
                     end
@@ -2358,7 +2378,7 @@ function Zonix:Window(config)
                 end
 
             local tbFrame = Instance.new("Frame")
-            tbFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(tbFrame, "BackgroundColor3", "Secondary")
             tbFrame.BorderSizePixel = 0
             tbFrame.Size = UDim2.new(1, 0, 0, 70)
             tbFrame.Parent = tabContent
@@ -2368,7 +2388,7 @@ function Zonix:Window(config)
             tbCorner.Parent = tbFrame
 
             local tbStroke = Instance.new("UIStroke")
-            tbStroke.Color = theme.Border
+            SetThemedProperty(tbStroke, "Color", "Border")
             tbStroke.Thickness = 1
             tbStroke.Parent = tbFrame
 
@@ -2378,21 +2398,21 @@ function Zonix:Window(config)
             tbLabel.Size = UDim2.new(1, -20, 0, 20)
             tbLabel.Font = Enum.Font.GothamBold
             tbLabel.Text = tbName
-            tbLabel.TextColor3 = theme.Text
+            SetThemedProperty(tbLabel, "TextColor3", "Text")
             tbLabel.TextSize = 13
             tbLabel.TextXAlignment = Enum.TextXAlignment.Left
             tbLabel.Parent = tbFrame
 
             local tb = Instance.new("TextBox")
-            tb.BackgroundColor3 = theme.Tertiary
+            SetThemedProperty(tb, "BackgroundColor3", "Tertiary")
             tb.BorderSizePixel = 0
             tb.Position = UDim2.new(0, 10, 0, 30)
             tb.Size = UDim2.new(1, -20, 0, 30)
             tb.Font = Enum.Font.Gotham
             tb.PlaceholderText = placeholder
-            tb.PlaceholderColor3 = theme.TextDark
+            SetThemedProperty(tb, "PlaceholderColor3", "TextDark")
             tb.Text = default
-            tb.TextColor3 = theme.Text
+            SetThemedProperty(tb, "TextColor3", "Text")
             tb.TextSize = 12
             tb.TextXAlignment = Enum.TextXAlignment.Left
             tb.ClearTextOnFocus = false
@@ -2425,13 +2445,13 @@ function Zonix:Window(config)
 
             tb.Focused:Connect(
                 function()
-                    Utils:Tween(tbStroke, {Color = theme.Accent}, 0.2)
+                    ThemedTween(tbStroke, {}, 0.2, {Color = "Accent"})
                 end
             )
 
             tb.FocusLost:Connect(
                 function()
-                    Utils:Tween(tbStroke, {Color = theme.Border}, 0.2)
+                    ThemedTween(tbStroke, {}, 0.2, {Color = "Border"})
                 end
             )
 
@@ -2472,7 +2492,7 @@ function Zonix:Window(config)
                 end
 
             local kbFrame = Instance.new("Frame")
-            kbFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(kbFrame, "BackgroundColor3", "Secondary")
             kbFrame.BorderSizePixel = 0
             kbFrame.Size = UDim2.new(1, 0, 0, 40)
             kbFrame.Parent = tabContent
@@ -2482,7 +2502,7 @@ function Zonix:Window(config)
             kbCorner.Parent = kbFrame
 
             local kbStroke = Instance.new("UIStroke")
-            kbStroke.Color = theme.Border
+            SetThemedProperty(kbStroke, "Color", "Border")
             kbStroke.Thickness = 1
             kbStroke.Parent = kbFrame
 
@@ -2492,20 +2512,20 @@ function Zonix:Window(config)
             kbLabel.Size = UDim2.new(1, -100, 1, 0)
             kbLabel.Font = Enum.Font.GothamBold
             kbLabel.Text = kbName
-            kbLabel.TextColor3 = theme.Text
+            SetThemedProperty(kbLabel, "TextColor3", "Text")
             kbLabel.TextSize = 13
             kbLabel.TextXAlignment = Enum.TextXAlignment.Left
             kbLabel.Parent = kbFrame
 
             local kbBtn = Instance.new("TextButton")
             kbBtn.AnchorPoint = Vector2.new(1, 0.5)
-            kbBtn.BackgroundColor3 = theme.Tertiary
+            SetThemedProperty(kbBtn, "BackgroundColor3", "Tertiary")
             kbBtn.BorderSizePixel = 0
             kbBtn.Position = UDim2.new(1, -10, 0.5, 0)
             kbBtn.Size = UDim2.new(0, 80, 0, 28)
             kbBtn.Font = Enum.Font.GothamBold
             kbBtn.Text = default.Name
-            kbBtn.TextColor3 = theme.Text
+            SetThemedProperty(kbBtn, "TextColor3", "Text")
             kbBtn.TextSize = 11
             kbBtn.Parent = kbFrame
 
@@ -2524,7 +2544,7 @@ function Zonix:Window(config)
                 function()
                     binding = true
                     kbBtn.Text = "..."
-                    Utils:Tween(kbBtn, {BackgroundColor3 = theme.Accent}, 0.2)
+                    ThemedTween(kbBtn, {}, 0.2, {BackgroundColor3 = "Accent"})
                 end
             )
 
@@ -2540,7 +2560,7 @@ function Zonix:Window(config)
                                 Zonix.Flags[flag] = currentKey
                             end
 
-                            Utils:Tween(kbBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                            ThemedTween(kbBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                         end
                     elseif input.KeyCode == currentKey and not gp then
                         pcall(callback)
@@ -2584,7 +2604,7 @@ function Zonix:Window(config)
                 end
 
             local cpFrame = Instance.new("Frame")
-            cpFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(cpFrame, "BackgroundColor3", "Secondary")
             cpFrame.BorderSizePixel = 0
             cpFrame.Size = UDim2.new(1, 0, 0, 40)
             cpFrame.Parent = tabContent
@@ -2594,7 +2614,7 @@ function Zonix:Window(config)
             cpCorner.Parent = cpFrame
 
             local cpStroke = Instance.new("UIStroke")
-            cpStroke.Color = theme.Border
+            SetThemedProperty(cpStroke, "Color", "Border")
             cpStroke.Thickness = 1
             cpStroke.Parent = cpFrame
 
@@ -2604,7 +2624,7 @@ function Zonix:Window(config)
             cpLabel.Size = UDim2.new(1, -50, 1, 0)
             cpLabel.Font = Enum.Font.GothamBold
             cpLabel.Text = cpName
-            cpLabel.TextColor3 = theme.Text
+            SetThemedProperty(cpLabel, "TextColor3", "Text")
             cpLabel.TextSize = 13
             cpLabel.TextXAlignment = Enum.TextXAlignment.Left
             cpLabel.Parent = cpFrame
@@ -2624,7 +2644,7 @@ function Zonix:Window(config)
             cpDisplayCorner.Parent = cpDisplay
 
             local cpDisplayStroke = Instance.new("UIStroke")
-            cpDisplayStroke.Color = theme.Border
+            SetThemedProperty(cpDisplayStroke, "Color", "Border")
             cpDisplayStroke.Thickness = 2
             cpDisplayStroke.Parent = cpDisplay
 
@@ -2763,7 +2783,8 @@ function Zonix:Window(config)
                     pk.Active = true
                     Instance.new("UICorner", pk).CornerRadius = UDim.new(0, 12)
                     local st = Instance.new("UIStroke", pk)
-                    st.Color, st.Thickness = theme.Border, 2
+                    SetThemedProperty(st, "Color", "Border")
+                    st.Thickness = 2
 
                     local tb = Instance.new("Frame", pk)
                     tb.BackgroundColor3, tb.BorderSizePixel, tb.Size, tb.ZIndex =
@@ -2811,7 +2832,7 @@ function Zonix:Window(config)
                     )
                     closeBtn.MouseLeave:Connect(
                         function()
-                            Utils:Tween(closeBtn, {BackgroundColor3 = theme.Error}, 0.2)
+                            ThemedTween(closeBtn, {}, 0.2, {BackgroundColor3 = "Error"})
                         end
                     )
                     closeBtn.MouseButton1Click:Connect(
@@ -2909,7 +2930,8 @@ function Zonix:Window(config)
                         1000001
                     Instance.new("UICorner", pv).CornerRadius = UDim.new(0, 8)
                     local pvs = Instance.new("UIStroke", pv)
-                    pvs.Color, pvs.Thickness = theme.Border, 2
+                    SetThemedProperty(pvs, "Color", "Border")
+                    pvs.Thickness = 2
 
                     local hf = Instance.new("Frame", pk)
                     hf.BackgroundColor3, hf.BorderSizePixel, hf.Position, hf.Size, hf.ZIndex =
@@ -2919,7 +2941,8 @@ function Zonix:Window(config)
                         UDim2.new(0, math.floor(440 * scale), 0, math.floor(50 * scale)),
                         1000001
                     Instance.new("UICorner", hf).CornerRadius = UDim.new(0, 8)
-                    Instance.new("UIStroke", hf).Color = theme.Border
+                    local hfStroke = Instance.new("UIStroke", hf)
+                    SetThemedProperty(hfStroke, "Color", "Border")
 
                     local ht = Instance.new("TextLabel", hf)
                     ht.BackgroundTransparency, ht.Position, ht.Size =
@@ -2984,7 +3007,8 @@ function Zonix:Window(config)
                             UDim2.new(0, math.floor(105 * scale), 0, math.floor(50 * scale)),
                             1000001
                         Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
-                        Instance.new("UIStroke", f).Color = theme.Border
+                        local fStroke = Instance.new("UIStroke", f)
+                        SetThemedProperty(fStroke, "Color", "Border")
                         local t = Instance.new("TextLabel", f)
                         t.BackgroundTransparency, t.Position, t.Size =
                             1,
@@ -3187,7 +3211,7 @@ function Zonix:Window(config)
             local text = cbConfig.Text or "Text to copy"
 
             local cbFrame = Instance.new("Frame")
-            cbFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(cbFrame, "BackgroundColor3", "Secondary")
             cbFrame.BorderSizePixel = 0
             cbFrame.Size = UDim2.new(1, 0, 0, 40)
             cbFrame.Parent = tabContent
@@ -3197,12 +3221,12 @@ function Zonix:Window(config)
             cbCorner.Parent = cbFrame
 
             local cbStroke = Instance.new("UIStroke")
-            cbStroke.Color = theme.Border
+            SetThemedProperty(cbStroke, "Color", "Border")
             cbStroke.Thickness = 1
             cbStroke.Parent = cbFrame
 
             local cbBtn = Instance.new("TextButton")
-            cbBtn.BackgroundColor3 = theme.Accent
+            SetThemedProperty(cbBtn, "BackgroundColor3", "Accent")
             cbBtn.BorderSizePixel = 0
             cbBtn.AnchorPoint = Vector2.new(1, 0.5)
             cbBtn.Position = UDim2.new(1, -10, 0.5, 0)
@@ -3224,7 +3248,7 @@ function Zonix:Window(config)
             cbLabel.Size = UDim2.new(1, -100, 1, 0)
             cbLabel.Font = Enum.Font.GothamBold
             cbLabel.Text = cbName
-            cbLabel.TextColor3 = theme.Text
+            SetThemedProperty(cbLabel, "TextColor3", "Text")
             cbLabel.TextSize = 13
             cbLabel.TextXAlignment = Enum.TextXAlignment.Left
             cbLabel.Parent = cbFrame
@@ -3241,13 +3265,13 @@ function Zonix:Window(config)
 
             cbBtn.MouseEnter:Connect(
                 function()
-                    Utils:Tween(cbBtn, {BackgroundColor3 = theme.AccentDark}, 0.2)
+                    ThemedTween(cbBtn, {}, 0.2, {BackgroundColor3 = "AccentDark"})
                 end
             )
 
             cbBtn.MouseLeave:Connect(
                 function()
-                    Utils:Tween(cbBtn, {BackgroundColor3 = theme.Accent}, 0.2)
+                    ThemedTween(cbBtn, {}, 0.2, {BackgroundColor3 = "Accent"})
                 end
             )
             
@@ -3268,7 +3292,7 @@ function Zonix:Window(config)
             local progress = pbConfig.Progress or 0
 
             local pbFrame = Instance.new("Frame")
-            pbFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(pbFrame, "BackgroundColor3", "Secondary")
             pbFrame.BorderSizePixel = 0
             pbFrame.Size = UDim2.new(1, 0, 0, 55)
             pbFrame.Parent = tabContent
@@ -3278,7 +3302,7 @@ function Zonix:Window(config)
             pbCorner.Parent = pbFrame
 
             local pbStroke = Instance.new("UIStroke")
-            pbStroke.Color = theme.Border
+            SetThemedProperty(pbStroke, "Color", "Border")
             pbStroke.Thickness = 1
             pbStroke.Parent = pbFrame
 
@@ -3288,7 +3312,7 @@ function Zonix:Window(config)
             pbLabel.Size = UDim2.new(1, -60, 0, 20)
             pbLabel.Font = Enum.Font.GothamBold
             pbLabel.Text = pbName
-            pbLabel.TextColor3 = theme.Text
+            SetThemedProperty(pbLabel, "TextColor3", "Text")
             pbLabel.TextSize = 13
             pbLabel.TextXAlignment = Enum.TextXAlignment.Left
             pbLabel.Parent = pbFrame
@@ -3300,13 +3324,13 @@ function Zonix:Window(config)
             pbPercent.Size = UDim2.new(0, 50, 0, 20)
             pbPercent.Font = Enum.Font.GothamBold
             pbPercent.Text = math.floor(progress * 100) .. "%"
-            pbPercent.TextColor3 = theme.Accent
+            SetThemedProperty(pbPercent, "TextColor3", "Accent")
             pbPercent.TextSize = 13
             pbPercent.TextXAlignment = Enum.TextXAlignment.Right
             pbPercent.Parent = pbFrame
 
             local pbBack = Instance.new("Frame")
-            pbBack.BackgroundColor3 = theme.Tertiary
+            SetThemedProperty(pbBack, "BackgroundColor3", "Tertiary")
             pbBack.BorderSizePixel = 0
             pbBack.Position = UDim2.new(0, 10, 0, 32)
             pbBack.Size = UDim2.new(1, -20, 0, 8)
@@ -3317,7 +3341,7 @@ function Zonix:Window(config)
             pbBackCorner.Parent = pbBack
 
             local pbFill = Instance.new("Frame")
-            pbFill.BackgroundColor3 = theme.Success
+            SetThemedProperty(pbFill, "BackgroundColor3", "Success")
             pbFill.BorderSizePixel = 0
             pbFill.Size = UDim2.new(progress, 0, 1, 0)
             pbFill.Parent = pbBack
@@ -3337,11 +3361,11 @@ function Zonix:Window(config)
                     Utils:Tween(pbFill, {Size = UDim2.new(value, 0, 1, 0)}, 0.3)
 
                     if value >= 1 then
-                        pbFill.BackgroundColor3 = theme.Success
+                        SetThemedProperty(pbFill, "BackgroundColor3", "Success")
                     elseif value >= 0.5 then
-                        pbFill.BackgroundColor3 = theme.Warning
+                        SetThemedProperty(pbFill, "BackgroundColor3", "Warning")
                     else
-                        pbFill.BackgroundColor3 = theme.Error
+                        SetThemedProperty(pbFill, "BackgroundColor3", "Error")
                     end
                 end
             }
@@ -3359,7 +3383,7 @@ function Zonix:Window(config)
             local flag = cbConfig.Flag
 
             local cbFrame = Instance.new("Frame")
-            cbFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(cbFrame, "BackgroundColor3", "Secondary")
             cbFrame.BorderSizePixel = 0
             cbFrame.Size = UDim2.new(1, 0, 0, 40)
             cbFrame.Parent = tabContent
@@ -3369,7 +3393,7 @@ function Zonix:Window(config)
             cbCorner.Parent = cbFrame
 
             local cbStroke = Instance.new("UIStroke")
-            cbStroke.Color = theme.Border
+            SetThemedProperty(cbStroke, "Color", "Border")
             cbStroke.Thickness = 1
             cbStroke.Parent = cbFrame
 
@@ -3379,20 +3403,20 @@ function Zonix:Window(config)
             cbLabel.Size = UDim2.new(1, -50, 1, 0)
             cbLabel.Font = Enum.Font.GothamBold
             cbLabel.Text = cbName
-            cbLabel.TextColor3 = theme.Text
+            SetThemedProperty(cbLabel, "TextColor3", "Text")
             cbLabel.TextSize = 13
             cbLabel.TextXAlignment = Enum.TextXAlignment.Left
             cbLabel.Parent = cbFrame
 
             local checkbox = Instance.new("TextButton")
-            checkbox.BackgroundColor3 = theme.Tertiary
+            SetThemedProperty(checkbox, "BackgroundColor3", "Tertiary")
             checkbox.BorderSizePixel = 0
             checkbox.AnchorPoint = Vector2.new(1, 0.5)
             checkbox.Position = UDim2.new(1, -10, 0.5, 0)
             checkbox.Size = UDim2.new(0, 24, 0, 24)
             checkbox.Font = Enum.Font.GothamBold
             checkbox.Text = ""
-            checkbox.TextColor3 = theme.Text
+            SetThemedProperty(checkbox, "TextColor3", "Text")
             checkbox.TextSize = 16
             checkbox.Parent = cbFrame
 
@@ -3401,7 +3425,7 @@ function Zonix:Window(config)
             checkCorner.Parent = checkbox
 
             local checkStroke = Instance.new("UIStroke")
-            checkStroke.Color = theme.Border
+            SetThemedProperty(checkStroke, "Color", "Border")
             checkStroke.Thickness = 2
             checkStroke.Parent = checkbox
 
@@ -3432,13 +3456,13 @@ function Zonix:Window(config)
 
             cbFrame.MouseEnter:Connect(
                 function()
-                    Utils:Tween(cbStroke, {Color = theme.Accent}, 0.2)
+                    ThemedTween(cbStroke, {}, 0.2, {Color = "Accent"})
                 end
             )
 
             cbFrame.MouseLeave:Connect(
                 function()
-                    Utils:Tween(cbStroke, {Color = theme.Border}, 0.2)
+                    ThemedTween(cbStroke, {}, 0.2, {Color = "Border"})
                 end
             )
 
@@ -3486,7 +3510,7 @@ function Zonix:Window(config)
             }
 
             local gbFrame = Instance.new("Frame")
-            gbFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(gbFrame, "BackgroundColor3", "Secondary")
             gbFrame.BorderSizePixel = 0
             gbFrame.Size = inline and UDim2.new(0.48, 0, 0, 0) or UDim2.new(1, 0, 0, 0)
             gbFrame.AutomaticSize = Enum.AutomaticSize.Y
@@ -3497,7 +3521,7 @@ function Zonix:Window(config)
             gbCorner.Parent = gbFrame
 
             local gbStroke = Instance.new("UIStroke")
-            gbStroke.Color = theme.Border
+            SetThemedProperty(gbStroke, "Color", "Border")
             gbStroke.Thickness = 1
             gbStroke.Parent = gbFrame
 
@@ -3506,7 +3530,7 @@ function Zonix:Window(config)
             gbHeader.Size = UDim2.new(1, 0, 0, 30)
             gbHeader.Font = Enum.Font.GothamBold
             gbHeader.Text = gbName
-            gbHeader.TextColor3 = theme.Accent
+            SetThemedProperty(gbHeader, "TextColor3", "Accent")
             gbHeader.TextSize = 14
             gbHeader.TextXAlignment = Enum.TextXAlignment.Left
             gbHeader.Parent = gbFrame
@@ -3542,7 +3566,7 @@ function Zonix:Window(config)
                     end
 
                 local btnFrame = Instance.new("TextButton")
-                btnFrame.BackgroundColor3 = theme.Accent
+                SetThemedProperty(btnFrame, "BackgroundColor3", "Accent")
                 btnFrame.BorderSizePixel = 0
                 btnFrame.Size = UDim2.new(1, 0, 0, 38)
                 btnFrame.Font = Enum.Font.GothamBold
@@ -3565,13 +3589,13 @@ function Zonix:Window(config)
 
                 btnFrame.MouseEnter:Connect(
                     function()
-                        Utils:Tween(btnFrame, {BackgroundColor3 = theme.AccentDark}, 0.2)
+                        ThemedTween(btnFrame, {}, 0.2, {BackgroundColor3 = "AccentDark"})
                     end
                 )
 
                 btnFrame.MouseLeave:Connect(
                     function()
-                        Utils:Tween(btnFrame, {BackgroundColor3 = theme.Accent}, 0.2)
+                        ThemedTween(btnFrame, {}, 0.2, {BackgroundColor3 = "Accent"})
                     end
                 )
             end
@@ -3585,7 +3609,7 @@ function Zonix:Window(config)
                 local flag = cbConfig.Flag
 
                 local cbFrame = Instance.new("Frame")
-                cbFrame.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(cbFrame, "BackgroundColor3", "Tertiary")
                 cbFrame.BorderSizePixel = 0
                 cbFrame.Size = UDim2.new(1, 0, 0, 35)
                 cbFrame.Parent = gbContent
@@ -3600,20 +3624,20 @@ function Zonix:Window(config)
                 cbLabel.Size = UDim2.new(1, -40, 1, 0)
                 cbLabel.Font = Enum.Font.Gotham
                 cbLabel.Text = cbName
-                cbLabel.TextColor3 = theme.Text
+                SetThemedProperty(cbLabel, "TextColor3", "Text")
                 cbLabel.TextSize = 12
                 cbLabel.TextXAlignment = Enum.TextXAlignment.Left
                 cbLabel.Parent = cbFrame
 
                 local checkbox = Instance.new("TextButton")
-                checkbox.BackgroundColor3 = theme.Background
+                SetThemedProperty(checkbox, "BackgroundColor3", "Background")
                 checkbox.BorderSizePixel = 0
                 checkbox.AnchorPoint = Vector2.new(1, 0.5)
                 checkbox.Position = UDim2.new(1, -8, 0.5, 0)
                 checkbox.Size = UDim2.new(0, 20, 0, 20)
                 checkbox.Font = Enum.Font.GothamBold
                 checkbox.Text = ""
-                checkbox.TextColor3 = theme.Text
+                SetThemedProperty(checkbox, "TextColor3", "Text")
                 checkbox.TextSize = 14
                 checkbox.Parent = cbFrame
 
@@ -3622,7 +3646,7 @@ function Zonix:Window(config)
                 checkCorner.Parent = checkbox
 
                 local checkStroke = Instance.new("UIStroke")
-                checkStroke.Color = theme.Border
+                SetThemedProperty(checkStroke, "Color", "Border")
                 checkStroke.Thickness = 1
                 checkStroke.Parent = checkbox
 
@@ -3679,7 +3703,7 @@ function Zonix:Window(config)
                 label.Size = UDim2.new(1, 0, 1, 0)
                 label.Font = Enum.Font.Gotham
                 label.Text = text
-                label.TextColor3 = theme.Text
+                SetThemedProperty(label, "TextColor3", "Text")
                 label.TextSize = 13
                 label.TextXAlignment = Enum.TextXAlignment.Left
                 label.Parent = labelFrame
@@ -3702,13 +3726,13 @@ function Zonix:Window(config)
                 label.Size = UDim2.new(1, 0, 1, 0)
                 label.Font = Enum.Font.GothamBold
                 label.Text = name
-                label.TextColor3 = theme.Text
+                SetThemedProperty(label, "TextColor3", "Text")
                 label.TextSize = 14
                 label.TextXAlignment = Enum.TextXAlignment.Left
                 label.Parent = section
 
                 local div = Instance.new("Frame")
-                div.BackgroundColor3 = theme.Border
+                SetThemedProperty(div, "BackgroundColor3", "Border")
                 div.BorderSizePixel = 0
                 div.Position = UDim2.new(0, 0, 1, -1)
                 div.Size = UDim2.new(1, 0, 0, 1)
@@ -3727,7 +3751,7 @@ function Zonix:Window(config)
                 titleLabel.Size = UDim2.new(1, 0, 0, 20)
                 titleLabel.Font = Enum.Font.GothamBold
                 titleLabel.Text = title
-                titleLabel.TextColor3 = theme.Text
+                SetThemedProperty(titleLabel, "TextColor3", "Text")
                 titleLabel.TextSize = 13
                 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
                 titleLabel.Parent = paraFrame
@@ -3739,7 +3763,7 @@ function Zonix:Window(config)
                 textLabel.AutomaticSize = Enum.AutomaticSize.Y
                 textLabel.Font = Enum.Font.Gotham
                 textLabel.Text = text
-                textLabel.TextColor3 = theme.TextDark
+                SetThemedProperty(textLabel, "TextColor3", "TextDark")
                 textLabel.TextSize = 12
                 textLabel.TextWrapped = true
                 textLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -3748,7 +3772,7 @@ function Zonix:Window(config)
 
             function groupBox:Divider()
                 local div = Instance.new("Frame")
-                div.BackgroundColor3 = theme.Border
+                SetThemedProperty(div, "BackgroundColor3", "Border")
                 div.BorderSizePixel = 0
                 div.Size = UDim2.new(1, 0, 0, 1)
                 div.Parent = gbContent
@@ -3763,7 +3787,7 @@ function Zonix:Window(config)
                     end
 
                 local togFrame = Instance.new("Frame")
-                togFrame.BackgroundColor3 = theme.Secondary
+                SetThemedProperty(togFrame, "BackgroundColor3", "Secondary")
                 togFrame.BorderSizePixel = 0
                 togFrame.Size = UDim2.new(1, 0, 0, 36)
                 togFrame.Parent = gbContent
@@ -3778,26 +3802,26 @@ function Zonix:Window(config)
                 togLabel.Size = UDim2.new(1, -60, 1, 0)
                 togLabel.Font = Enum.Font.GothamBold
                 togLabel.Text = togName
-                togLabel.TextColor3 = theme.Text
+                SetThemedProperty(togLabel, "TextColor3", "Text")
                 togLabel.TextSize = 12
                 togLabel.TextXAlignment = Enum.TextXAlignment.Left
                 togLabel.Parent = togFrame
 
                 local togBtn = Instance.new("TextButton")
                 togBtn.AnchorPoint = Vector2.new(1, 0.5)
-                togBtn.BackgroundColor3 = default and theme.Accent or theme.Tertiary
                 togBtn.BorderSizePixel = 0
                 togBtn.Position = UDim2.new(1, -8, 0.5, 0)
                 togBtn.Size = UDim2.new(0, 45, 0, 24)
                 togBtn.Text = ""
                 togBtn.Parent = togFrame
+                SetThemedProperty(togBtn, "BackgroundColor3", default and "Accent" or "Tertiary")
 
                 local togBtnCorner = Instance.new("UICorner")
                 togBtnCorner.CornerRadius = UDim.new(1, 0)
                 togBtnCorner.Parent = togBtn
 
                 local togCircle = Instance.new("Frame")
-                togCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                SetThemedProperty(togCircle, "BackgroundColor3", "Text")
                 togCircle.BorderSizePixel = 0
                 togCircle.Position = default and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
                 togCircle.Size = UDim2.new(0, 20, 0, 20)
@@ -3820,7 +3844,7 @@ function Zonix:Window(config)
                         Zonix.Flags[flag] = toggled
                     end
 
-                    Utils:Tween(togBtn, {BackgroundColor3 = toggled and theme.Accent or theme.Tertiary}, 0.2)
+                    ThemedTween(togBtn, {}, 0.2, {BackgroundColor3 = toggled and "Accent" or "Tertiary"})
                     Utils:Tween(
                         togCircle,
                         {Position = toggled and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)},
@@ -3853,7 +3877,7 @@ function Zonix:Window(config)
                     end
 
                 local slFrame = Instance.new("Frame")
-                slFrame.BackgroundColor3 = theme.Secondary
+                SetThemedProperty(slFrame, "BackgroundColor3", "Secondary")
                 slFrame.BorderSizePixel = 0
                 slFrame.Size = UDim2.new(1, 0, 0, 50)
                 slFrame.Parent = gbContent
@@ -3863,7 +3887,7 @@ function Zonix:Window(config)
                 slCorner.Parent = slFrame
 
                 local slStroke = Instance.new("UIStroke")
-                slStroke.Color = theme.Border
+                SetThemedProperty(slStroke, "Color", "Border")
                 slStroke.Thickness = 1
                 slStroke.Parent = slFrame
 
@@ -3873,7 +3897,7 @@ function Zonix:Window(config)
                 slLabel.Size = UDim2.new(1, -70, 0, 20)
                 slLabel.Font = Enum.Font.GothamBold
                 slLabel.Text = slName
-                slLabel.TextColor3 = theme.Text
+                SetThemedProperty(slLabel, "TextColor3", "Text")
                 slLabel.TextSize = 13
                 slLabel.TextXAlignment = Enum.TextXAlignment.Left
                 slLabel.Parent = slFrame
@@ -3885,13 +3909,13 @@ function Zonix:Window(config)
                 slValue.Size = UDim2.new(0, 50, 0, 20)
                 slValue.Font = Enum.Font.GothamBold
                 slValue.Text = tostring(default)
-                slValue.TextColor3 = theme.Accent
+                SetThemedProperty(slValue, "TextColor3", "Accent")
                 slValue.TextSize = 13
                 slValue.TextXAlignment = Enum.TextXAlignment.Right
                 slValue.Parent = slFrame
 
                 local slBack = Instance.new("Frame")
-                slBack.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(slBack, "BackgroundColor3", "Tertiary")
                 slBack.BorderSizePixel = 0
                 slBack.Position = UDim2.new(0, 10, 0, 32)
                 slBack.Size = UDim2.new(1, -20, 0, 6)
@@ -3902,7 +3926,7 @@ function Zonix:Window(config)
                 slBackCorner.Parent = slBack
 
                 local slFill = Instance.new("Frame")
-                slFill.BackgroundColor3 = theme.Accent
+                SetThemedProperty(slFill, "BackgroundColor3", "Accent")
                 slFill.BorderSizePixel = 0
                 slFill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
                 slFill.Parent = slBack
@@ -4008,7 +4032,7 @@ function Zonix:Window(config)
                     end
 
                 local ddFrame = Instance.new("Frame")
-                ddFrame.BackgroundColor3 = theme.Secondary
+                SetThemedProperty(ddFrame, "BackgroundColor3", "Secondary")
                 ddFrame.BorderSizePixel = 0
                 ddFrame.Size = UDim2.new(1, 0, 0, 40)
                 ddFrame.ClipsDescendants = true
@@ -4019,7 +4043,7 @@ function Zonix:Window(config)
                 ddCorner.Parent = ddFrame
 
                 local ddStroke = Instance.new("UIStroke")
-                ddStroke.Color = theme.Border
+                SetThemedProperty(ddStroke, "Color", "Border")
                 ddStroke.Thickness = 1
                 ddStroke.Parent = ddFrame
 
@@ -4029,7 +4053,7 @@ function Zonix:Window(config)
                 ddLabel.Size = UDim2.new(1, -40, 0, 40)
                 ddLabel.Font = Enum.Font.GothamBold
                 ddLabel.Text = ddName .. ": " .. default
-                ddLabel.TextColor3 = theme.Text
+                SetThemedProperty(ddLabel, "TextColor3", "Text")
                 ddLabel.TextSize = 13
                 ddLabel.TextXAlignment = Enum.TextXAlignment.Left
                 ddLabel.Parent = ddFrame
@@ -4041,7 +4065,7 @@ function Zonix:Window(config)
                 ddBtn.Size = UDim2.new(0, 30, 0, 30)
                 ddBtn.Font = Enum.Font.GothamBold
                 ddBtn.Text = "▼"
-                ddBtn.TextColor3 = theme.TextDark
+                SetThemedProperty(ddBtn, "TextColor3", "TextDark")
                 ddBtn.TextSize = 12
                 ddBtn.Parent = ddFrame
 
@@ -4064,12 +4088,12 @@ function Zonix:Window(config)
 
                 for _, opt in ipairs(options) do
                     local optBtn = Instance.new("TextButton")
-                    optBtn.BackgroundColor3 = theme.Tertiary
+                    SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
                     optBtn.BorderSizePixel = 0
                     optBtn.Size = UDim2.new(1, 0, 0, 30)
                     optBtn.Font = Enum.Font.Gotham
                     optBtn.Text = "  " .. opt
-                    optBtn.TextColor3 = theme.TextDark
+                    SetThemedProperty(optBtn, "TextColor3", "TextDark")
                     optBtn.TextSize = 12
                     optBtn.TextXAlignment = Enum.TextXAlignment.Left
                     optBtn.Parent = optList
@@ -4089,18 +4113,39 @@ function Zonix:Window(config)
 
                     optBtn.MouseEnter:Connect(
                         function()
-                            Utils:Tween(optBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                            ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                         end
                     )
 
                     optBtn.MouseLeave:Connect(
                         function()
-                            Utils:Tween(optBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                            ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                         end
                     )
                 end
 
                 ddBtn.MouseButton1Click:Connect(
+                    function()
+                        opened = not opened
+
+                        if opened then
+                            Utils:Tween(ddFrame, {Size = UDim2.new(1, 0, 0, 40 + #options * 32)}, 0.3)
+                            Utils:Tween(ddBtn, {Rotation = 180}, 0.3)
+                        else
+                            Utils:Tween(ddFrame, {Size = UDim2.new(1, 0, 0, 40)}, 0.3)
+                            Utils:Tween(ddBtn, {Rotation = 0}, 0.3)
+                        end
+                    end
+                )
+                
+                local ddClickBtn = Instance.new("TextButton")
+                ddClickBtn.BackgroundTransparency = 1
+                ddClickBtn.Size = UDim2.new(1, 0, 0, 40)
+                ddClickBtn.Text = ""
+                ddClickBtn.ZIndex = 0
+                ddClickBtn.Parent = ddFrame
+                
+                ddClickBtn.MouseButton1Click:Connect(
                     function()
                         opened = not opened
 
@@ -4137,12 +4182,12 @@ function Zonix:Window(config)
 
                         for _, opt in ipairs(options) do
                             local optBtn = Instance.new("TextButton")
-                            optBtn.BackgroundColor3 = theme.Tertiary
+                            SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
                             optBtn.BorderSizePixel = 0
                             optBtn.Size = UDim2.new(1, 0, 0, 30)
                             optBtn.Font = Enum.Font.Gotham
                             optBtn.Text = "  " .. opt
-                            optBtn.TextColor3 = theme.TextDark
+                            SetThemedProperty(optBtn, "TextColor3", "TextDark")
                             optBtn.TextSize = 12
                             optBtn.TextXAlignment = Enum.TextXAlignment.Left
                             optBtn.Parent = optList
@@ -4162,13 +4207,13 @@ function Zonix:Window(config)
 
                             optBtn.MouseEnter:Connect(
                                 function()
-                                    Utils:Tween(optBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                                    ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                                 end
                             )
 
                             optBtn.MouseLeave:Connect(
                                 function()
-                                    Utils:Tween(optBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                                    ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                                 end
                             )
                         end
@@ -4191,7 +4236,7 @@ function Zonix:Window(config)
                     end
 
                 local tbFrame = Instance.new("Frame")
-                tbFrame.BackgroundColor3 = theme.Secondary
+                SetThemedProperty(tbFrame, "BackgroundColor3", "Secondary")
                 tbFrame.BorderSizePixel = 0
                 tbFrame.Size = UDim2.new(1, 0, 0, 60)
                 tbFrame.Parent = gbContent
@@ -4206,21 +4251,21 @@ function Zonix:Window(config)
                 tbLabel.Size = UDim2.new(1, -16, 0, 18)
                 tbLabel.Font = Enum.Font.GothamBold
                 tbLabel.Text = tbName
-                tbLabel.TextColor3 = theme.Text
+                SetThemedProperty(tbLabel, "TextColor3", "Text")
                 tbLabel.TextSize = 12
                 tbLabel.TextXAlignment = Enum.TextXAlignment.Left
                 tbLabel.Parent = tbFrame
 
                 local tb = Instance.new("TextBox")
-                tb.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(tb, "BackgroundColor3", "Tertiary")
                 tb.BorderSizePixel = 0
                 tb.Position = UDim2.new(0, 8, 0, 28)
                 tb.Size = UDim2.new(1, -16, 0, 26)
                 tb.Font = Enum.Font.Gotham
                 tb.PlaceholderText = placeholder
-                tb.PlaceholderColor3 = theme.TextDark
+                SetThemedProperty(tb, "PlaceholderColor3", "TextDark")
                 tb.Text = default
-                tb.TextColor3 = theme.Text
+                SetThemedProperty(tb, "TextColor3", "Text")
                 tb.TextSize = 11
                 tb.TextXAlignment = Enum.TextXAlignment.Left
                 tb.ClearTextOnFocus = false
@@ -4270,7 +4315,7 @@ function Zonix:Window(config)
                 local progress = pbConfig.Progress or 0
 
                 local pbFrame = Instance.new("Frame")
-                pbFrame.BackgroundColor3 = theme.Secondary
+                SetThemedProperty(pbFrame, "BackgroundColor3", "Secondary")
                 pbFrame.BorderSizePixel = 0
                 pbFrame.Size = UDim2.new(1, 0, 0, 45)
                 pbFrame.Parent = gbContent
@@ -4285,7 +4330,7 @@ function Zonix:Window(config)
                 pbLabel.Size = UDim2.new(1, -50, 0, 18)
                 pbLabel.Font = Enum.Font.GothamBold
                 pbLabel.Text = pbName
-                pbLabel.TextColor3 = theme.Text
+                SetThemedProperty(pbLabel, "TextColor3", "Text")
                 pbLabel.TextSize = 12
                 pbLabel.TextXAlignment = Enum.TextXAlignment.Left
                 pbLabel.Parent = pbFrame
@@ -4297,13 +4342,13 @@ function Zonix:Window(config)
                 pbPercent.Size = UDim2.new(0, 45, 0, 18)
                 pbPercent.Font = Enum.Font.GothamBold
                 pbPercent.Text = math.floor(progress * 100) .. "%"
-                pbPercent.TextColor3 = theme.Accent
+                SetThemedProperty(pbPercent, "TextColor3", "Accent")
                 pbPercent.TextSize = 12
                 pbPercent.TextXAlignment = Enum.TextXAlignment.Right
                 pbPercent.Parent = pbFrame
 
                 local pbBack = Instance.new("Frame")
-                pbBack.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(pbBack, "BackgroundColor3", "Tertiary")
                 pbBack.BorderSizePixel = 0
                 pbBack.Position = UDim2.new(0, 8, 0, 28)
                 pbBack.Size = UDim2.new(1, -16, 0, 8)
@@ -4314,7 +4359,7 @@ function Zonix:Window(config)
                 pbBackCorner.Parent = pbBack
 
                 local pbFill = Instance.new("Frame")
-                pbFill.BackgroundColor3 = theme.Accent
+                SetThemedProperty(pbFill, "BackgroundColor3", "Accent")
                 pbFill.BorderSizePixel = 0
                 pbFill.Size = UDim2.new(progress, 0, 1, 0)
                 pbFill.Parent = pbBack
@@ -4360,7 +4405,7 @@ function Zonix:Window(config)
             stFrame.Parent = tabContent
 
             local stHeader = Instance.new("Frame")
-            stHeader.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(stHeader, "BackgroundColor3", "Secondary")
             stHeader.BorderSizePixel = 0
             stHeader.Size = UDim2.new(1, 0, 0, 40)
             stHeader.Parent = stFrame
@@ -4370,7 +4415,7 @@ function Zonix:Window(config)
             stHeaderCorner.Parent = stHeader
 
             local stHeaderStroke = Instance.new("UIStroke")
-            stHeaderStroke.Color = theme.Border
+            SetThemedProperty(stHeaderStroke, "Color", "Border")
             stHeaderStroke.Thickness = 1
             stHeaderStroke.Parent = stHeader
 
@@ -4438,7 +4483,7 @@ function Zonix:Window(config)
                         end
 
                     local btnFrame = Instance.new("TextButton")
-                    btnFrame.BackgroundColor3 = theme.Accent
+                    SetThemedProperty(btnFrame, "BackgroundColor3", "Accent")
                     btnFrame.BorderSizePixel = 0
                     btnFrame.Size = UDim2.new(1, 0, 0, 38)
                     btnFrame.Font = Enum.Font.GothamBold
@@ -4461,13 +4506,13 @@ function Zonix:Window(config)
 
                     btnFrame.MouseEnter:Connect(
                         function()
-                            Utils:Tween(btnFrame, {BackgroundColor3 = theme.AccentDark}, 0.2)
+                            ThemedTween(btnFrame, {}, 0.2, {BackgroundColor3 = "AccentDark"})
                         end
                     )
 
                     btnFrame.MouseLeave:Connect(
                         function()
-                            Utils:Tween(btnFrame, {BackgroundColor3 = theme.Accent}, 0.2)
+                            ThemedTween(btnFrame, {}, 0.2, {BackgroundColor3 = "Accent"})
                         end
                     )
                 end
@@ -4481,7 +4526,7 @@ function Zonix:Window(config)
                     local flag = cbConfig.Flag
 
                     local cbFrame = Instance.new("Frame")
-                    cbFrame.BackgroundColor3 = theme.Secondary
+                    SetThemedProperty(cbFrame, "BackgroundColor3", "Secondary")
                     cbFrame.BorderSizePixel = 0
                     cbFrame.Size = UDim2.new(1, 0, 0, 40)
                     cbFrame.Parent = stTabContent
@@ -4491,7 +4536,7 @@ function Zonix:Window(config)
                     cbCorner.Parent = cbFrame
 
                     local cbStroke = Instance.new("UIStroke")
-                    cbStroke.Color = theme.Border
+                    SetThemedProperty(cbStroke, "Color", "Border")
                     cbStroke.Thickness = 1
                     cbStroke.Parent = cbFrame
 
@@ -4501,20 +4546,20 @@ function Zonix:Window(config)
                     cbLabel.Size = UDim2.new(1, -50, 1, 0)
                     cbLabel.Font = Enum.Font.GothamBold
                     cbLabel.Text = cbName
-                    cbLabel.TextColor3 = theme.Text
+                    SetThemedProperty(cbLabel, "TextColor3", "Text")
                     cbLabel.TextSize = 13
                     cbLabel.TextXAlignment = Enum.TextXAlignment.Left
                     cbLabel.Parent = cbFrame
 
                     local checkbox = Instance.new("TextButton")
-                    checkbox.BackgroundColor3 = theme.Tertiary
+                    SetThemedProperty(checkbox, "BackgroundColor3", "Tertiary")
                     checkbox.BorderSizePixel = 0
                     checkbox.AnchorPoint = Vector2.new(1, 0.5)
                     checkbox.Position = UDim2.new(1, -10, 0.5, 0)
                     checkbox.Size = UDim2.new(0, 24, 0, 24)
                     checkbox.Font = Enum.Font.GothamBold
                     checkbox.Text = ""
-                    checkbox.TextColor3 = theme.Text
+                    SetThemedProperty(checkbox, "TextColor3", "Text")
                     checkbox.TextSize = 16
                     checkbox.Parent = cbFrame
 
@@ -4523,7 +4568,7 @@ function Zonix:Window(config)
                     checkCorner.Parent = checkbox
 
                     local checkStroke = Instance.new("UIStroke")
-                    checkStroke.Color = theme.Border
+                    SetThemedProperty(checkStroke, "Color", "Border")
                     checkStroke.Thickness = 2
                     checkStroke.Parent = checkbox
 
@@ -4575,7 +4620,7 @@ function Zonix:Window(config)
                     label.Size = UDim2.new(1, 0, 1, 0)
                     label.Font = Enum.Font.Gotham
                     label.Text = text
-                    label.TextColor3 = theme.Text
+                    SetThemedProperty(label, "TextColor3", "Text")
                     label.TextSize = 13
                     label.TextXAlignment = Enum.TextXAlignment.Left
                     label.Parent = labelFrame
@@ -4598,13 +4643,13 @@ function Zonix:Window(config)
                     label.Size = UDim2.new(1, 0, 1, 0)
                     label.Font = Enum.Font.GothamBold
                     label.Text = name
-                    label.TextColor3 = theme.Text
+                    SetThemedProperty(label, "TextColor3", "Text")
                     label.TextSize = 14
                     label.TextXAlignment = Enum.TextXAlignment.Left
                     label.Parent = section
 
                     local div = Instance.new("Frame")
-                    div.BackgroundColor3 = theme.Border
+                    SetThemedProperty(div, "BackgroundColor3", "Border")
                     div.BorderSizePixel = 0
                     div.Position = UDim2.new(0, 0, 1, -1)
                     div.Size = UDim2.new(1, 0, 0, 1)
@@ -4623,7 +4668,7 @@ function Zonix:Window(config)
                     titleLabel.Size = UDim2.new(1, 0, 0, 20)
                     titleLabel.Font = Enum.Font.GothamBold
                     titleLabel.Text = title
-                    titleLabel.TextColor3 = theme.Text
+                    SetThemedProperty(titleLabel, "TextColor3", "Text")
                     titleLabel.TextSize = 13
                     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
                     titleLabel.Parent = paraFrame
@@ -4635,7 +4680,7 @@ function Zonix:Window(config)
                     textLabel.AutomaticSize = Enum.AutomaticSize.Y
                     textLabel.Font = Enum.Font.Gotham
                     textLabel.Text = text
-                    textLabel.TextColor3 = theme.TextDark
+                    SetThemedProperty(textLabel, "TextColor3", "TextDark")
                     textLabel.TextSize = 12
                     textLabel.TextWrapped = true
                     textLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -4644,7 +4689,7 @@ function Zonix:Window(config)
 
                 function subTabObj:Divider()
                     local div = Instance.new("Frame")
-                    div.BackgroundColor3 = theme.Border
+                    SetThemedProperty(div, "BackgroundColor3", "Border")
                     div.BorderSizePixel = 0
                     div.Size = UDim2.new(1, 0, 0, 1)
                     div.Parent = stTabContent
@@ -4659,7 +4704,7 @@ function Zonix:Window(config)
                         end
 
                     local togFrame = Instance.new("Frame")
-                    togFrame.BackgroundColor3 = theme.Secondary
+                    SetThemedProperty(togFrame, "BackgroundColor3", "Secondary")
                     togFrame.BorderSizePixel = 0
                     togFrame.Size = UDim2.new(1, 0, 0, 40)
                     togFrame.Parent = stTabContent
@@ -4669,7 +4714,7 @@ function Zonix:Window(config)
                     togCorner.Parent = togFrame
 
                     local togStroke = Instance.new("UIStroke")
-                    togStroke.Color = theme.Border
+                    SetThemedProperty(togStroke, "Color", "Border")
                     togStroke.Thickness = 1
                     togStroke.Parent = togFrame
 
@@ -4679,26 +4724,26 @@ function Zonix:Window(config)
                     togLabel.Size = UDim2.new(1, -70, 1, 0)
                     togLabel.Font = Enum.Font.GothamBold
                     togLabel.Text = togName
-                    togLabel.TextColor3 = theme.Text
+                    SetThemedProperty(togLabel, "TextColor3", "Text")
                     togLabel.TextSize = 13
                     togLabel.TextXAlignment = Enum.TextXAlignment.Left
                     togLabel.Parent = togFrame
 
                     local togBtn = Instance.new("TextButton")
                     togBtn.AnchorPoint = Vector2.new(1, 0.5)
-                    togBtn.BackgroundColor3 = default and theme.Accent or theme.Tertiary
                     togBtn.BorderSizePixel = 0
                     togBtn.Position = UDim2.new(1, -10, 0.5, 0)
                     togBtn.Size = UDim2.new(0, 45, 0, 24)
                     togBtn.Text = ""
                     togBtn.Parent = togFrame
+                    SetThemedProperty(togBtn, "BackgroundColor3", default and "Accent" or "Tertiary")
 
                     local togBtnCorner = Instance.new("UICorner")
                     togBtnCorner.CornerRadius = UDim.new(1, 0)
                     togBtnCorner.Parent = togBtn
 
                     local togCircle = Instance.new("Frame")
-                    togCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                    SetThemedProperty(togCircle, "BackgroundColor3", "Text")
                     togCircle.BorderSizePixel = 0
                     togCircle.Position = default and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
                     togCircle.Size = UDim2.new(0, 20, 0, 20)
@@ -4721,7 +4766,7 @@ function Zonix:Window(config)
                             Zonix.Flags[flag] = toggled
                         end
 
-                        Utils:Tween(togBtn, {BackgroundColor3 = toggled and theme.Accent or theme.Tertiary}, 0.2)
+                        ThemedTween(togBtn, {}, 0.2, {BackgroundColor3 = toggled and "Accent" or "Tertiary"})
                         Utils:Tween(
                             togCircle,
                             {Position = toggled and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)},
@@ -4754,7 +4799,7 @@ function Zonix:Window(config)
                         end
 
                     local slFrame = Instance.new("Frame")
-                    slFrame.BackgroundColor3 = theme.Secondary
+                    SetThemedProperty(slFrame, "BackgroundColor3", "Secondary")
                     slFrame.BorderSizePixel = 0
                     slFrame.Size = UDim2.new(1, 0, 0, 55)
                     slFrame.Parent = stTabContent
@@ -4764,7 +4809,7 @@ function Zonix:Window(config)
                     slCorner.Parent = slFrame
 
                     local slStroke = Instance.new("UIStroke")
-                    slStroke.Color = theme.Border
+                    SetThemedProperty(slStroke, "Color", "Border")
                     slStroke.Thickness = 1
                     slStroke.Parent = slFrame
 
@@ -4774,7 +4819,7 @@ function Zonix:Window(config)
                     slLabel.Size = UDim2.new(1, -70, 0, 20)
                     slLabel.Font = Enum.Font.GothamBold
                     slLabel.Text = slName
-                    slLabel.TextColor3 = theme.Text
+                    SetThemedProperty(slLabel, "TextColor3", "Text")
                     slLabel.TextSize = 13
                     slLabel.TextXAlignment = Enum.TextXAlignment.Left
                     slLabel.Parent = slFrame
@@ -4786,13 +4831,13 @@ function Zonix:Window(config)
                     slValue.Size = UDim2.new(0, 50, 0, 20)
                     slValue.Font = Enum.Font.GothamBold
                     slValue.Text = tostring(default)
-                    slValue.TextColor3 = theme.Accent
+                    SetThemedProperty(slValue, "TextColor3", "Accent")
                     slValue.TextSize = 13
                     slValue.TextXAlignment = Enum.TextXAlignment.Right
                     slValue.Parent = slFrame
 
                     local slBack = Instance.new("Frame")
-                    slBack.BackgroundColor3 = theme.Tertiary
+                    SetThemedProperty(slBack, "BackgroundColor3", "Tertiary")
                     slBack.BorderSizePixel = 0
                     slBack.Position = UDim2.new(0, 10, 0, 32)
                     slBack.Size = UDim2.new(1, -20, 0, 6)
@@ -4803,7 +4848,7 @@ function Zonix:Window(config)
                     slBackCorner.Parent = slBack
 
                     local slFill = Instance.new("Frame")
-                    slFill.BackgroundColor3 = theme.Accent
+                    SetThemedProperty(slFill, "BackgroundColor3", "Accent")
                     slFill.BorderSizePixel = 0
                     slFill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
                     slFill.Parent = slBack
@@ -4908,7 +4953,7 @@ function Zonix:Window(config)
                         end
 
                     local ddFrame = Instance.new("Frame")
-                    ddFrame.BackgroundColor3 = theme.Secondary
+                    SetThemedProperty(ddFrame, "BackgroundColor3", "Secondary")
                     ddFrame.BorderSizePixel = 0
                     ddFrame.Size = UDim2.new(1, 0, 0, 40)
                     ddFrame.ClipsDescendants = true
@@ -4919,7 +4964,7 @@ function Zonix:Window(config)
                     ddCorner.Parent = ddFrame
 
                     local ddStroke = Instance.new("UIStroke")
-                    ddStroke.Color = theme.Border
+                    SetThemedProperty(ddStroke, "Color", "Border")
                     ddStroke.Thickness = 1
                     ddStroke.Parent = ddFrame
 
@@ -4929,7 +4974,7 @@ function Zonix:Window(config)
                     ddLabel.Size = UDim2.new(1, -40, 0, 40)
                     ddLabel.Font = Enum.Font.GothamBold
                     ddLabel.Text = ddName .. ": " .. default
-                    ddLabel.TextColor3 = theme.Text
+                    SetThemedProperty(ddLabel, "TextColor3", "Text")
                     ddLabel.TextSize = 13
                     ddLabel.TextXAlignment = Enum.TextXAlignment.Left
                     ddLabel.Parent = ddFrame
@@ -4941,7 +4986,7 @@ function Zonix:Window(config)
                     ddBtn.Size = UDim2.new(0, 30, 0, 30)
                     ddBtn.Font = Enum.Font.GothamBold
                     ddBtn.Text = "▼"
-                    ddBtn.TextColor3 = theme.TextDark
+                    SetThemedProperty(ddBtn, "TextColor3", "TextDark")
                     ddBtn.TextSize = 12
                     ddBtn.Parent = ddFrame
 
@@ -4964,12 +5009,12 @@ function Zonix:Window(config)
 
                     for _, opt in ipairs(options) do
                         local optBtn = Instance.new("TextButton")
-                        optBtn.BackgroundColor3 = theme.Tertiary
+                        SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
                         optBtn.BorderSizePixel = 0
                         optBtn.Size = UDim2.new(1, 0, 0, 30)
                         optBtn.Font = Enum.Font.Gotham
                         optBtn.Text = "  " .. opt
-                        optBtn.TextColor3 = theme.TextDark
+                        SetThemedProperty(optBtn, "TextColor3", "TextDark")
                         optBtn.TextSize = 12
                         optBtn.TextXAlignment = Enum.TextXAlignment.Left
                         optBtn.Parent = optList
@@ -4989,18 +5034,39 @@ function Zonix:Window(config)
 
                         optBtn.MouseEnter:Connect(
                             function()
-                                Utils:Tween(optBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                                ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                             end
                         )
 
                         optBtn.MouseLeave:Connect(
                             function()
-                                Utils:Tween(optBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                                ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                             end
                         )
                     end
 
                     ddBtn.MouseButton1Click:Connect(
+                        function()
+                            opened = not opened
+
+                            if opened then
+                                Utils:Tween(ddFrame, {Size = UDim2.new(1, 0, 0, 40 + #options * 32)}, 0.3)
+                                Utils:Tween(ddBtn, {Rotation = 180}, 0.3)
+                            else
+                                Utils:Tween(ddFrame, {Size = UDim2.new(1, 0, 0, 40)}, 0.3)
+                                Utils:Tween(ddBtn, {Rotation = 0}, 0.3)
+                            end
+                        end
+                    )
+                    
+                    local ddClickBtn = Instance.new("TextButton")
+                    ddClickBtn.BackgroundTransparency = 1
+                    ddClickBtn.Size = UDim2.new(1, 0, 0, 40)
+                    ddClickBtn.Text = ""
+                    ddClickBtn.ZIndex = 0
+                    ddClickBtn.Parent = ddFrame
+                    
+                    ddClickBtn.MouseButton1Click:Connect(
                         function()
                             opened = not opened
 
@@ -5037,12 +5103,12 @@ function Zonix:Window(config)
 
                             for _, opt in ipairs(options) do
                                 local optBtn = Instance.new("TextButton")
-                                optBtn.BackgroundColor3 = theme.Tertiary
+                                SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
                                 optBtn.BorderSizePixel = 0
                                 optBtn.Size = UDim2.new(1, 0, 0, 30)
                                 optBtn.Font = Enum.Font.Gotham
                                 optBtn.Text = "  " .. opt
-                                optBtn.TextColor3 = theme.TextDark
+                                SetThemedProperty(optBtn, "TextColor3", "TextDark")
                                 optBtn.TextSize = 12
                                 optBtn.TextXAlignment = Enum.TextXAlignment.Left
                                 optBtn.Parent = optList
@@ -5062,13 +5128,13 @@ function Zonix:Window(config)
 
                                 optBtn.MouseEnter:Connect(
                                     function()
-                                        Utils:Tween(optBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                                        ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                                     end
                                 )
 
                                 optBtn.MouseLeave:Connect(
                                     function()
-                                        Utils:Tween(optBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                                        ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                                     end
                                 )
                             end
@@ -5091,7 +5157,7 @@ function Zonix:Window(config)
                         end
 
                     local tbFrame = Instance.new("Frame")
-                    tbFrame.BackgroundColor3 = theme.Secondary
+                    SetThemedProperty(tbFrame, "BackgroundColor3", "Secondary")
                     tbFrame.BorderSizePixel = 0
                     tbFrame.Size = UDim2.new(1, 0, 0, 70)
                     tbFrame.Parent = stTabContent
@@ -5101,7 +5167,7 @@ function Zonix:Window(config)
                     tbCorner.Parent = tbFrame
 
                     local tbStroke = Instance.new("UIStroke")
-                    tbStroke.Color = theme.Border
+                    SetThemedProperty(tbStroke, "Color", "Border")
                     tbStroke.Thickness = 1
                     tbStroke.Parent = tbFrame
 
@@ -5111,21 +5177,21 @@ function Zonix:Window(config)
                     tbLabel.Size = UDim2.new(1, -20, 0, 20)
                     tbLabel.Font = Enum.Font.GothamBold
                     tbLabel.Text = tbName
-                    tbLabel.TextColor3 = theme.Text
+                    SetThemedProperty(tbLabel, "TextColor3", "Text")
                     tbLabel.TextSize = 13
                     tbLabel.TextXAlignment = Enum.TextXAlignment.Left
                     tbLabel.Parent = tbFrame
 
                     local tb = Instance.new("TextBox")
-                    tb.BackgroundColor3 = theme.Tertiary
+                    SetThemedProperty(tb, "BackgroundColor3", "Tertiary")
                     tb.BorderSizePixel = 0
                     tb.Position = UDim2.new(0, 10, 0, 30)
                     tb.Size = UDim2.new(1, -20, 0, 30)
                     tb.Font = Enum.Font.Gotham
                     tb.PlaceholderText = placeholder
-                    tb.PlaceholderColor3 = theme.TextDark
+                    SetThemedProperty(tb, "PlaceholderColor3", "TextDark")
                     tb.Text = default
-                    tb.TextColor3 = theme.Text
+                    SetThemedProperty(tb, "TextColor3", "Text")
                     tb.TextSize = 12
                     tb.TextXAlignment = Enum.TextXAlignment.Left
                     tb.ClearTextOnFocus = false
@@ -5158,13 +5224,13 @@ function Zonix:Window(config)
 
                     tb.Focused:Connect(
                         function()
-                            Utils:Tween(tbStroke, {Color = theme.Accent}, 0.2)
+                            ThemedTween(tbStroke, {}, 0.2, {Color = "Accent"})
                         end
                     )
 
                     tb.FocusLost:Connect(
                         function()
-                            Utils:Tween(tbStroke, {Color = theme.Border}, 0.2)
+                            ThemedTween(tbStroke, {}, 0.2, {Color = "Border"})
                         end
                     )
 
@@ -5187,7 +5253,7 @@ function Zonix:Window(config)
                     local progress = pbConfig.Progress or 0
 
                     local pbFrame = Instance.new("Frame")
-                    pbFrame.BackgroundColor3 = theme.Secondary
+                    SetThemedProperty(pbFrame, "BackgroundColor3", "Secondary")
                     pbFrame.BorderSizePixel = 0
                     pbFrame.Size = UDim2.new(1, 0, 0, 55)
                     pbFrame.Parent = stTabContent
@@ -5197,7 +5263,7 @@ function Zonix:Window(config)
                     pbCorner.Parent = pbFrame
 
                     local pbStroke = Instance.new("UIStroke")
-                    pbStroke.Color = theme.Border
+                    SetThemedProperty(pbStroke, "Color", "Border")
                     pbStroke.Thickness = 1
                     pbStroke.Parent = pbFrame
 
@@ -5207,7 +5273,7 @@ function Zonix:Window(config)
                     pbLabel.Size = UDim2.new(1, -60, 0, 20)
                     pbLabel.Font = Enum.Font.GothamBold
                     pbLabel.Text = pbName
-                    pbLabel.TextColor3 = theme.Text
+                    SetThemedProperty(pbLabel, "TextColor3", "Text")
                     pbLabel.TextSize = 13
                     pbLabel.TextXAlignment = Enum.TextXAlignment.Left
                     pbLabel.Parent = pbFrame
@@ -5219,13 +5285,13 @@ function Zonix:Window(config)
                     pbPercent.Size = UDim2.new(0, 50, 0, 20)
                     pbPercent.Font = Enum.Font.GothamBold
                     pbPercent.Text = math.floor(progress * 100) .. "%"
-                    pbPercent.TextColor3 = theme.Accent
+                    SetThemedProperty(pbPercent, "TextColor3", "Accent")
                     pbPercent.TextSize = 13
                     pbPercent.TextXAlignment = Enum.TextXAlignment.Right
                     pbPercent.Parent = pbFrame
 
                     local pbBack = Instance.new("Frame")
-                    pbBack.BackgroundColor3 = theme.Tertiary
+                    SetThemedProperty(pbBack, "BackgroundColor3", "Tertiary")
                     pbBack.BorderSizePixel = 0
                     pbBack.Position = UDim2.new(0, 10, 0, 32)
                     pbBack.Size = UDim2.new(1, -20, 0, 8)
@@ -5236,7 +5302,7 @@ function Zonix:Window(config)
                     pbBackCorner.Parent = pbBack
 
                     local pbFill = Instance.new("Frame")
-                    pbFill.BackgroundColor3 = theme.Accent
+                    SetThemedProperty(pbFill, "BackgroundColor3", "Accent")
                     pbFill.BorderSizePixel = 0
                     pbFill.Size = UDim2.new(progress, 0, 1, 0)
                     pbFill.Parent = pbBack
@@ -5274,7 +5340,7 @@ function Zonix:Window(config)
                     }
 
                     local gbFrame = Instance.new("Frame")
-                    gbFrame.BackgroundColor3 = theme.Tertiary
+                    SetThemedProperty(gbFrame, "BackgroundColor3", "Tertiary")
                     gbFrame.BorderSizePixel = 0
                     gbFrame.Size = inline and UDim2.new(0.48, 0, 0, 0) or UDim2.new(1, 0, 0, 0)
                     gbFrame.AutomaticSize = Enum.AutomaticSize.Y
@@ -5289,7 +5355,7 @@ function Zonix:Window(config)
                     gbHeader.Size = UDim2.new(1, 0, 0, 28)
                     gbHeader.Font = Enum.Font.GothamBold
                     gbHeader.Text = gbName
-                    gbHeader.TextColor3 = theme.Accent
+                    SetThemedProperty(gbHeader, "TextColor3", "Accent")
                     gbHeader.TextSize = 13
                     gbHeader.TextXAlignment = Enum.TextXAlignment.Left
                     gbHeader.Parent = gbFrame
@@ -5327,7 +5393,7 @@ function Zonix:Window(config)
                         local flag = cbConfig.Flag
 
                         local cbFrame = Instance.new("Frame")
-                        cbFrame.BackgroundColor3 = theme.Secondary
+                        SetThemedProperty(cbFrame, "BackgroundColor3", "Secondary")
                         cbFrame.BorderSizePixel = 0
                         cbFrame.Size = UDim2.new(1, 0, 0, 32)
                         cbFrame.Parent = gbContent
@@ -5342,20 +5408,20 @@ function Zonix:Window(config)
                         cbLabel.Size = UDim2.new(1, -38, 1, 0)
                         cbLabel.Font = Enum.Font.Gotham
                         cbLabel.Text = cbName
-                        cbLabel.TextColor3 = theme.Text
+                        SetThemedProperty(cbLabel, "TextColor3", "Text")
                         cbLabel.TextSize = 11
                         cbLabel.TextXAlignment = Enum.TextXAlignment.Left
                         cbLabel.Parent = cbFrame
 
                         local checkbox = Instance.new("TextButton")
-                        checkbox.BackgroundColor3 = theme.Background
+                        SetThemedProperty(checkbox, "BackgroundColor3", "Background")
                         checkbox.BorderSizePixel = 0
                         checkbox.AnchorPoint = Vector2.new(1, 0.5)
                         checkbox.Position = UDim2.new(1, -8, 0.5, 0)
                         checkbox.Size = UDim2.new(0, 18, 0, 18)
                         checkbox.Font = Enum.Font.GothamBold
                         checkbox.Text = ""
-                        checkbox.TextColor3 = theme.Text
+                        SetThemedProperty(checkbox, "TextColor3", "Text")
                         checkbox.TextSize = 12
                         checkbox.Parent = cbFrame
 
@@ -5364,7 +5430,7 @@ function Zonix:Window(config)
                         checkCorner.Parent = checkbox
 
                         local checkStroke = Instance.new("UIStroke")
-                        checkStroke.Color = theme.Border
+                        SetThemedProperty(checkStroke, "Color", "Border")
                         checkStroke.Thickness = 1
                         checkStroke.Parent = checkbox
 
@@ -5576,19 +5642,19 @@ function Zonix:Window(config)
                 modeLabel.Size = UDim2.new(0, modeLabelWidth, 1, 0)
                 modeLabel.Font = Enum.Font.GothamBold
                 modeLabel.Text = "Mode:"
-                modeLabel.TextColor3 = theme.Text
+                SetThemedProperty(modeLabel, "TextColor3", "Text")
                 modeLabel.TextSize = modeFontSize
                 modeLabel.TextXAlignment = Enum.TextXAlignment.Left
                 modeLabel.Parent = modeFrame
 
                 modeSelector = Instance.new("TextButton")
-                modeSelector.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(modeSelector, "BackgroundColor3", "Tertiary")
                 modeSelector.BorderSizePixel = 0
                 modeSelector.Position = UDim2.new(0, modeLabelWidth + 5, 0, 0)
                 modeSelector.Size = UDim2.new(0, modeSelectorWidth, 1, 0)
                 modeSelector.Font = Enum.Font.Gotham
                 modeSelector.Text = search.CurrentMode:upper()
-                modeSelector.TextColor3 = theme.Text
+                SetThemedProperty(modeSelector, "TextColor3", "Text")
                 modeSelector.TextSize = modeTextSize
                 modeSelector.Parent = modeFrame
 
@@ -5602,12 +5668,12 @@ function Zonix:Window(config)
                 modeArrow.Size = UDim2.new(0, 20 * scaleFactor, 1, 0)
                 modeArrow.Font = Enum.Font.GothamBold
                 modeArrow.Text = "▼"
-                modeArrow.TextColor3 = theme.TextDark
+                SetThemedProperty(modeArrow, "TextColor3", "TextDark")
                 modeArrow.TextSize = math.floor(10 * scaleFactor)
                 modeArrow.Parent = modeSelector
 
                 local modeDropdown = Instance.new("Frame")
-                modeDropdown.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(modeDropdown, "BackgroundColor3", "Tertiary")
                 modeDropdown.BorderSizePixel = 0
                 modeDropdown.Position = UDim2.new(0, modeLabelWidth + 5, 1, 5)
                 modeDropdown.Size = UDim2.new(0, modeSelectorWidth, 0, 0)
@@ -5621,7 +5687,7 @@ function Zonix:Window(config)
                 dropCorner.Parent = modeDropdown
 
                 local dropStroke = Instance.new("UIStroke")
-                dropStroke.Color = theme.Border
+                SetThemedProperty(dropStroke, "Color", "Border")
                 dropStroke.Thickness = 1
                 dropStroke.Parent = modeDropdown
 
@@ -5649,12 +5715,12 @@ function Zonix:Window(config)
                 local optionHeight = math.floor(30 * scaleFactor)
                 for i, modeData in ipairs(modes) do
                     local option = Instance.new("TextButton")
-                    option.BackgroundColor3 = theme.Secondary
+                    SetThemedProperty(option, "BackgroundColor3", "Secondary")
                     option.BorderSizePixel = 0
                     option.Size = UDim2.new(1, 0, 0, optionHeight)
                     option.Font = Enum.Font.Gotham
                     option.Text = "  " .. modeData.icon .. " " .. modeData.desc
-                    option.TextColor3 = theme.Text
+                    SetThemedProperty(option, "TextColor3", "Text")
                     option.TextSize = modeTextSize
                     option.TextXAlignment = Enum.TextXAlignment.Left
                     option.LayoutOrder = i
@@ -5679,11 +5745,11 @@ function Zonix:Window(config)
                     end)
 
                     option.MouseEnter:Connect(function()
-                        Utils:Tween(option, {BackgroundColor3 = theme.Accent}, 0.2)
+                        ThemedTween(option, {}, 0.2, {BackgroundColor3 = "Accent"})
                     end)
 
                     option.MouseLeave:Connect(function()
-                        Utils:Tween(option, {BackgroundColor3 = theme.Secondary}, 0.2)
+                        ThemedTween(option, {}, 0.2, {BackgroundColor3 = "Secondary"})
                     end)
                 end
 
@@ -5699,11 +5765,11 @@ function Zonix:Window(config)
                 end)
 
                 modeSelector.MouseEnter:Connect(function()
-                    Utils:Tween(modeSelector, {BackgroundColor3 = theme.Border}, 0.2)
+                    ThemedTween(modeSelector, {}, 0.2, {BackgroundColor3 = "Border"})
                 end)
 
                 modeSelector.MouseLeave:Connect(function()
-                    Utils:Tween(modeSelector, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                    ThemedTween(modeSelector, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                 end)
             end
 
@@ -5718,7 +5784,7 @@ function Zonix:Window(config)
             local resultLabelOffset = clearButton and math.floor(95 * scaleFactor) or math.floor(40 * scaleFactor)
             
             local mainFrame = Instance.new("Frame")
-            mainFrame.BackgroundColor3 = theme.Secondary
+            SetThemedProperty(mainFrame, "BackgroundColor3", "Secondary")
             mainFrame.BorderSizePixel = 0
             mainFrame.Size = UDim2.new(1, 0, 0, mainHeight)
             mainFrame.Parent = container
@@ -5734,7 +5800,7 @@ function Zonix:Window(config)
             searchIcon.Size = UDim2.new(0, iconSize, 0, iconSize)
             searchIcon.Font = Enum.Font.GothamBold
             searchIcon.Text = "🔍"
-            searchIcon.TextColor3 = theme.TextDark
+            SetThemedProperty(searchIcon, "TextColor3", "TextDark")
             searchIcon.TextSize = math.floor(16 * scaleFactor)
             searchIcon.Parent = mainFrame
 
@@ -5744,9 +5810,9 @@ function Zonix:Window(config)
             searchBox.Size = UDim2.new(1, clearButton and -(searchBoxLeft + resultLabelOffset + 20) or -(searchBoxLeft + resultLabelOffset - 10), 1, 0)
             searchBox.Font = Enum.Font.Gotham
             searchBox.PlaceholderText = placeholder
-            searchBox.PlaceholderColor3 = theme.TextDark
+            SetThemedProperty(searchBox, "PlaceholderColor3", "TextDark")
             searchBox.Text = ""
-            searchBox.TextColor3 = theme.Text
+            SetThemedProperty(searchBox, "TextColor3", "Text")
             searchBox.TextSize = textSize
             searchBox.TextXAlignment = Enum.TextXAlignment.Left
             searchBox.ClearTextOnFocus = false
@@ -5759,7 +5825,7 @@ function Zonix:Window(config)
             resultLabel.Size = UDim2.new(0, resultLabelWidth, 0, iconSize)
             resultLabel.Font = Enum.Font.Gotham
             resultLabel.Text = ""
-            resultLabel.TextColor3 = theme.TextDark
+            SetThemedProperty(resultLabel, "TextColor3", "TextDark")
             resultLabel.TextSize = math.floor(11 * scaleFactor)
             resultLabel.TextXAlignment = Enum.TextXAlignment.Right
             resultLabel.Visible = showResultCount
@@ -5768,14 +5834,14 @@ function Zonix:Window(config)
             local clearBtn
             if clearButton then
                 clearBtn = Instance.new("TextButton")
-                clearBtn.BackgroundColor3 = theme.Tertiary
+                SetThemedProperty(clearBtn, "BackgroundColor3", "Tertiary")
                 clearBtn.BorderSizePixel = 0
                 clearBtn.Position = UDim2.new(1, -buttonOffset, 0.5, 0)
                 clearBtn.AnchorPoint = Vector2.new(1, 0.5)
                 clearBtn.Size = UDim2.new(0, buttonSize, 0, buttonSize)
                 clearBtn.Font = Enum.Font.GothamBold
                 clearBtn.Text = "×"
-                clearBtn.TextColor3 = theme.Text
+                SetThemedProperty(clearBtn, "TextColor3", "Text")
                 clearBtn.TextSize = math.floor(20 * scaleFactor)
                 clearBtn.Visible = false
                 clearBtn.Parent = mainFrame
@@ -5803,16 +5869,16 @@ function Zonix:Window(config)
                 end)
 
                 clearBtn.MouseEnter:Connect(function()
-                    Utils:Tween(clearBtn, {BackgroundColor3 = theme.Border}, 0.2)
+                    ThemedTween(clearBtn, {}, 0.2, {BackgroundColor3 = "Border"})
                 end)
 
                 clearBtn.MouseLeave:Connect(function()
-                    Utils:Tween(clearBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                    ThemedTween(clearBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                 end)
             end
 
             local historyFrame = Instance.new("Frame")
-            historyFrame.BackgroundColor3 = theme.Tertiary
+            SetThemedProperty(historyFrame, "BackgroundColor3", "Tertiary")
             historyFrame.BorderSizePixel = 0
             historyFrame.Position = UDim2.new(0, 0, 1, 5)
             historyFrame.Size = UDim2.new(1, 0, 0, 0)
@@ -5826,7 +5892,7 @@ function Zonix:Window(config)
             historyCorner.Parent = historyFrame
 
             local historyStroke = Instance.new("UIStroke")
-            historyStroke.Color = theme.Border
+            SetThemedProperty(historyStroke, "Color", "Border")
             historyStroke.Thickness = 1
             historyStroke.Parent = historyFrame
 
@@ -5947,10 +6013,10 @@ function Zonix:Window(config)
                         if #search.Results > 0 then
                             local modeStr = search.CurrentMode == "fuzzy" and " (fuzzy)" or ""
                             resultLabel.Text = #search.Results .. " found" .. modeStr
-                            resultLabel.TextColor3 = theme.Success
+                            SetThemedProperty(resultLabel, "TextColor3", "Success")
                         elseif query ~= "" then
                             resultLabel.Text = "No results"
-                            resultLabel.TextColor3 = theme.Error
+                            SetThemedProperty(resultLabel, "TextColor3", "Error")
                         else
                             resultLabel.Text = ""
                         end
@@ -6106,12 +6172,12 @@ function Zonix:Window(config)
                     local totalHeight = 10
                     for i, query in ipairs(search.History) do
                         local historyBtn = Instance.new("TextButton")
-                        historyBtn.BackgroundColor3 = theme.Secondary
+                        SetThemedProperty(historyBtn, "BackgroundColor3", "Secondary")
                         historyBtn.BorderSizePixel = 0
                         historyBtn.Size = UDim2.new(1, 0, 0, 30)
                         historyBtn.Font = Enum.Font.Gotham
                         historyBtn.Text = "  🕐 " .. query
-                        historyBtn.TextColor3 = theme.Text
+                        SetThemedProperty(historyBtn, "TextColor3", "Text")
                         historyBtn.TextSize = 12
                         historyBtn.TextXAlignment = Enum.TextXAlignment.Left
                         historyBtn.LayoutOrder = i
@@ -6128,11 +6194,11 @@ function Zonix:Window(config)
                         end)
 
                         historyBtn.MouseEnter:Connect(function()
-                            Utils:Tween(historyBtn, {BackgroundColor3 = theme.Tertiary}, 0.2)
+                            ThemedTween(historyBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
                         end)
 
                         historyBtn.MouseLeave:Connect(function()
-                            Utils:Tween(historyBtn, {BackgroundColor3 = theme.Secondary}, 0.2)
+                            ThemedTween(historyBtn, {}, 0.2, {BackgroundColor3 = "Secondary"})
                         end)
 
                         totalHeight = totalHeight + 32
@@ -6284,7 +6350,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.4.1 LOADED!                  ║")
+print("║                 Zonix UI v1.4.2 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
