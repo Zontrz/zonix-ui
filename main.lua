@@ -378,6 +378,18 @@ function Utils:GetTheme()
     return Zonix.Themes[Zonix.Settings.Theme] or Zonix.Themes.Dark
 end
 
+function Utils:Lighten(color, amount)
+    amount = amount or 1.2
+    local h, s, v = color:ToHSV()
+    return Color3.fromHSV(h, s / amount, math.min(v * amount, 1))
+end
+
+function Utils:Darken(color, amount)
+    amount = amount or 1.3
+    local h, s, v = color:ToHSV()
+    return Color3.fromHSV(h, math.min(s * amount, 1), v / amount)
+end
+
 function Utils:Rainbow()
     local hue = tick() % Zonix.Settings.RainbowSpeed / Zonix.Settings.RainbowSpeed
     return Color3.fromHSV(hue, 0.8, 1)
@@ -882,6 +894,8 @@ function Zonix:SetAccent(color)
     local currentTheme = Utils:GetTheme()
     local themeName = Zonix.Settings.Theme or "Dark"
     
+    local accentDark = Utils:Darken(color, 1.3)
+    
     if themeName == "Custom" or not Zonix.Themes[themeName] then
         if not Zonix.Themes.Custom then
             Zonix.Themes.Custom = {}
@@ -890,12 +904,14 @@ function Zonix:SetAccent(color)
             end
         end
         Zonix.Themes.Custom.Accent = color
+        Zonix.Themes.Custom.AccentDark = accentDark
     else
         Zonix.Themes.Custom = {}
         for k, v in pairs(currentTheme) do
             Zonix.Themes.Custom[k] = v
         end
         Zonix.Themes.Custom.Accent = color
+        Zonix.Themes.Custom.AccentDark = accentDark
         Zonix.Settings.Theme = "Custom"
     end
     
@@ -910,12 +926,13 @@ end
 
 local function UpdateGuiTree(gui, oldTheme, newTheme)
     local colorMappings = {
-        BackgroundColor3 = {"Background", "Primary", "Secondary", "Tertiary", "Topbar"},
-        TextColor3 = {"Text", "SubText", "Accent"},
-        BorderColor3 = {"Border"},
-        Color = {"Border", "Accent"},
-        ImageColor3 = {"Accent", "Text"},
-        PlaceholderColor3 = {"SubText"}
+        BackgroundColor3 = {"Accent", "AccentDark", "Success", "Warning", "Error", "Info", "Background", "Secondary", "Tertiary", "Topbar"},
+        TextColor3 = {"Accent", "AccentDark", "Text", "TextDark"},
+        BorderColor3 = {"Accent", "Border"},
+        Color = {"Accent", "AccentDark", "Border"},
+        ImageColor3 = {"Accent", "AccentDark", "Text"},
+        PlaceholderColor3 = {"TextDark", "Text"},
+        ScrollBarImageColor3 = {"Accent", "AccentDark"}
     }
     
     for _, child in ipairs(gui:GetDescendants()) do
@@ -925,11 +942,41 @@ local function UpdateGuiTree(gui, oldTheme, newTheme)
                 for _, themeKey in ipairs(themeKeys) do
                     if oldTheme[themeKey] and ColorMatches(currentColor, oldTheme[themeKey]) then
                         if newTheme[themeKey] then
-                            child[property] = newTheme[themeKey]
+                            pcall(function()
+                                child[property] = newTheme[themeKey]
+                            end)
                         end
                         break
                     end
                 end
+            end
+        end
+        
+        if child:IsA("UIGradient") and child.Color then
+            local keypoints = child.Color.Keypoints
+            local newKeypoints = {}
+            local changed = false
+            
+            for _, keypoint in ipairs(keypoints) do
+                local newColor = keypoint.Value
+                
+                for themeKey, oldColor in pairs(oldTheme) do
+                    if typeof(oldColor) == "Color3" and ColorMatches(keypoint.Value, oldColor) then
+                        if newTheme[themeKey] then
+                            newColor = newTheme[themeKey]
+                            changed = true
+                            break
+                        end
+                    end
+                end
+                
+                table.insert(newKeypoints, ColorSequenceKeypoint.new(keypoint.Time, newColor))
+            end
+            
+            if changed then
+                pcall(function()
+                    child.Color = ColorSequence.new(newKeypoints)
+                end)
             end
         end
     end
@@ -942,6 +989,18 @@ function Zonix:UpdateTheme(newTheme)
         Zonix.Settings.Theme = newTheme
     elseif type(newTheme) == "table" then
         Zonix.Settings.Theme = "Custom"
+        
+        if newTheme.Accent and not newTheme.AccentDark then
+            newTheme.AccentDark = Utils:Darken(newTheme.Accent, 1.3)
+        end
+        
+        local defaultTheme = Zonix.Themes.Dark
+        for key, value in pairs(defaultTheme) do
+            if not newTheme[key] then
+                newTheme[key] = value
+            end
+        end
+        
         Zonix.Themes.Custom = newTheme
     end
     
