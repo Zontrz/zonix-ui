@@ -450,35 +450,49 @@ function Utils:MakeDraggable(frame, handle)
         function(input)
             if input == dragInput and dragging then
                 local delta = input.Position - dragStart
-                local newX = startPos.X.Offset + delta.X
-                local newY = startPos.Y.Offset + delta.Y
                 
-                local viewportSize = workspace.CurrentCamera.ViewportSize
-                local frameSize = frame.AbsoluteSize
-                
-                local topBarHeight = 45
-                local minTopBarVisible = 20
-                local minY = -(topBarHeight - minTopBarVisible)
-                local maxY = viewportSize.Y - frameSize.Y
-                newY = math.clamp(newY, minY, maxY)
-                
-                local minVisibleWidth = frameSize.X * 0.5
-                local minX = -(frameSize.X - minVisibleWidth)
-                local maxX = viewportSize.X - minVisibleWidth
-                newX = math.clamp(newX, minX, maxX)
-                
-                Utils:Tween(
-                    frame,
-                    {
-                        Position = UDim2.new(
-                            startPos.X.Scale,
-                            newX,
-                            startPos.Y.Scale,
-                            newY
-                        )
-                    },
-                    0.1
+                local newPosition = UDim2.new(
+                    startPos.X.Scale,
+                    startPos.X.Offset + delta.X,
+                    startPos.Y.Scale,
+                    startPos.Y.Offset + delta.Y
                 )
+                
+                frame.Position = newPosition
+                
+                local absPos = frame.AbsolutePosition
+                local absSize = frame.AbsoluteSize
+                local viewportSize = workspace.CurrentCamera.ViewportSize
+                
+                local offsetX = newPosition.X.Offset
+                local offsetY = newPosition.Y.Offset
+                local needsAdjustment = false
+                
+                if absPos.Y < 0 then
+                    offsetY = offsetY - absPos.Y
+                    needsAdjustment = true
+                elseif absPos.Y + absSize.Y > viewportSize.Y then
+                    offsetY = offsetY - ((absPos.Y + absSize.Y) - viewportSize.Y)
+                    needsAdjustment = true
+                end
+                
+                local minVisible = absSize.X * 0.5
+                if absPos.X + absSize.X < minVisible then
+                    offsetX = offsetX + (minVisible - (absPos.X + absSize.X))
+                    needsAdjustment = true
+                elseif absPos.X > viewportSize.X - minVisible then
+                    offsetX = offsetX - (absPos.X - (viewportSize.X - minVisible))
+                    needsAdjustment = true
+                end
+                
+                if needsAdjustment then
+                    frame.Position = UDim2.new(
+                        startPos.X.Scale,
+                        offsetX,
+                        startPos.Y.Scale,
+                        offsetY
+                    )
+                end
             end
         end
     )
