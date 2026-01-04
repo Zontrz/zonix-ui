@@ -456,7 +456,9 @@ function Utils:MakeDraggable(frame, handle)
                 local viewportSize = workspace.CurrentCamera.ViewportSize
                 local frameSize = frame.AbsoluteSize
                 
-                local minY = 0
+                local topBarHeight = 45
+                local minTopBarVisible = 20
+                local minY = -(topBarHeight - minTopBarVisible)
                 local maxY = viewportSize.Y - frameSize.Y
                 newY = math.clamp(newY, minY, maxY)
                 
