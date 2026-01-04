@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ ZONIX UI v1.4.2
+# ⚡ ZONIX UI v1.4.3
 
 ### The Ultimate Roblox UI Library
 
