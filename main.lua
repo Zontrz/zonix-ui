@@ -1,10 +1,20 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.4.3                           ║
+    ║                    Zonix UI v1.4.4                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+    
+    v1.4.4 - MOBILE POSITIONING FIX (CRITICAL):
+    • FIXED: Topbar no longer appears off-screen on small mobile devices
+    • FIXED: Window now properly validates initial position on load
+    • FIXED: Window size now accounts for device safe areas and notches
+    • IMPROVED: More conservative mobile sizing (85% width vs 90%)
+    • IMPROVED: Height calculation now reserves 100px for system UI
+    • IMPROVED: Position validation runs after window creation and resize
+    • Mobile windows now ALWAYS have accessible topbar for dragging/closing
+    • Maximum mobile dimensions reduced to prevent off-screen issues
     
     v1.4.3 - DRAG CONSTRAINTS & MOBILE TAB SCROLLING:
     • FIXED: TopBar can no longer be dragged off top or bottom of screen
@@ -283,7 +293,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.4.3",
+    Version = "1.4.4",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -1099,8 +1109,12 @@ function Zonix:Window(config)
     local shrinkSize
     
     if isMobile then
-        windowWidth = math.min(screenSize.X * 0.9, 500)
-        windowHeight = math.min(screenSize.Y * 0.7, 600)
+        local safeAreaPadding = 100
+        local maxMobileWidth = math.min(screenSize.X * 0.85, 480)
+        local maxMobileHeight = math.min(screenSize.Y - safeAreaPadding, 550)
+        
+        windowWidth = maxMobileWidth
+        windowHeight = maxMobileHeight
         shrinkSize = math.max(math.min(screenSize.X * 0.15, 80), 60)
     else
         local baseWidth = 700
@@ -1133,13 +1147,60 @@ function Zonix:Window(config)
     main.Size = UDim2.new(0, windowWidth, 0, windowHeight)
     main.ClipsDescendants = true
     main.Parent = gui
+    
+    task.defer(function()
+        task.wait()
+        local absPos = main.AbsolutePosition
+        local absSize = main.AbsoluteSize
+        local viewportSize = workspace.CurrentCamera.ViewportSize
+        
+        local needsAdjustment = false
+        local newX = main.Position.X.Offset
+        local newY = main.Position.Y.Offset
+        
+        local minTopVisible = isMobile and 45 or 10
+        if absPos.Y < minTopVisible then
+            newY = newY + (minTopVisible - absPos.Y)
+            needsAdjustment = true
+        end
+        
+        if absPos.Y + absSize.Y > viewportSize.Y then
+            local overflow = (absPos.Y + absSize.Y) - viewportSize.Y
+            if overflow > 0 then
+                newY = newY - overflow - 10
+                needsAdjustment = true
+            end
+        end
+        
+        local minVisible = absSize.X * 0.5
+        if absPos.X + absSize.X < minVisible then
+            newX = newX + (minVisible - (absPos.X + absSize.X))
+            needsAdjustment = true
+        elseif absPos.X > viewportSize.X - minVisible then
+            newX = newX - (absPos.X - (viewportSize.X - minVisible))
+            needsAdjustment = true
+        end
+        
+        if needsAdjustment then
+            main.Position = UDim2.new(
+                main.Position.X.Scale,
+                newX,
+                main.Position.Y.Scale,
+                newY
+            )
+        end
+    end)
 
     workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
         local newScreenSize = workspace.CurrentCamera.ViewportSize
         
         if isMobile then
-            windowWidth = math.min(newScreenSize.X * 0.9, 500)
-            windowHeight = math.min(newScreenSize.Y * 0.7, 600)
+            local safeAreaPadding = 100
+            local maxMobileWidth = math.min(newScreenSize.X * 0.85, 480)
+            local maxMobileHeight = math.min(newScreenSize.Y - safeAreaPadding, 550)
+            
+            windowWidth = maxMobileWidth
+            windowHeight = maxMobileHeight
             shrinkSize = math.max(math.min(newScreenSize.X * 0.15, 80), 60)
         else
             local baseWidth = 700
@@ -1172,6 +1233,49 @@ function Zonix:Window(config)
                 main.Size = UDim2.new(0, windowWidth, 0, 45)
             end
         end
+        
+        task.defer(function()
+            task.wait()
+            local absPos = main.AbsolutePosition
+            local absSize = main.AbsoluteSize
+            local viewportSize = workspace.CurrentCamera.ViewportSize
+            
+            local needsAdjustment = false
+            local newX = main.Position.X.Offset
+            local newY = main.Position.Y.Offset
+            
+            local minTopVisible = isMobile and 45 or 10
+            if absPos.Y < minTopVisible then
+                newY = newY + (minTopVisible - absPos.Y)
+                needsAdjustment = true
+            end
+            
+            if absPos.Y + absSize.Y > viewportSize.Y then
+                local overflow = (absPos.Y + absSize.Y) - viewportSize.Y
+                if overflow > 0 then
+                    newY = newY - overflow - 10
+                    needsAdjustment = true
+                end
+            end
+            
+            local minVisible = absSize.X * 0.5
+            if absPos.X + absSize.X < minVisible then
+                newX = newX + (minVisible - (absPos.X + absSize.X))
+                needsAdjustment = true
+            elseif absPos.X > viewportSize.X - minVisible then
+                newX = newX - (absPos.X - (viewportSize.X - minVisible))
+                needsAdjustment = true
+            end
+            
+            if needsAdjustment then
+                main.Position = UDim2.new(
+                    main.Position.X.Scale,
+                    newX,
+                    main.Position.Y.Scale,
+                    newY
+                )
+            end
+        end)
     end)
 
     local mainCorner = Instance.new("UICorner")
@@ -6387,7 +6491,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.4.3 LOADED!                  ║")
+print("║                 Zonix UI v1.4.4 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
