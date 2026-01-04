@@ -162,7 +162,7 @@ local function DetectExecutor()
     elseif identifyexecutor then
         return identifyexecutor() or "Unknown"
     end
-
+    -- FALLBACKS: Script Never Usually Gets Here:
     if KRNL_LOADED then
         return "KRNL"
     elseif getgenv().Potassium then
