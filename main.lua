@@ -50,7 +50,7 @@
     • All interactive elements now fully support touch gestures
     • Improved mobile responsiveness across all components
     
-    ✓ NORMAL FEATURES:
+       NORMAL FEATURES:
       • Windows & Tabs
       • Buttons with callbacks
       • Toggles with smooth animations
