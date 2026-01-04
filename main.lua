@@ -460,7 +460,7 @@ function Utils:MakeDraggable(frame, handle)
                 local maxY = viewportSize.Y - frameSize.Y
                 newY = math.clamp(newY, minY, maxY)
                 
-                local minVisibleWidth = 100
+                local minVisibleWidth = frameSize.X * 0.5
                 local minX = -(frameSize.X - minVisibleWidth)
                 local maxX = viewportSize.X - minVisibleWidth
                 newX = math.clamp(newX, minX, maxX)
