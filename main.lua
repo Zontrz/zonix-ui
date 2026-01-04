@@ -1,10 +1,18 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.4.2                           ║
+    ║                    Zonix UI v1.4.3                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+    
+    v1.4.3 - DRAG CONSTRAINTS & MOBILE TAB SCROLLING:
+    • FIXED: TopBar can no longer be dragged off top or bottom of screen
+    • FIXED: UI can be partially dragged off left/right (keeps 100px visible)
+    • FIXED: Mobile users can now scroll tabs when there are many tabs
+    • Tab bar is now a ScrollingFrame with touch-friendly scrolling
+    • Automatic canvas sizing for tab content
+    • Smooth elastic scrolling behavior on mobile
     
     v1.4.0 - ADVANCED SEARCH & MINIMIZE MODES:
     • NEW: Advanced Search Component with customizable options
@@ -275,7 +283,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 -- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.4.2",
+    Version = "1.4.3",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -442,14 +450,29 @@ function Utils:MakeDraggable(frame, handle)
         function(input)
             if input == dragInput and dragging then
                 local delta = input.Position - dragStart
+                local newX = startPos.X.Offset + delta.X
+                local newY = startPos.Y.Offset + delta.Y
+                
+                local viewportSize = workspace.CurrentCamera.ViewportSize
+                local frameSize = frame.AbsoluteSize
+                
+                local minY = 0
+                local maxY = viewportSize.Y - frameSize.Y
+                newY = math.clamp(newY, minY, maxY)
+                
+                local minVisibleWidth = 100
+                local minX = -(frameSize.X - minVisibleWidth)
+                local maxX = viewportSize.X - minVisibleWidth
+                newX = math.clamp(newX, minX, maxX)
+                
                 Utils:Tween(
                     frame,
                     {
                         Position = UDim2.new(
                             startPos.X.Scale,
-                            startPos.X.Offset + delta.X,
+                            newX,
                             startPos.Y.Scale,
-                            startPos.Y.Offset + delta.Y
+                            newY
                         )
                     },
                     0.1
@@ -1312,11 +1335,18 @@ function Zonix:Window(config)
     centerLabel.Parent = main
     window.CenterLabel = centerLabel
 
-    local tabBar = Instance.new("Frame")
+    local tabBar = Instance.new("ScrollingFrame")
     SetThemedProperty(tabBar, "BackgroundColor3", "Secondary")
     tabBar.BorderSizePixel = 0
     tabBar.Position = UDim2.new(0, 0, 0, 45)
     tabBar.Size = UDim2.new(0, 160, 1, -45)
+    tabBar.CanvasSize = UDim2.new(0, 0, 0, 0)
+    tabBar.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    tabBar.ScrollBarThickness = 4
+    SetThemedProperty(tabBar, "ScrollBarImageColor3", "Accent")
+    tabBar.ScrollBarImageTransparency = 0.3
+    tabBar.ScrollingDirection = Enum.ScrollingDirection.Y
+    tabBar.ElasticBehavior = Enum.ElasticBehavior.Always
     tabBar.Parent = main
 
     local tabList = Instance.new("UIListLayout")
@@ -6341,7 +6371,7 @@ end
 -- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.4.2 LOADED!                  ║")
+print("║                 Zonix UI v1.4.3 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
