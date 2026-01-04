@@ -1430,7 +1430,7 @@ function Zonix:Window(config)
     close.BorderSizePixel = 0
     close.Size = UDim2.new(0, 30, 0, 30)
     close.Font = Enum.Font.GothamBold
-    close.Text = "X"
+    close.Text = "x"
     close.TextSize = 20
     close.Parent = controls
     SetThemedProperty(close, "TextColor3", "Text")
@@ -2959,7 +2959,7 @@ function Zonix:Window(config)
                     closeBtn.Position, closeBtn.Size = UDim2.new(1, math.floor(-15 * scale), 0.5, 0), UDim2.new(0, math.floor(30 * scale), 0, math.floor(30 * scale))
                     closeBtn.Font, closeBtn.Text, closeBtn.TextColor3, closeBtn.TextSize, closeBtn.ZIndex =
                         Enum.Font.GothamBold,
-                        "X",
+                        "x",
                         Color3.new(1, 1, 1),
                         math.floor(18 * scale),
                         1000002
