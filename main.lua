@@ -6,7 +6,7 @@
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
     
-    🔥 v1.4.0 - ADVANCED SEARCH & MINIMIZE MODES:
+    v1.4.0 - ADVANCED SEARCH & MINIMIZE MODES:
     • NEW: Advanced Search Component with customizable options
     • Live search with debouncing and result highlighting
     • Search history with auto-save (configurable)
@@ -30,7 +30,7 @@
     • Programmatic mode switching via SetMode()
     • AddElementTag() for custom element categorization
     
-    🔧 v1.3.7 - CONFIG SYSTEM FIX:
+    v1.3.7 - CONFIG SYSTEM FIX:
     • SaveConfig now properly saves ALL UI element values
     • LoadConfig now updates UI elements when loading configs
     • Toggles, Sliders, Dropdowns, Colors, Checkboxes, Textboxes, Keybinds ALL save/load correctly
@@ -38,32 +38,17 @@
     • KeyCode enums properly serialized and restored
     • Fixed issue where configs only saved some values
     
-    📱 v1.3.5 - FULLY RESPONSIVE COLOR PICKER:
+    v1.3.5 - FULLY RESPONSIVE COLOR PICKER:
     • Color picker now scales on ALL screen sizes
     • Mobile: Automatically scales down to fit small screens
     • Large screens (>1920px): Scales up proportionally (max 1.5x)
     • All UI elements scale perfectly across any resolution
     
-    📱 v1.3.4 - MOBILE COMPATIBILITY UPDATE:
+    v1.3.4 - MOBILE COMPATIBILITY UPDATE:
     • Fixed slider touch input on mobile devices
     • Fixed color picker touch dragging
     • All interactive elements now fully support touch gestures
     • Improved mobile responsiveness across all components
-    
-    🔥 INSANE FEATURES:
-    
-    ✓ EXECUTOR SUPPORT:
-      • Works on ALL 40+ executors across ALL platforms
-      • Windows: Potassium, Matcha, Xeno, Photon, DX9WARE V2, Sirhurt, Valex, 
-                 Seliware, Volt, Velocity, Solara, Matrix Hub, Wave, Lovreware,
-                 Isabelle, Zenith, Swift, Volcano, Ronin, Assembly, Bunni.lol,
-                 Serotonin, Melatonin, Nucleus, Synapse Z, Yerba, Severe, ChocoSploit, RbxCli
-      • Mac: Cryptic, Hydrogen, Macsploit
-      • Android: Cryptic, Delta, Codex, Krnl, Vega X
-      • iOS: Delta, Krnl
-      • Universal clipboard (setclipboard on ANY executor)
-      • Auto-detection system
-      • ⚡ AUTOEXE SUPPORT (NEW!) - Works when executed before game loads!
     
     ✓ NORMAL FEATURES:
       • Windows & Tabs
@@ -77,7 +62,7 @@
       • Keybinds
       • Color Pickers (RGB/HSV)
     
-    ✓ ADVANCED FEATURES:
+      ADVANCED FEATURES:
       • Multi-Dropdown (select multiple)
       • Advanced Search Component (NEW in v1.4.0!)
       • Progress Bars
@@ -100,7 +85,7 @@
       • Spacing Control (NEW!)
       • In-line Layout (NEW!)
     
-    ✓ UI FEATURES:
+      UI FEATURES:
       • 3 Built-in Themes + Custom
       • Rainbow/Chroma Mode
       • Blur Effects
