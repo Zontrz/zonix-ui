@@ -3550,6 +3550,7 @@ function Zonix:Window(config)
                                 UpHu(i)
                             end
                         end
+                    )
 
                     inputEndedConn =
                         UserInputService.InputEnded:Connect(
