@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ ZONIX UI v1.4.4
+# ⚡ ZONIX UI v1.5.8
 
 ### The Ultimate Roblox UI Library
 
@@ -10,12 +10,88 @@
 
 </div>
 
-## 🎯 What's New in v1.4.0
+## 🎯 What's New in v1.5.8
 
-### 🆕 NEW COMPONENTS & FEATURES:
+### 🆕 v1.5.8 - COMPACT MODE:
+- 📏 **Compact Mode** - Reduce UI size by 25% with `window:SetCompactMode()` for streamlined interfaces!
+- ✨ All UI components scale properly: fonts, buttons, spacing, icons
+- 🔄 Dynamic resize handler respects compact mode setting
+- 🎬 Smooth animations when toggling between normal and compact sizes
+- 📐 Minimum window sizes enforced for usability (400x300 desktop, scaled mobile)
+- 🔔 Notification shown when compact mode is toggled
 
-- 🔎 **NEW: Advanced Search Component** - Brand new Search component with 6 modes, fuzzy matching, intelligent ranking, and extensive customization!
-- 🔲 **NEW: Shrink Minimize Mode** - Minimize windows to compact 100x100 square OR traditional topbar-only collapse
+### 🆕 v1.5.7 - COLORPICKER FIX, IMAGE & MULTIDROPDOWN:
+- 🖼️ **Image Component** - Display images with ImageLabel/ImageButton support, ScaleType, transparency controls, and hover effects!
+- 📋 **MultiDropdown Component** - Multi-selection dropdown with checkbox-based selection and configurable max selections!
+- 🎨 **SubTab ColorPicker** - Full ColorPicker implementation now available in SubTabs!
+- 🐛 **FIXED**: ColorPicker close button now properly saves selected color
+- 📦 Image features: Responsive sizing, ScaleType, ImageColor3, transparency controls
+- 🔘 ImageButton includes hover effects and ripple animations
+- ☑️ MultiDropdown features: Checkbox-based selection, configurable max selections
+- 🔧 MultiDropdown methods: Set(), GetSelected()
+
+### 🆕 v1.5.6 - SUBTAB DYNAMIC ELEMENT MANAGEMENT:
+- ➕ **SubTab:AddElement()** - Add elements to subtabs after creation
+- ➖ **SubTab:RemoveElement()** - Remove elements from subtabs dynamically
+- 🔄 SubTab elements now return objects with Frame property for proper cleanup
+- 🧹 Automatic Frame destruction and memory cleanup
+- 🏷️ Flag cleanup for flagged elements in subtabs
+- ✅ Supports all SubTab element types (Label, Button, Checkbox, etc.)
+
+### 🆕 v1.5.5 - PLAYERLIST COMPONENT:
+- 👥 **PlayerList Component** - Scrollable player list with visual cards, avatars, and click-to-select functionality!
+- 🖼️ Circular avatar headshots via Roblox thumbnail API
+- 📝 Display names (bold) and usernames (@username format)
+- 🎨 Hover effects with accent color highlighting
+- ✅ Click-to-select with visual feedback (accent border on selected player)
+- 🔄 Auto-refresh every 2 seconds + instant updates on PlayerAdded/PlayerRemoving events
+- 📏 Dynamic height that auto-scales based on player count (min/max clamping)
+- 🔧 Methods: GetSelected(), SelectPlayer(player), Refresh()
+
+### 🆕 v1.5.4 - LABEL SET FUNCTION FIX (CRITICAL):
+- 🐛 **FIXED**: Label:Set() now uses self parameter instead of closure element
+- 🐛 **FIXED**: Added nil check to prevent indexing nil in Set function
+- ✅ Label:Set() is now completely safe even if called on cleared elements
+
+### 🆕 v1.5.3 - COMPREHENSIVE NIL SAFETY (CRITICAL):
+- 🐛 **FIXED**: Added explicit element nil checks to ALL iteration loops
+- 🐛 **FIXED**: Search component initialization now checks for nil elements
+- 🐛 **FIXED**: All hideNonMatching visibility loops have nil safety
+- 🐛 **FIXED**: SearchData initialization properly handles nil elements
+- 🛡️ Prevents any "attempt to index nil" errors during UI creation
+
+### 🆕 v1.5.2 - NIL CHECK FIXES (CRITICAL):
+- 🐛 **FIXED**: RemoveElementByName now checks if element exists before accessing .Name
+- 🐛 **FIXED**: GetElement now checks if element exists before accessing .Name
+- 🐛 **FIXED**: AddElementTag now checks if element exists before accessing .Name
+- 🛡️ All element iteration loops now safely handle nil elements
+
+### 🆕 v1.5.1 - ADDELEMENT IMPROVEMENTS:
+- ✨ **IMPROVED**: AddElement now accepts simple syntax
+- 🔤 **IMPROVED**: Case-insensitive element type names
+- 🔄 **IMPROVED**: Auto-converts common aliases (e.g., "Spacing" -> "AddSpace")
+- 🎯 **IMPROVED**: Smart config handling - accepts strings/numbers directly
+- 💡 Examples: AddElement("Label", "Hello") or AddElement("Spacing", 10)
+- 📝 Better error messages with list of valid element types
+
+### 🆕 v1.5.0 - DYNAMIC ELEMENT MANAGEMENT & THEME UPDATE FIX:
+- 📦 **Dynamic Element Management** - Add/remove elements after UI creation with powerful new methods!
+- ➕ **NEW: AddElement()** - Add elements after UI creation
+- ➖ **NEW: RemoveElement()** - Remove elements dynamically
+- 🔍 **NEW: RemoveElementByName()** - Remove by element name
+- 🏷️ **NEW: RemoveElementByFlag()** - Remove by flag identifier
+- 🔎 **NEW: GetElement()** - Find element by name or flag
+- 🧹 **NEW: ClearElements()** - Remove all elements from a tab
+- ✅ Supports all element types (Buttons, Toggles, Sliders, etc.)
+- 🧼 Automatic cleanup of flags and dependencies
+- ⚡ Real-time UI updates when adding/removing elements
+- 🔗 Seamless integration with existing UI system
+- 🐛 **FIXED**: Checkboxes now properly update colors when theme changes
+- 🐛 **FIXED**: SubTab buttons now properly update colors when theme changes
+
+### 🔎 ADVANCED SEARCH COMPONENT (v1.4.0+):
+- 🔎 **Advanced Search Component** - 6 search modes, fuzzy matching, intelligent ranking, and extensive customization!
+- 🔲 **Shrink Minimize Mode** - Minimize windows to compact 100x100 square OR traditional topbar-only collapse
 
 ### ⚡ SEARCH COMPONENT FEATURES:
 
@@ -41,7 +117,7 @@
 - 📱 **Fully Responsive** - Works perfectly on mobile, tablet, and desktop
 - 🎮 **Touch Support** - Native touch controls for mobile devices
 - 💾 **Config System** - Save and load your settings
-- 🔧 **14 Core Components** - Label, Section, Paragraph, Divider, Button, Checkbox, Toggle, Slider, Dropdown, Textbox, ProgressBar, Keybind, ColorPicker, **Search**
+- 🔧 **17 Core Components** - Label, Section, Paragraph, Divider, Button, Checkbox, Toggle, Slider, Dropdown, Textbox, ProgressBar, Keybind, ColorPicker, Search, **Image**, **MultiDropdown**, **PlayerList**
 - ⚡ **Notifications & Prompts** - Built-in user feedback system
 - 🌈 **Custom Themes** - Create your own themes with 13 color properties
 - 🌈 **Rainbow Mode** - Animated rainbow borders and effects
@@ -50,13 +126,18 @@
 - ⚙️ **Auto-Detection** - Automatically detects and adapts to your executor
 - 🖼️ **Enhanced Icons** - Emoji and image icons for Window & Tabs
 - ✅ **Checkboxes** - Simple toggle controls
-- 📑 **SubTabs** - Organize content with tabs within tabs (ALL 14 components supported)
-- 📦 **GroupBoxes** - Group UI elements together (ALL 14 components supported)
+- 📑 **SubTabs** - Organize content with tabs within tabs (ALL 17 components supported)
+- 📦 **GroupBoxes** - Group UI elements together (ALL 17 components supported)
 - 📏 **Spacing Control** - Add custom spacing between elements
 - ➡️ **In-line Layout** - Place elements side-by-side
 - 🔄 **Nested GroupBoxes** - GroupBox inside GroupBox support
 - 🔍 **Advanced Search** - Real-time search with history and highlighting
 - 🔲 **Minimize Modes** - "collapse" or "shrink" window minimize options
+- 📏 **Compact Mode** - Toggle compact mode for 25% smaller UI
+- 🔧 **Dynamic Elements** - Add/remove UI elements after creation
+- 🖼️ **Image Support** - Display images with buttons and customization
+- 📋 **Multi-Selection** - Select multiple options in dropdowns
+- 👥 **Player Lists** - Visual player selection with avatars
 
 ---
 
@@ -132,11 +213,15 @@ Tab:Button({
   - [Search](#search)
   - [CopyButton](#copybutton)
   - [ProgressBar](#progressbar)
-  - [Checkbox](#checkbox-new)
-  - [Spacing](#spacing-new)
-  - [GroupBox](#groupbox-new)
-  - [SubTab](#subtab-new)
-  - [In-line Layout](#in-line-layout-new)
+  - [Checkbox](#checkbox)
+  - [Image](#image)
+  - [MultiDropdown](#multidropdown)
+  - [PlayerList](#playerlist)
+  - [Spacing](#spacing)
+  - [GroupBox](#groupbox)
+  - [SubTab](#subtab)
+  - [In-line Layout](#in-line-layout)
+  - [Dynamic Element Management](#dynamic-element-management)
 - [Flag System](#-flag-system)
 - [Utilities](#-utilities)
   - [Notifications](#notifications)
@@ -159,8 +244,10 @@ local Window = Zonix:Window({
         Type = "emoji",       -- "emoji" or "image"
         Value = "🔥"          -- emoji character or rbxassetid
     },
-    MinimizeMode = "collapse" -- Minimize behavior (optional, default: "collapse")
+    MinimizeMode = "collapse", -- Minimize behavior (optional, default: "collapse")
                               -- Options: "collapse" (bar only) or "shrink" (small square)
+    CompactMode = false       -- Start in compact mode (optional, default: false)
+                              -- Reduces UI size by 25% while maintaining proportions
 })
 ```
 
@@ -172,6 +259,8 @@ local Window = Zonix:Window({
 - `MinimizeMode` (string, optional) - Minimize behavior (default: "collapse")
   - `"collapse"` - Collapses window to topbar only (traditional minimize)
   - `"shrink"` - Shrinks window to small 100x100 square (compact minimize)
+- `CompactMode` (boolean, optional) - Start in compact mode (default: false)
+  - Reduces UI size by 25% while maintaining all functionality and proportions
 
 **Window Features:**
 - Draggable by clicking and holding the top bar
@@ -857,7 +946,7 @@ MyProgress:Set(0.75)                     -- Update progress (0 to 1)
 
 ---
 
-### Checkbox *(NEW!)*
+### Checkbox
 
 Simple checkbox toggle control.
 
@@ -883,7 +972,165 @@ local isChecked = Zonix.Flags.AutoFarm   -- Access current value via flag
 
 ---
 
-### Spacing *(NEW!)*
+### Image
+
+Display images with ImageLabel or ImageButton support.
+
+```lua
+local MyImage = Tab:Image({
+    Name = "Logo",                           -- Image name/label (optional)
+    Image = "rbxassetid://12345678",        -- Image asset ID (required)
+    Size = UDim2.new(0, 200, 0, 100),       -- Image size (optional, default: 200x100)
+    ScaleType = Enum.ScaleType.Fit,         -- Scale type (optional, default: Fit)
+    ImageColor = Color3.fromRGB(255, 255, 255), -- Tint color (optional, default: white)
+    ImageTransparency = 0,                   -- Transparency 0-1 (optional, default: 0)
+    IsButton = false,                        -- Make it clickable (optional, default: false)
+    Callback = function()                    -- Click callback (optional, for buttons)
+        print("Image clicked!")
+    end
+})
+
+-- Methods
+MyImage:SetImage("rbxassetid://98765432")         -- Change image
+MyImage:SetImageColor(Color3.fromRGB(255, 0, 0))  -- Change tint
+MyImage:SetTransparency(0.5)                      -- Change transparency
+MyImage:SetSize(UDim2.new(0, 300, 0, 150))        -- Change size
+```
+
+**Parameters:**
+- `Name` (string, optional) - Label for the image
+- `Image` (string, required) - rbxassetid or image URL
+- `Size` (UDim2, optional) - Image dimensions (default: 200x100)
+- `ScaleType` (Enum.ScaleType, optional) - How image scales (Fit, Stretch, Crop, Tile, Slice)
+- `ImageColor` (Color3, optional) - Tint color applied to image
+- `ImageTransparency` (number, optional) - 0 (opaque) to 1 (invisible)
+- `IsButton` (boolean, optional) - Enable click interaction with hover effects
+- `Callback` (function, optional) - Function called when clicked (IsButton must be true)
+
+**Methods:**
+- `:SetImage(assetId)` - Change the displayed image
+- `:SetImageColor(color)` - Change the tint color
+- `:SetTransparency(value)` - Set transparency (0-1)
+- `:SetSize(udim2)` - Change image size
+
+**Features:**
+- ImageButton includes hover effects and ripple animations
+- Responsive sizing with proper aspect ratio handling
+- Full theme integration
+- Works in Tabs, GroupBoxes, and SubTabs
+
+---
+
+### MultiDropdown
+
+Multi-selection dropdown with checkbox-based selection.
+
+```lua
+local MyMultiDropdown = Tab:MultiDropdown({
+    Name = "Select Features",                -- Dropdown name (required)
+    Options = {"Option 1", "Option 2", "Option 3", "Option 4"}, -- Available options (required)
+    Default = {"Option 1"},                  -- Starting selections (optional, default: {})
+    MaxSelections = 3,                       -- Max items selectable (optional, default: unlimited)
+    Flag = "SelectedFeatures",               -- Flag name (optional)
+    Callback = function(selected)            -- Function called on change (optional)
+        print("Selected:", table.concat(selected, ", "))
+    end
+})
+
+-- Methods
+MyMultiDropdown:Set({"Option 2", "Option 3"})     -- Set selected options
+local selected = MyMultiDropdown:GetSelected()    -- Get array of selected options
+local flagged = Zonix.Flags.SelectedFeatures     -- Access via flag (table of selected)
+```
+
+**Parameters:**
+- `Name` (string, required) - Dropdown label
+- `Options` (table, required) - Array of selectable options
+- `Default` (table, optional) - Array of initially selected options
+- `MaxSelections` (number, optional) - Maximum number of selections allowed (nil = unlimited)
+- `Flag` (string, optional) - Flag name for value access
+- `Callback` (function, optional) - Called with table of selected options when changed
+
+**Methods:**
+- `:Set(options)` - Set selected options (table of strings)
+- `:GetSelected()` - Get array of currently selected options
+
+**Features:**
+- Checkbox-based selection UI
+- Configurable maximum selections
+- Visual feedback for selected items
+- Expandable dropdown menu
+- Works in Tabs, GroupBoxes, and SubTabs
+
+---
+
+### PlayerList
+
+Scrollable player list with visual cards and avatar thumbnails.
+
+```lua
+local MyPlayerList = Tab:PlayerList({
+    Name = "Select Player",                  -- PlayerList label (optional)
+    MinHeight = 200,                         -- Minimum height (optional, default: 200)
+    MaxHeight = 400,                         -- Maximum height (optional, default: 400)
+    Flag = "SelectedPlayer",                 -- Flag name (optional)
+    Callback = function(player)              -- Function called on selection (optional)
+        print("Selected:", player.Name)
+    end
+})
+
+-- Methods
+MyPlayerList:GetSelected()                   -- Get currently selected player
+MyPlayerList:SelectPlayer(player)            -- Programmatically select a player
+MyPlayerList:Refresh()                       -- Manually refresh player list
+local selectedPlayer = Zonix.Flags.SelectedPlayer  -- Access via flag
+```
+
+**Parameters:**
+- `Name` (string, optional) - Label for the player list
+- `MinHeight` (number, optional) - Minimum list height in pixels (default: 200)
+- `MaxHeight` (number, optional) - Maximum list height in pixels (default: 400)
+- `Flag` (string, optional) - Flag name for value access
+- `Callback` (function, optional) - Called with player object when selection changes
+
+**Methods:**
+- `:GetSelected()` - Returns currently selected Player object (or nil)
+- `:SelectPlayer(player)` - Select a specific player programmatically
+- `:Refresh()` - Force refresh of player list
+
+**Features:**
+- Circular avatar headshots via Roblox thumbnail API
+- Display names (bold) and usernames (@username format)
+- Hover effects with accent color highlighting
+- Click-to-select with visual feedback (accent border on selected)
+- Auto-refresh every 2 seconds + instant updates on PlayerAdded/PlayerRemoving
+- Dynamic height auto-scales based on player count
+- Excludes LocalPlayer from list automatically
+- Full theme integration
+- Scrollable when player count exceeds visible area
+
+**Example:**
+```lua
+local PlayerList = Tab:PlayerList({
+    Name = "Target Player",
+    Flag = "TargetPlayer",
+    Callback = function(player)
+        print("Targeting:", player.DisplayName, "(@" .. player.Name .. ")")
+    end
+})
+
+-- Use selected player
+game:GetService("RunService").Heartbeat:Connect(function()
+    local target = Zonix.Flags.TargetPlayer
+    if target and target.Character then
+        -- Do something with target player
+    end
+end)
+```
+
+---
+
+### Spacing
 
 Add custom vertical spacing between components.
 
@@ -899,7 +1146,7 @@ Tab:AddSpacing(20)                        -- Add 20 pixels of spacing
 
 ---
 
-### GroupBox *(NEW!)*
+### GroupBox
 
 Group related UI elements together with a labeled container.
 
@@ -938,7 +1185,7 @@ When `Inline = true`, the GroupBox takes up only 48% width, allowing you to plac
 
 ---
 
-### SubTab *(NEW!)*
+### SubTab
 
 Create tabs within tabs for better organization.
 
@@ -981,7 +1228,7 @@ Each sub-tab supports:
 
 ---
 
-### In-line Layout *(NEW!)*
+### In-line Layout
 
 Place elements side-by-side instead of stacking vertically.
 
@@ -1021,6 +1268,166 @@ Tab:Button({
 
 ---
 
+### Dynamic Element Management
+
+Add and remove UI elements after creation with powerful dynamic management methods.
+
+```lua
+-- Add elements dynamically
+Tab:AddElement("Button", {
+    Name = "Dynamic Button",
+    Callback = function()
+        print("Dynamically added button clicked!")
+    end
+})
+
+Tab:AddElement("Toggle", {
+    Name = "Dynamic Toggle",
+    Flag = "DynToggle",
+    Default = false
+})
+
+-- Simplified syntax for simple elements
+Tab:AddElement("Label", "This is a dynamic label")
+Tab:AddElement("Spacing", 10)
+
+-- Remove elements by reference
+local myButton = Tab:Button({ Name = "Removable Button" })
+Tab:RemoveElement(myButton)
+
+-- Remove by name
+Tab:RemoveElementByName("Dynamic Button")
+
+-- Remove by flag
+Tab:RemoveElementByFlag("DynToggle")
+
+-- Get element by name or flag
+local element = Tab:GetElement("Dynamic Toggle")
+if element then
+    element:Set(true)
+end
+
+-- Clear all elements from a tab
+Tab:ClearElements()
+```
+
+**Available Methods:**
+
+**Tab Methods:**
+- `:AddElement(elementType, config)` - Add element after UI creation
+- `:RemoveElement(element)` - Remove element by reference
+- `:RemoveElementByName(name)` - Remove element by name
+- `:RemoveElementByFlag(flag)` - Remove element by flag identifier
+- `:GetElement(nameOrFlag)` - Find element by name or flag
+- `:ClearElements()` - Remove all elements from tab
+
+**SubTab Methods:**
+- `:AddElement(elementType, config)` - Add element to subtab
+- `:RemoveElement(element)` - Remove element from subtab
+
+**Supported Element Types:**
+All 17 components can be dynamically added:
+- `"Label"`, `"Section"`, `"Paragraph"`, `"Divider"`
+- `"Button"`, `"Toggle"`, `"Checkbox"`, `"Slider"`
+- `"Dropdown"`, `"MultiDropdown"`, `"Textbox"`, `"Keybind"`
+- `"ColorPicker"`, `"Search"`, `"ProgressBar"`
+- `"Image"`, `"PlayerList"`, `"CopyButton"`
+- `"Spacing"` (or `"AddSpacing"`)
+- `"GroupBox"`, `"SubTab"`
+
+**Simplified Syntax:**
+```lua
+-- Case-insensitive element types
+Tab:AddElement("button", { Name = "Test" })
+Tab:AddElement("TOGGLE", { Name = "Test" })
+
+-- Direct values for simple elements
+Tab:AddElement("Label", "My Label Text")
+Tab:AddElement("Spacing", 15)
+Tab:AddElement("Section", "My Section")
+```
+
+**Features:**
+- Real-time UI updates when adding/removing elements
+- Automatic cleanup of flags and dependencies
+- Works with all component types
+- Supports both Tab and SubTab elements
+- Seamless integration with existing UI system
+- Memory-safe element destruction
+
+**Example: Dynamic UI Builder**
+```lua
+local Tab = Window:Tab({ Name = "Dynamic" })
+
+-- Create toggle to control dynamic elements
+Tab:Toggle({
+    Name = "Show Advanced Options",
+    Callback = function(enabled)
+        if enabled then
+            Tab:AddElement("Section", "Advanced")
+            Tab:AddElement("Slider", {
+                Name = "Advanced Setting",
+                Min = 0,
+                Max = 100,
+                Flag = "AdvancedSetting"
+            })
+        else
+            Tab:RemoveElementByName("Advanced")
+            Tab:RemoveElementByFlag("AdvancedSetting")
+        end
+    end
+})
+
+-- Build UI based on conditions
+local function buildPlayerControls()
+    Tab:ClearElements()
+    Tab:AddElement("PlayerList", {
+        Name = "Select Player",
+        Flag = "TargetPlayer"
+    })
+    Tab:AddElement("Button", {
+        Name = "Teleport to Player",
+        Callback = function()
+            local target = Zonix.Flags.TargetPlayer
+            if target then
+                -- Teleport logic
+            end
+        end
+    })
+end
+
+buildPlayerControls()
+```
+
+---
+
+### Window Methods
+
+**Compact Mode:**
+
+Toggle compact mode to reduce UI size by 25% while maintaining all functionality.
+
+```lua
+local Window = Zonix:Window({
+    Name = "My UI",
+    CompactMode = false  -- Start in normal mode (optional, default: false)
+})
+
+-- Toggle compact mode at runtime
+Window:SetCompactMode(true)   -- Enable compact mode (25% smaller)
+Window:SetCompactMode(false)  -- Disable compact mode (normal size)
+```
+
+**Features:**
+- Reduces UI size by 25% while maintaining proportions
+- All components scale properly (fonts, buttons, spacing, icons)
+- Dynamic resize handler respects compact mode
+- Smooth animations when toggling modes
+- Minimum window sizes enforced for usability
+- Notification shown when mode changes
+
+---
+
 ## 🔑 Flag System
 
 The flag system allows you to easily access and monitor component values without storing references. Set a `Flag` parameter on any interactive component, and access its current value via `Zonix.Flags`.
@@ -1034,9 +1441,11 @@ The flag system allows you to easily access and monitor component values without
 | Toggle | `Zonix.Flags.YourFlag` | `boolean` |
 | Slider | `Zonix.Flags.YourFlag` | `number` |
 | Dropdown | `Zonix.Flags.YourFlag` | `string` |
+| MultiDropdown | `Zonix.Flags.YourFlag` | `table` (array of strings) |
 | Textbox | `Zonix.Flags.YourFlag` | `string` |
 | Keybind | `Zonix.Flags.YourFlag` | `Enum.KeyCode` |
 | ColorPicker | `Zonix.Flags.YourFlag` | `Color3` |
+| PlayerList | `Zonix.Flags.YourFlag` | `Player` object |
 
 ### Example Usage
 
