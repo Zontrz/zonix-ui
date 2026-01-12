@@ -1,10 +1,106 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.4.4                           ║
+    ║                    Zonix UI v1.5.8                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+
+    v1.5.8 - COMPACT MODE:
+    • NEW: Window CompactMode configuration option
+    • NEW: window:SetCompactMode(enabled) - Toggle compact mode at runtime
+    • Compact mode reduces UI size by 25% while maintaining proportions
+    • All UI components scale properly: fonts, buttons, spacing, icons
+    • Dynamic resize handler respects compact mode setting
+    • Smooth animations when toggling between normal and compact sizes
+    • Minimum window sizes enforced for usability (400x300 desktop, scaled mobile)
+    • Notification shown when compact mode is toggled
+
+    v1.5.7 - COLORPICKER FIX, IMAGE & MULTIDROPDOWN COMPONENTS:
+    • FIXED: ColorPicker close button now properly saves selected color
+    • FIXED: Close button handler now includes full save logic (flag update, callback, cleanup)
+    • NEW: SubTab:ColorPicker() - Full ColorPicker implementation for subtabs
+    • NEW: Tab:Image() - Image component with ImageLabel/ImageButton support
+    • NEW: GroupBox:Image() - Image component for groupboxes
+    • NEW: SubTab:Image() - Image component for subtabs
+    • Image features: Responsive sizing, ScaleType, ImageColor3, transparency controls
+    • Image methods: SetImage(), SetImageColor(), SetTransparency(), SetSize()
+    • ImageButton includes hover effects and ripple animations
+    • NEW: Tab:MultiDropdown() - Multi-selection dropdown with MaxSelections limit
+    • NEW: GroupBox:MultiDropdown() - Compact multi-select for groupboxes
+    • NEW: SubTab:MultiDropdown() - Multi-select dropdown for subtabs
+    • MultiDropdown features: Checkbox-based selection, configurable max selections
+    • MultiDropdown methods: Set(), GetSelected()
+    • All new components fully integrated with AddElement() system
+    • Full theme integration for all new components
+    
+    v1.5.6 - SUBTAB DYNAMIC ELEMENT MANAGEMENT:
+    • NEW: SubTab:AddElement() - Add elements to subtabs after creation
+    • NEW: SubTab:RemoveElement() - Remove elements from subtabs dynamically
+    • SubTab elements now return objects with Frame property for proper cleanup
+    • Supports all SubTab element types (Label, Button, Checkbox, etc.)
+    • Automatic Frame destruction and memory cleanup
+    • Flag cleanup for flagged elements in subtabs
+    • Same intuitive API as Tab:AddElement() and Tab:RemoveElement()
+    • Fixed Label, Section, Button, Checkbox, Paragraph, Divider, AddSpacing return values
+    
+    v1.5.5 - PLAYERLIST COMPONENT:
+    • NEW: Tab:PlayerList() - Scrollable player list with visual cards
+    • Dynamic height that auto-scales based on player count (min/max clamping)
+    • Circular avatar headshots via Roblox thumbnail API
+    • Display names (bold) and usernames (@username format)
+    • Hover effects with accent color highlighting
+    • Click-to-select with visual feedback (accent border on selected player)
+    • Auto-refresh every 2 seconds + instant updates on PlayerAdded/PlayerRemoving events
+    • Full theme integration via SetThemedProperty
+    • Config: MinHeight, MaxHeight, Flag, Callback
+    • Methods: GetSelected(), SelectPlayer(player), Refresh()
+    • Excludes LocalPlayer from list automatically
+    
+    v1.5.4 - LABEL SET FUNCTION FIX (CRITICAL):
+    • FIXED: Label:Set() now uses self parameter instead of closure element
+    • FIXED: Added nil check to prevent indexing nil in Set function
+    • Label:Set() is now completely safe even if called on cleared elements
+    • All Set functions now properly handle edge cases
+    
+    v1.5.3 - COMPREHENSIVE NIL SAFETY (CRITICAL):
+    • FIXED: Added explicit element nil checks to ALL iteration loops
+    • FIXED: Search component initialization now checks for nil elements
+    • FIXED: All hideNonMatching visibility loops have nil safety
+    • FIXED: SearchData initialization properly handles nil elements
+    • Prevents any "attempt to index nil" errors during UI creation
+    • All element loops now use pattern: if element and element.Property
+    
+    v1.5.2 - NIL CHECK FIXES (CRITICAL):
+    • FIXED: RemoveElementByName now checks if element exists before accessing .Name
+    • FIXED: GetElement now checks if element exists before accessing .Name
+    • FIXED: AddElementTag now checks if element exists before accessing .Name
+    • FIXED: Prevents "attempt to index nil with 'Name'" errors
+    • All element iteration loops now safely handle nil elements
+    
+    v1.5.1 - ADDELEMENT IMPROVEMENTS:
+    • IMPROVED: AddElement now accepts simple syntax
+    • IMPROVED: Case-insensitive element type names
+    • IMPROVED: Auto-converts common aliases (e.g., "Spacing" -> "AddSpace")
+    • IMPROVED: Smart config handling - accepts strings/numbers directly
+    • Examples: AddElement("Label", "Hello") or AddElement("Spacing", 10)
+    • Better error messages with list of valid element types
+    
+    v1.5.0 - DYNAMIC ELEMENT MANAGEMENT & THEME UPDATE FIX:
+    • NEW: AddElement() - Add elements after UI creation
+    • NEW: RemoveElement() - Remove elements dynamically
+    • NEW: RemoveElementByName() - Remove by element name
+    • NEW: RemoveElementByFlag() - Remove by flag identifier
+    • NEW: GetElement() - Find element by name or flag
+    • NEW: ClearElements() - Remove all elements from a tab
+    • Supports all element types (Buttons, Toggles, Sliders, etc.)
+    • Automatic cleanup of flags and dependencies
+    • Real-time UI updates when adding/removing elements
+    • Seamless integration with existing UI system
+    • FIXED: Checkboxes now properly update colors when theme changes
+    • FIXED: SubTab buttons now properly update colors when theme changes
+    • FIXED: All checkbox variants (main, GroupBox, SubTab, MultiDropdown) now theme-aware
+    • FIXED: Theme attributes properly maintained during element state changes
     
     v1.4.4 - MOBILE POSITIONING FIX (CRITICAL):
     • FIXED: Topbar no longer appears off-screen on small mobile devices
@@ -48,41 +144,22 @@
     • Programmatic mode switching via SetMode()
     • AddElementTag() for custom element categorization
     
-    v1.3.7 - CONFIG SYSTEM FIX:
-    • SaveConfig now properly saves ALL UI element values
-    • LoadConfig now updates UI elements when loading configs
-    • Toggles, Sliders, Dropdowns, Colors, Checkboxes, Textboxes, Keybinds ALL save/load correctly
-    • Color3 values properly serialized and restored
-    • KeyCode enums properly serialized and restored
-    • Fixed issue where configs only saved some values
-    
-    v1.3.5 - FULLY RESPONSIVE COLOR PICKER:
-    • Color picker now scales on ALL screen sizes
-    • Mobile: Automatically scales down to fit small screens
-    • Large screens (>1920px): Scales up proportionally (max 1.5x)
-    • All UI elements scale perfectly across any resolution
-    
-    v1.3.4 - MOBILE COMPATIBILITY UPDATE:
-    • Fixed slider touch input on mobile devices
-    • Fixed color picker touch dragging
-    • All interactive elements now fully support touch gestures
-    • Improved mobile responsiveness across all components
-    
        NORMAL FEATURES:
       • Windows & Tabs
       • Buttons with callbacks
       • Toggles with smooth animations
-      • Checkboxes (NEW!)
+      • Checkboxes
       • Sliders (draggable)
       • Dropdowns (expandable)
       • Textboxes with validation
       • Labels & Sections
       • Keybinds
       • Color Pickers (RGB/HSV)
+      • PlayerList (NEW!)
     
       ADVANCED FEATURES:
       • Multi-Dropdown (select multiple)
-      • Advanced Search Component (NEW in v1.4.0!)
+      • Advanced Search Component
       • Progress Bars
       • Loading Indicators
       • Console Logger (built-in)
@@ -98,10 +175,10 @@
       • Transparency Sliders
       • Toggle Groups
       • Custom Themes
-      • SubTabs (NEW!)
-      • GroupBoxes (NEW!)
-      • Spacing Control (NEW!)
-      • In-line Layout (NEW!)
+      • SubTabs
+      • GroupBoxes
+      • Spacing Control
+      • In-line Layout
     
       UI FEATURES:
       • 3 Built-in Themes + Custom
@@ -111,15 +188,12 @@
       • Ripple Animations
       • Watermark
       • Notifications (4 types)
-      • Prompts/Dialogs (NEW!)
+      • Prompts/Dialogs
       • Mobile Responsive
       • Draggable Windows
-      • Minimize/Maximize with Modes (NEW!)
+      • Minimize/Maximize with Modes
       • Custom Window Icons
-]]
--- ═══════════════════════════════════════════════════════════════
---                    AUTOEXE SUPPORT - WAIT FOR GAME
--- ═══════════════════════════════════════════════════════════════
+      --]]
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -153,9 +227,6 @@ local function GetMouse()
 end
 Mouse = GetMouse()
 
--- ═══════════════════════════════════════════════════════════════
---                    EXECUTOR COMPATIBILITY
--- ═══════════════════════════════════════════════════════════════
 
 local Executor = {}
 
@@ -180,81 +251,10 @@ local function DetectExecutor()
     elseif identifyexecutor then
         return identifyexecutor() or "Unknown"
     end
-    -- FALLBACKS: Script Never Usually Gets Here:
     if KRNL_LOADED then
         return "KRNL"
-    elseif getgenv().Potassium then
-        return "Potassium"
-    elseif getgenv().Matcha then
-        return "Matcha"
-    elseif Xeno or getgenv().Xeno then
-        return "Xeno"
-    elseif getgenv().Photon then
-        return "Photon"
-    elseif getgenv().DX9WARE then
-        return "DX9WARE V2"
-    elseif Sirhurt or getgenv().Sirhurt then
-        return "Sirhurt"
-    elseif Valex or getgenv().Valex then
-        return "Valex"
-    elseif getgenv().Seliware then
-        return "Seliware"
-    elseif Volt or getgenv().Volt then
-        return "Volt"
-    elseif getgenv().Velocity then
-        return "Velocity"
-    elseif Solara or getgenv().Solara then
-        return "Solara"
-    elseif getgenv().MatrixHub then
-        return "Matrix Hub"
-    elseif Wave or getgenv().Wave then
-        return "Wave"
-    elseif getgenv().Lovreware then
-        return "Lovreware"
-    elseif getgenv().Isabelle then
-        return "Isabelle"
-    elseif Zenith or getgenv().Zenith then
-        return "Zenith"
-    elseif Swift or getgenv().Swift then
-        return "Swift"
-    elseif getgenv().Volcano then
-        return "Volcano"
-    elseif getgenv().Ronin then
-        return "Ronin"
-    elseif getgenv().Assembly then
-        return "Assembly"
-    elseif getgenv().Bunni then
-        return "Bunni.lol"
-    elseif getgenv().Serotonin then
-        return "Serotonin"
-    elseif getgenv().Melatonin then
-        return "Melatonin"
-    elseif getgenv().Nucleus then
-        return "Nucleus"
-    elseif syn or getgenv().syn then
-        return "Synapse Z"
-    elseif getgenv().Yerba then
-        return "Yerba"
-    elseif getgenv().Severe then
-        return "Severe"
-    elseif getgenv().ChocoSploit then
-        return "ChocoSploit"
-    elseif getgenv().RbxCli then
-        return "RbxCli"
-    elseif Hydrogen or getgenv().Hydrogen then
-        return "Hydrogen"
-    elseif getgenv().Macsploit then
-        return "Macsploit"
-    elseif getgenv().CrypticMac then
-        return "Cryptic (Mac)"
-    elseif delta or getgenv().delta then
+    elseif delta then
         return "Delta"
-    elseif getgenv().Cryptic then
-        return "Cryptic"
-    elseif getgenv().Codex then
-        return "Codex"
-    elseif getgenv().VegaX then
-        return "Vega X"
     elseif issentinel and issentinel() then
         return "Sentinel"
     elseif Fluxus then
@@ -288,12 +288,9 @@ Executor.ListFiles = FindFunc("listfiles") or function()
         return {}
     end
 
--- ═══════════════════════════════════════════════════════════════
---                         MAIN LIBRARY
--- ═══════════════════════════════════════════════════════════════
 
 local Zonix = {
-    Version = "1.4.4",
+    Version = "1.5.8",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -363,9 +360,6 @@ Zonix.Settings = {
     ConfigFolder = "ZonixUI"
 }
 
--- ═══════════════════════════════════════════════════════════════
---                        UTILITY FUNCTIONS
--- ═══════════════════════════════════════════════════════════════
 
 local Utils = {}
 
@@ -593,9 +587,6 @@ local function CreateGui()
     return gui
 end
 
--- ═══════════════════════════════════════════════════════════════
---                      NOTIFICATION SYSTEM
--- ═══════════════════════════════════════════════════════════════
 
 function Zonix:Notify(config)
     config = config or {}
@@ -699,9 +690,6 @@ function Zonix:Notify(config)
     )
 end
 
--- ═══════════════════════════════════════════════════════════════
---                         PROMPT SYSTEM
--- ═══════════════════════════════════════════════════════════════
 
 function Zonix:Prompt(config)
     if Zonix.PromptOpen then
@@ -865,9 +853,6 @@ function Zonix:Prompt(config)
     Utils:Tween(prompt, {Size = UDim2.new(0, promptWidth, 0, promptHeight)}, 0.3, Enum.EasingStyle.Back)
 end
 
--- ═══════════════════════════════════════════════════════════════
---                        WATERMARK SYSTEM
--- ═══════════════════════════════════════════════════════════════
 
 function Zonix:Watermark(config)
     config = config or {}
@@ -915,9 +900,6 @@ function Zonix:Watermark(config)
     return watermark
 end
 
--- ═══════════════════════════════════════════════════════════════
---                         THEME MANAGEMENT
--- ═══════════════════════════════════════════════════════════════
 
 local function SetThemedProperty(element, property, themeKey)
     local theme = Utils:GetTheme()
@@ -1074,15 +1056,13 @@ function Zonix:UpdateTheme(newTheme)
     })
 end
 
--- ═══════════════════════════════════════════════════════════════
---                         WINDOW CREATION
--- ═══════════════════════════════════════════════════════════════
 
 function Zonix:Window(config)
     config = config or {}
     local windowName = config.Name or "Zonix UI"
     local windowIcon = config.Icon
     local minimizeMode = config.MinimizeMode or "collapse"
+    local compactMode = config.CompactMode or false
     local theme = Utils:GetTheme()
 
     local function getInitials(name)
@@ -1097,7 +1077,8 @@ function Zonix:Window(config)
         Tabs = {},
         CurrentTab = nil,
         Minimized = false,
-        MinimizeMode = minimizeMode
+        MinimizeMode = minimizeMode,
+        CompactMode = compactMode
     }
 
     local gui = CreateGui()
@@ -1107,33 +1088,35 @@ function Zonix:Window(config)
     local screenSize = workspace.CurrentCamera.ViewportSize
     local windowWidth, windowHeight
     local shrinkSize
-    
+
+    local compactScale = compactMode and 0.75 or 1.0
+
     if isMobile then
         local safeAreaPadding = 100
         local maxMobileWidth = math.min(screenSize.X * 0.85, 480)
         local maxMobileHeight = math.min(screenSize.Y - safeAreaPadding, 550)
-        
-        windowWidth = maxMobileWidth
-        windowHeight = maxMobileHeight
+
+        windowWidth = maxMobileWidth * compactScale
+        windowHeight = maxMobileHeight * compactScale
         shrinkSize = math.max(math.min(screenSize.X * 0.15, 80), 60)
     else
         local baseWidth = 700
         local baseHeight = 520
         local baseScreenWidth = 1920
-        
+
         if screenSize.X > baseScreenWidth then
             local scaleFactor = math.min(screenSize.X / baseScreenWidth, 1.8)
-            windowWidth = baseWidth * scaleFactor
-            windowHeight = baseHeight * scaleFactor
+            windowWidth = baseWidth * scaleFactor * compactScale
+            windowHeight = baseHeight * scaleFactor * compactScale
             shrinkSize = math.min(100 * scaleFactor, 150)
         elseif screenSize.X < 1366 then
             local scaleFactor = screenSize.X / 1366
-            windowWidth = math.max(baseWidth * scaleFactor, 500)
-            windowHeight = math.max(baseHeight * scaleFactor, 400)
+            windowWidth = math.max(baseWidth * scaleFactor * compactScale, 400)
+            windowHeight = math.max(baseHeight * scaleFactor * compactScale, 300)
             shrinkSize = math.max(100 * scaleFactor, 80)
         else
-            windowWidth = baseWidth
-            windowHeight = baseHeight
+            windowWidth = baseWidth * compactScale
+            windowHeight = baseHeight * compactScale
             shrinkSize = 100
         end
     end
@@ -1193,33 +1176,35 @@ function Zonix:Window(config)
 
     workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
         local newScreenSize = workspace.CurrentCamera.ViewportSize
-        
+
+        local currentCompactScale = window.CompactMode and 0.75 or 1.0
+
         if isMobile then
             local safeAreaPadding = 100
             local maxMobileWidth = math.min(newScreenSize.X * 0.85, 480)
             local maxMobileHeight = math.min(newScreenSize.Y - safeAreaPadding, 550)
-            
-            windowWidth = maxMobileWidth
-            windowHeight = maxMobileHeight
+
+            windowWidth = maxMobileWidth * currentCompactScale
+            windowHeight = maxMobileHeight * currentCompactScale
             shrinkSize = math.max(math.min(newScreenSize.X * 0.15, 80), 60)
         else
             local baseWidth = 700
             local baseHeight = 520
             local baseScreenWidth = 1920
-            
+
             if newScreenSize.X > baseScreenWidth then
                 local scaleFactor = math.min(newScreenSize.X / baseScreenWidth, 1.8)
-                windowWidth = baseWidth * scaleFactor
-                windowHeight = baseHeight * scaleFactor
+                windowWidth = baseWidth * scaleFactor * currentCompactScale
+                windowHeight = baseHeight * scaleFactor * currentCompactScale
                 shrinkSize = math.min(100 * scaleFactor, 150)
             elseif newScreenSize.X < 1366 then
                 local scaleFactor = newScreenSize.X / 1366
-                windowWidth = math.max(baseWidth * scaleFactor, 500)
-                windowHeight = math.max(baseHeight * scaleFactor, 400)
+                windowWidth = math.max(baseWidth * scaleFactor * currentCompactScale, 400)
+                windowHeight = math.max(baseHeight * scaleFactor * currentCompactScale, 300)
                 shrinkSize = math.max(100 * scaleFactor, 80)
             else
-                windowWidth = baseWidth
-                windowHeight = baseHeight
+                windowWidth = baseWidth * currentCompactScale
+                windowHeight = baseHeight * currentCompactScale
                 shrinkSize = 100
             end
         end
@@ -1301,7 +1286,7 @@ function Zonix:Window(config)
     local topbar = Instance.new("Frame")
     SetThemedProperty(topbar, "BackgroundColor3", "Topbar")
     topbar.BorderSizePixel = 0
-    topbar.Size = UDim2.new(1, 0, 0, 45)
+    topbar.Size = UDim2.new(1, 0, 0, math.floor(45 * compactScale))
     topbar.Parent = main
 
     local topCorner = Instance.new("UICorner")
@@ -1327,25 +1312,25 @@ function Zonix:Window(config)
         if iconType == "emoji" or iconType == "text" then
             local iconLabel = Instance.new("TextLabel")
             iconLabel.BackgroundTransparency = 1
-            iconLabel.Position = UDim2.new(0, 12, 0.5, 0)
+            iconLabel.Position = UDim2.new(0, math.floor(12 * compactScale), 0.5, 0)
             iconLabel.AnchorPoint = Vector2.new(0, 0.5)
-            iconLabel.Size = UDim2.new(0, 28, 0, 28)
+            iconLabel.Size = UDim2.new(0, math.floor(28 * compactScale), 0, math.floor(28 * compactScale))
             iconLabel.Font = Enum.Font.GothamBold
             iconLabel.Text = iconValue
             SetThemedProperty(iconLabel, "TextColor3", "Text")
-            iconLabel.TextSize = 20
+            iconLabel.TextSize = math.floor(20 * compactScale)
             iconLabel.TextXAlignment = Enum.TextXAlignment.Center
             iconLabel.TextYAlignment = Enum.TextYAlignment.Center
             iconLabel.Parent = topbar
 
             local title = Instance.new("TextLabel")
             title.BackgroundTransparency = 1
-            title.Position = UDim2.new(0, 48, 0, 0)
-            title.Size = UDim2.new(0.7, -48, 1, 0)
+            title.Position = UDim2.new(0, math.floor(48 * compactScale), 0, 0)
+            title.Size = UDim2.new(0.7, math.floor(-48 * compactScale), 1, 0)
             title.Font = Enum.Font.GothamBold
             title.Text = windowName
             SetThemedProperty(title, "TextColor3", "Text")
-            title.TextSize = 16
+            title.TextSize = math.floor(16 * compactScale)
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Parent = topbar
             
@@ -1357,21 +1342,21 @@ function Zonix:Window(config)
         else
             local icon = Instance.new("ImageLabel")
             icon.BackgroundTransparency = 1
-            icon.Position = UDim2.new(0, 12, 0.5, 0)
+            icon.Position = UDim2.new(0, math.floor(12 * compactScale), 0.5, 0)
             icon.AnchorPoint = Vector2.new(0, 0.5)
-            icon.Size = UDim2.new(0, 28, 0, 28)
+            icon.Size = UDim2.new(0, math.floor(28 * compactScale), 0, math.floor(28 * compactScale))
             icon.Image = iconValue
             icon.ScaleType = Enum.ScaleType.Fit
             icon.Parent = topbar
 
             local title = Instance.new("TextLabel")
             title.BackgroundTransparency = 1
-            title.Position = UDim2.new(0, 48, 0, 0)
-            title.Size = UDim2.new(0.7, -48, 1, 0)
+            title.Position = UDim2.new(0, math.floor(48 * compactScale), 0, 0)
+            title.Size = UDim2.new(0.7, math.floor(-48 * compactScale), 1, 0)
             title.Font = Enum.Font.GothamBold
             title.Text = windowName
             SetThemedProperty(title, "TextColor3", "Text")
-            title.TextSize = 16
+            title.TextSize = math.floor(16 * compactScale)
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.Parent = topbar
             
@@ -1383,12 +1368,12 @@ function Zonix:Window(config)
     else
         local title = Instance.new("TextLabel")
         title.BackgroundTransparency = 1
-        title.Position = UDim2.new(0, 15, 0, 0)
+        title.Position = UDim2.new(0, math.floor(15 * compactScale), 0, 0)
         title.Size = UDim2.new(0.7, 0, 1, 0)
         title.Font = Enum.Font.GothamBold
         title.Text = windowName
         SetThemedProperty(title, "TextColor3", "Text")
-        title.TextSize = 16
+        title.TextSize = math.floor(16 * compactScale)
         title.TextXAlignment = Enum.TextXAlignment.Left
         title.Parent = topbar
         
@@ -1400,54 +1385,54 @@ function Zonix:Window(config)
     local controls = Instance.new("Frame")
     controls.AnchorPoint = Vector2.new(1, 0)
     controls.BackgroundTransparency = 1
-    controls.Position = UDim2.new(1, -10, 0, 0)
-    controls.Size = UDim2.new(0, 80, 1, 0)
+    controls.Position = UDim2.new(1, math.floor(-10 * compactScale), 0, 0)
+    controls.Size = UDim2.new(0, math.floor(80 * compactScale), 1, 0)
     controls.Parent = topbar
 
     local controlsList = Instance.new("UIListLayout")
     controlsList.FillDirection = Enum.FillDirection.Horizontal
     controlsList.HorizontalAlignment = Enum.HorizontalAlignment.Right
     controlsList.VerticalAlignment = Enum.VerticalAlignment.Center
-    controlsList.Padding = UDim.new(0, 8)
+    controlsList.Padding = UDim.new(0, math.floor(8 * compactScale))
     controlsList.Parent = controls
 
     local minimize = Instance.new("TextButton")
     SetThemedProperty(minimize, "BackgroundColor3", "Tertiary")
     minimize.BorderSizePixel = 0
-    minimize.Size = UDim2.new(0, 30, 0, 30)
+    minimize.Size = UDim2.new(0, math.floor(30 * compactScale), 0, math.floor(30 * compactScale))
     minimize.Font = Enum.Font.GothamBold
     minimize.Text = "-"
     SetThemedProperty(minimize, "TextColor3", "Text")
-    minimize.TextSize = 18
+    minimize.TextSize = math.floor(18 * compactScale)
     minimize.Parent = controls
 
     local minCorner = Instance.new("UICorner")
-    minCorner.CornerRadius = UDim.new(0, 6)
+    minCorner.CornerRadius = UDim.new(0, math.floor(6 * compactScale))
     minCorner.Parent = minimize
 
     local close = Instance.new("TextButton")
     SetThemedProperty(close, "BackgroundColor3", "Error")
     close.BorderSizePixel = 0
-    close.Size = UDim2.new(0, 30, 0, 30)
+    close.Size = UDim2.new(0, math.floor(30 * compactScale), 0, math.floor(30 * compactScale))
     close.Font = Enum.Font.GothamBold
     close.Text = "x"
-    close.TextSize = 20
+    close.TextSize = math.floor(20 * compactScale)
     close.Parent = controls
     SetThemedProperty(close, "TextColor3", "Text")
 
     local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 6)
+    closeCorner.CornerRadius = UDim.new(0, math.floor(6 * compactScale))
     closeCorner.Parent = close
 
     local centerLabel = Instance.new("TextLabel")
     centerLabel.BackgroundTransparency = 1
     centerLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
     centerLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-    centerLabel.Size = UDim2.new(0.8, 0, 0, 30)
+    centerLabel.Size = UDim2.new(0.8, 0, 0, math.floor(30 * compactScale))
     centerLabel.Font = Enum.Font.GothamBold
     centerLabel.Text = getInitials(windowName)
     SetThemedProperty(centerLabel, "TextColor3", "Text")
-    centerLabel.TextSize = 18
+    centerLabel.TextSize = math.floor(18 * compactScale)
     centerLabel.TextXAlignment = Enum.TextXAlignment.Center
     centerLabel.TextYAlignment = Enum.TextYAlignment.Center
     centerLabel.Visible = false
@@ -1458,8 +1443,8 @@ function Zonix:Window(config)
     local tabBar = Instance.new("ScrollingFrame")
     SetThemedProperty(tabBar, "BackgroundColor3", "Secondary")
     tabBar.BorderSizePixel = 0
-    tabBar.Position = UDim2.new(0, 0, 0, 45)
-    tabBar.Size = UDim2.new(0, 160, 1, -45)
+    tabBar.Position = UDim2.new(0, 0, 0, math.floor(45 * compactScale))
+    tabBar.Size = UDim2.new(0, math.floor(160 * compactScale), 1, math.floor(-45 * compactScale))
     tabBar.CanvasSize = UDim2.new(0, 0, 0, 0)
     tabBar.AutomaticCanvasSize = Enum.AutomaticSize.Y
     tabBar.ScrollBarThickness = 4
@@ -1482,8 +1467,8 @@ function Zonix:Window(config)
 
     local content = Instance.new("Frame")
     content.BackgroundTransparency = 1
-    content.Position = UDim2.new(0, 160, 0, 45)
-    content.Size = UDim2.new(1, -160, 1, -45)
+    content.Position = UDim2.new(0, math.floor(160 * compactScale), 0, math.floor(45 * compactScale))
+    content.Size = UDim2.new(1, math.floor(-160 * compactScale), 1, math.floor(-45 * compactScale))
     content.Parent = main
 
     Utils:MakeDraggable(main, topbar)
@@ -1599,20 +1584,20 @@ function Zonix:Window(config)
         local tabBtn = Instance.new("TextButton")
         SetThemedProperty(tabBtn, "BackgroundColor3", "Tertiary")
         tabBtn.BorderSizePixel = 0
-        tabBtn.Size = UDim2.new(1, 0, 0, 40)
+        tabBtn.Size = UDim2.new(1, 0, 0, math.floor(40 * compactScale))
         tabBtn.Font = Enum.Font.GothamBold
         tabBtn.Text = ""
         SetThemedProperty(tabBtn, "TextColor3", "TextDark")
-        tabBtn.TextSize = 13
+        tabBtn.TextSize = math.floor(13 * compactScale)
         tabBtn.TextXAlignment = Enum.TextXAlignment.Left
         tabBtn.Parent = tabBar
 
         local tabCorner = Instance.new("UICorner")
-        tabCorner.CornerRadius = UDim.new(0, 8)
+        tabCorner.CornerRadius = UDim.new(0, math.floor(8 * compactScale))
         tabCorner.Parent = tabBtn
 
         local tabPad = Instance.new("UIPadding")
-        tabPad.PaddingLeft = UDim.new(0, 10)
+        tabPad.PaddingLeft = UDim.new(0, math.floor(10 * compactScale))
         tabPad.Parent = tabBtn
 
         local tabLayout = Instance.new("Frame")
@@ -1624,25 +1609,25 @@ function Zonix:Window(config)
         tabListLayout.FillDirection = Enum.FillDirection.Horizontal
         tabListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
         tabListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-        tabListLayout.Padding = UDim.new(0, 8)
+        tabListLayout.Padding = UDim.new(0, math.floor(8 * compactScale))
         tabListLayout.Parent = tabLayout
 
         if iconType == "image" then
             local iconImg = Instance.new("ImageLabel")
             iconImg.BackgroundTransparency = 1
-            iconImg.Size = UDim2.new(0, 18, 0, 18)
+            iconImg.Size = UDim2.new(0, math.floor(18 * compactScale), 0, math.floor(18 * compactScale))
             iconImg.Image = iconValue
             iconImg.ScaleType = Enum.ScaleType.Fit
             iconImg.Parent = tabLayout
 
             local textLabel = Instance.new("TextLabel")
             textLabel.BackgroundTransparency = 1
-            textLabel.Size = UDim2.new(0, 100, 1, 0)
+            textLabel.Size = UDim2.new(0, math.floor(100 * compactScale), 1, 0)
             textLabel.AutomaticSize = Enum.AutomaticSize.X
             textLabel.Font = Enum.Font.GothamBold
             textLabel.Text = tabName
             SetThemedProperty(textLabel, "TextColor3", "TextDark")
-            textLabel.TextSize = 13
+            textLabel.TextSize = math.floor(13 * compactScale)
             textLabel.TextXAlignment = Enum.TextXAlignment.Left
             textLabel.Parent = tabLayout
 
@@ -1650,22 +1635,22 @@ function Zonix:Window(config)
         else
             local iconText = Instance.new("TextLabel")
             iconText.BackgroundTransparency = 1
-            iconText.Size = UDim2.new(0, 20, 1, 0)
+            iconText.Size = UDim2.new(0, math.floor(20 * compactScale), 1, 0)
             iconText.Font = Enum.Font.GothamBold
             iconText.Text = iconValue
             SetThemedProperty(iconText, "TextColor3", "TextDark")
-            iconText.TextSize = 16
+            iconText.TextSize = math.floor(16 * compactScale)
             iconText.TextXAlignment = Enum.TextXAlignment.Left
             iconText.Parent = tabLayout
 
             local textLabel = Instance.new("TextLabel")
             textLabel.BackgroundTransparency = 1
-            textLabel.Size = UDim2.new(0, 100, 1, 0)
+            textLabel.Size = UDim2.new(0, math.floor(100 * compactScale), 1, 0)
             textLabel.AutomaticSize = Enum.AutomaticSize.X
             textLabel.Font = Enum.Font.GothamBold
             textLabel.Text = tabName
             SetThemedProperty(textLabel, "TextColor3", "TextDark")
-            textLabel.TextSize = 13
+            textLabel.TextSize = math.floor(13 * compactScale)
             textLabel.TextXAlignment = Enum.TextXAlignment.Left
             textLabel.Parent = tabLayout
 
@@ -1684,15 +1669,15 @@ function Zonix:Window(config)
         tabContent.Parent = content
 
         local contentList = Instance.new("UIListLayout")
-        contentList.Padding = UDim.new(0, 8)
+        contentList.Padding = UDim.new(0, math.floor(8 * compactScale))
         contentList.SortOrder = Enum.SortOrder.LayoutOrder
         contentList.Parent = tabContent
 
         local contentPad = Instance.new("UIPadding")
-        contentPad.PaddingTop = UDim.new(0, 15)
-        contentPad.PaddingLeft = UDim.new(0, 15)
-        contentPad.PaddingRight = UDim.new(0, 15)
-        contentPad.PaddingBottom = UDim.new(0, 15)
+        contentPad.PaddingTop = UDim.new(0, math.floor(15 * compactScale))
+        contentPad.PaddingLeft = UDim.new(0, math.floor(15 * compactScale))
+        contentPad.PaddingRight = UDim.new(0, math.floor(15 * compactScale))
+        contentPad.PaddingBottom = UDim.new(0, math.floor(15 * compactScale))
         contentPad.Parent = tabContent
 
         contentList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(
@@ -1791,9 +1776,6 @@ function Zonix:Window(config)
             )
         end
 
-        -- ═══════════════════════════════════════════════════════
-        --                    COMPONENT FUNCTIONS
-        -- ═══════════════════════════════════════════════════════
 
         function tab:Section(name)
             local section = Instance.new("Frame")
@@ -1851,10 +1833,11 @@ function Zonix:Window(config)
                 Name = text,
                 SearchData = text,
                 Tags = {},
-                Set = function(_, newText)
+                Set = function(self, newText)
+                    if not self then return end
                     label.Text = newText
-                    element.Name = newText
-                    element.SearchData = newText
+                    self.Name = newText
+                    self.SearchData = newText
                 end
             }
             
@@ -2320,7 +2303,7 @@ function Zonix:Window(config)
             ddLabel.Position = UDim2.new(0, 10, 0, 0)
             ddLabel.Size = UDim2.new(1, -40, 0, 40)
             ddLabel.Font = Enum.Font.GothamBold
-            ddLabel.Text = ddName .. ": " .. default
+            ddLabel.Text = ddName .. ": " .. (default or "None")
             SetThemedProperty(ddLabel, "TextColor3", "Text")
             ddLabel.TextSize = 13
             ddLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -2507,6 +2490,305 @@ function Zonix:Window(config)
             
             table.insert(tab.Elements, dropdownElement)
             return dropdownElement
+        end
+
+        function tab:MultiDropdown(mdConfig)
+            mdConfig = mdConfig or {}
+            local mdName = mdConfig.Name or "Multi Dropdown"
+            local options = mdConfig.Options or {"Option 1", "Option 2", "Option 3"}
+            local defaults = mdConfig.Default or {}
+            local maxSelections = mdConfig.MaxSelections or #options
+            local flag = mdConfig.Flag
+            local callback = mdConfig.Callback or function() end
+
+            local mdFrame = Instance.new("Frame")
+            SetThemedProperty(mdFrame, "BackgroundColor3", "Secondary")
+            mdFrame.BorderSizePixel = 0
+            mdFrame.Size = UDim2.new(1, 0, 0, 40)
+            mdFrame.ClipsDescendants = true
+            mdFrame.Parent = tabContent
+
+            local mdCorner = Instance.new("UICorner")
+            mdCorner.CornerRadius = UDim.new(0, 8)
+            mdCorner.Parent = mdFrame
+
+            local mdStroke = Instance.new("UIStroke")
+            SetThemedProperty(mdStroke, "Color", "Border")
+            mdStroke.Thickness = 1
+            mdStroke.Parent = mdFrame
+
+            local selectedItems = {}
+            for _, item in ipairs(defaults) do
+                if table.find(options, item) then
+                    selectedItems[item] = true
+                end
+            end
+
+            local function getSelectedText()
+                local selected = {}
+                for item, isSelected in pairs(selectedItems) do
+                    if isSelected then
+                        table.insert(selected, item)
+                    end
+                end
+                return #selected > 0 and table.concat(selected, ", ") or "None"
+            end
+
+            local mdLabel = Instance.new("TextLabel")
+            mdLabel.BackgroundTransparency = 1
+            mdLabel.Position = UDim2.new(0, 10, 0, 0)
+            mdLabel.Size = UDim2.new(1, -40, 0, 40)
+            mdLabel.Font = Enum.Font.GothamBold
+            mdLabel.Text = mdName .. ": " .. getSelectedText()
+            SetThemedProperty(mdLabel, "TextColor3", "Text")
+            mdLabel.TextSize = 13
+            mdLabel.TextXAlignment = Enum.TextXAlignment.Left
+            mdLabel.TextTruncate = Enum.TextTruncate.AtEnd
+            mdLabel.Parent = mdFrame
+
+            local mdBtn = Instance.new("TextButton")
+            mdBtn.AnchorPoint = Vector2.new(1, 0)
+            mdBtn.BackgroundTransparency = 1
+            mdBtn.Position = UDim2.new(1, -5, 0, 5)
+            mdBtn.Size = UDim2.new(0, 30, 0, 30)
+            mdBtn.Font = Enum.Font.GothamBold
+            mdBtn.Text = "▼"
+            SetThemedProperty(mdBtn, "TextColor3", "TextDark")
+            mdBtn.TextSize = 12
+            mdBtn.Parent = mdFrame
+
+            local optList = Instance.new("Frame")
+            optList.BackgroundTransparency = 1
+            optList.Position = UDim2.new(0, 0, 0, 40)
+            optList.Size = UDim2.new(1, 0, 0, 0)
+            optList.Parent = mdFrame
+
+            local optLayout = Instance.new("UIListLayout")
+            optLayout.Padding = UDim.new(0, 2)
+            optLayout.Parent = optList
+
+            local opened = false
+
+            if flag then
+                local flagValue = {}
+                for item, isSelected in pairs(selectedItems) do
+                    if isSelected then
+                        table.insert(flagValue, item)
+                    end
+                end
+                Zonix.Flags[flag] = flagValue
+            end
+
+            local function updateFlag()
+                if flag then
+                    local flagValue = {}
+                    for item, isSelected in pairs(selectedItems) do
+                        if isSelected then
+                            table.insert(flagValue, item)
+                        end
+                    end
+                    Zonix.Flags[flag] = flagValue
+                end
+            end
+
+            for _, opt in ipairs(options) do
+                local optBtn = Instance.new("TextButton")
+                SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
+                optBtn.BorderSizePixel = 0
+                optBtn.Size = UDim2.new(1, 0, 0, 30)
+                optBtn.Font = Enum.Font.Gotham
+                optBtn.Text = ""
+                optBtn.TextSize = 12
+                optBtn.TextXAlignment = Enum.TextXAlignment.Left
+                optBtn.Parent = optList
+
+                local checkbox = Instance.new("TextLabel")
+                SetThemedProperty(checkbox, "BackgroundColor3", "Background")
+                checkbox.BorderSizePixel = 0
+                checkbox.Position = UDim2.new(0, 5, 0.5, -10)
+                checkbox.Size = UDim2.new(0, 20, 0, 20)
+                checkbox.Font = Enum.Font.GothamBold
+                checkbox.Text = selectedItems[opt] and "✓" or ""
+                SetThemedProperty(checkbox, "TextColor3", "Text")
+                checkbox.TextSize = 14
+                checkbox.Parent = optBtn
+
+                local checkCorner = Instance.new("UICorner")
+                checkCorner.CornerRadius = UDim.new(0, 4)
+                checkCorner.Parent = checkbox
+
+                local checkStroke = Instance.new("UIStroke")
+                SetThemedProperty(checkStroke, "Color", selectedItems[opt] and "Accent" or "Border")
+                checkStroke.Thickness = 1
+                checkStroke.Parent = checkbox
+
+                local optLabel = Instance.new("TextLabel")
+                optLabel.BackgroundTransparency = 1
+                optLabel.Position = UDim2.new(0, 30, 0, 0)
+                optLabel.Size = UDim2.new(1, -30, 1, 0)
+                optLabel.Font = Enum.Font.Gotham
+                optLabel.Text = opt
+                SetThemedProperty(optLabel, "TextColor3", "TextDark")
+                optLabel.TextSize = 12
+                optLabel.TextXAlignment = Enum.TextXAlignment.Left
+                optLabel.Parent = optBtn
+
+                if selectedItems[opt] then
+                    checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                    local theme = Utils:GetTheme()
+                    checkbox.BackgroundColor3 = theme.Accent
+                end
+
+                optBtn.MouseButton1Click:Connect(function()
+                    local currentCount = 0
+                    for _, isSelected in pairs(selectedItems) do
+                        if isSelected then
+                            currentCount = currentCount + 1
+                        end
+                    end
+
+                    if selectedItems[opt] then
+                        selectedItems[opt] = false
+                        checkbox.Text = ""
+                        checkbox:SetAttribute("Theme_BackgroundColor3", "Background")
+                        checkStroke:SetAttribute("Theme_Color", "Border")
+                        local theme = Utils:GetTheme()
+                        checkbox.BackgroundColor3 = theme.Background
+                        checkStroke.Color = theme.Border
+                    elseif currentCount < maxSelections then
+                        selectedItems[opt] = true
+                        checkbox.Text = "✓"
+                        checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                        checkStroke:SetAttribute("Theme_Color", "Accent")
+                        local theme = Utils:GetTheme()
+                        checkbox.BackgroundColor3 = theme.Accent
+                        checkStroke.Color = theme.Accent
+                    end
+
+                    mdLabel.Text = mdName .. ": " .. getSelectedText()
+                    updateFlag()
+                    
+                    local selected = {}
+                    for item, isSelected in pairs(selectedItems) do
+                        if isSelected then
+                            table.insert(selected, item)
+                        end
+                    end
+                    pcall(callback, selected)
+                end)
+
+                optBtn.MouseEnter:Connect(function()
+                    ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
+                end)
+
+                optBtn.MouseLeave:Connect(function()
+                    ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
+                end)
+            end
+
+            mdBtn.MouseButton1Click:Connect(function()
+                opened = not opened
+                if opened then
+                    Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40 + #options * 32)}, 0.3)
+                    Utils:Tween(mdBtn, {Rotation = 180}, 0.3)
+                else
+                    Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40)}, 0.3)
+                    Utils:Tween(mdBtn, {Rotation = 0}, 0.3)
+                end
+            end)
+
+            local mdClickBtn = Instance.new("TextButton")
+            mdClickBtn.BackgroundTransparency = 1
+            mdClickBtn.Size = UDim2.new(1, 0, 0, 40)
+            mdClickBtn.Text = ""
+            mdClickBtn.ZIndex = 0
+            mdClickBtn.Parent = mdFrame
+
+            mdClickBtn.MouseButton1Click:Connect(function()
+                opened = not opened
+                if opened then
+                    Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40 + #options * 32)}, 0.3)
+                    Utils:Tween(mdBtn, {Rotation = 180}, 0.3)
+                else
+                    Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40)}, 0.3)
+                    Utils:Tween(mdBtn, {Rotation = 0}, 0.3)
+                end
+            end)
+
+            if mdConfig.Tooltip then
+                Utils:AddTooltip(mdFrame, mdConfig.Tooltip)
+            end
+
+            local multiDropdownElement = {
+                Set = function(_, items)
+                    selectedItems = {}
+                    local count = 0
+                    for _, item in ipairs(items) do
+                        if table.find(options, item) and count < maxSelections then
+                            selectedItems[item] = true
+                            count = count + 1
+                        end
+                    end
+                    
+                    for _, optBtn in ipairs(optList:GetChildren()) do
+                        if optBtn:IsA("TextButton") then
+                            local optLabel = optBtn:FindFirstChild("TextLabel")
+                            local checkbox = optBtn:FindFirstChildWhichIsA("TextLabel")
+                            local checkStroke = checkbox and checkbox:FindFirstChildWhichIsA("UIStroke")
+                            
+                            if optLabel and checkbox and checkStroke then
+                                local optText = optLabel.Text
+                                if selectedItems[optText] then
+                                    checkbox.Text = "✓"
+                                    checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                                    checkStroke:SetAttribute("Theme_Color", "Accent")
+                                    local theme = Utils:GetTheme()
+                                    checkbox.BackgroundColor3 = theme.Accent
+                                    checkStroke.Color = theme.Accent
+                                else
+                                    checkbox.Text = ""
+                                    checkbox:SetAttribute("Theme_BackgroundColor3", "Background")
+                                    checkStroke:SetAttribute("Theme_Color", "Border")
+                                    local theme = Utils:GetTheme()
+                                    checkbox.BackgroundColor3 = theme.Background
+                                    checkStroke.Color = theme.Border
+                                end
+                            end
+                        end
+                    end
+                    
+                    mdLabel.Text = mdName .. ": " .. getSelectedText()
+                    updateFlag()
+                    
+                    local selected = {}
+                    for item, isSelected in pairs(selectedItems) do
+                        if isSelected then
+                            table.insert(selected, item)
+                        end
+                    end
+                    pcall(callback, selected)
+                end,
+                GetSelected = function()
+                    local selected = {}
+                    for item, isSelected in pairs(selectedItems) do
+                        if isSelected then
+                            table.insert(selected, item)
+                        end
+                    end
+                    return selected
+                end,
+                Frame = mdFrame,
+                Name = mdName,
+                SearchData = mdName,
+                Tags = {}
+            }
+
+            if flag then
+                Zonix.FlaggedElements[flag] = multiDropdownElement
+            end
+
+            table.insert(tab.Elements, multiDropdownElement)
+            return multiDropdownElement
         end
 
         function tab:Textbox(tbConfig)
@@ -2978,7 +3260,14 @@ function Zonix:Window(config)
                     )
                     closeBtn.MouseButton1Click:Connect(
                         function()
+                            cpDisplay.BackgroundColor3 = currentColor
+                            if flag then
+                                Zonix.Flags[flag] = currentColor
+                            end
+                            pcall(callback, currentColor)
                             pickerOpen = false
+                            inputEndedConn:Disconnect()
+                            inputChangedConn:Disconnect()
                             sg:Destroy()
                         end
                     )
@@ -3346,6 +3635,97 @@ function Zonix:Window(config)
             return colorPickerElement
         end
 
+        function tab:Image(imgConfig)
+            imgConfig = imgConfig or {}
+            local imgType = imgConfig.Type or "ImageLabel"
+            local imgId = imgConfig.Image or ""
+            local imgSize = imgConfig.Size or UDim2.new(1, 0, 0, 150)
+            local callback = imgConfig.Callback or function() end
+            local scaleType = imgConfig.ScaleType or Enum.ScaleType.Fit
+            local imageColor = imgConfig.ImageColor3 or Color3.fromRGB(255, 255, 255)
+            local imageTransparency = imgConfig.ImageTransparency or 0
+            local backgroundTransparency = imgConfig.BackgroundTransparency or 1
+
+            local imgFrame = Instance.new("Frame")
+            SetThemedProperty(imgFrame, "BackgroundColor3", "Secondary")
+            imgFrame.BorderSizePixel = 0
+            imgFrame.Size = UDim2.new(1, 0, 0, 0)
+            imgFrame.AutomaticSize = Enum.AutomaticSize.Y
+            imgFrame.Parent = tabContent
+
+            local imgCorner = Instance.new("UICorner")
+            imgCorner.CornerRadius = UDim.new(0, 8)
+            imgCorner.Parent = imgFrame
+
+            local imgStroke = Instance.new("UIStroke")
+            SetThemedProperty(imgStroke, "Color", "Border")
+            imgStroke.Thickness = 1
+            imgStroke.Parent = imgFrame
+
+            local imgPad = Instance.new("UIPadding")
+            imgPad.PaddingLeft = UDim.new(0, 10)
+            imgPad.PaddingRight = UDim.new(0, 10)
+            imgPad.PaddingTop = UDim.new(0, 10)
+            imgPad.PaddingBottom = UDim.new(0, 10)
+            imgPad.Parent = imgFrame
+
+            local imageElement
+            if imgType == "ImageButton" then
+                imageElement = Instance.new("ImageButton")
+                imageElement.AutoButtonColor = false
+                imageElement.MouseButton1Click:Connect(function()
+                    Utils:Ripple(imageElement)
+                    callback()
+                end)
+                imageElement.MouseEnter:Connect(function()
+                    Utils:Tween(imageElement, {ImageTransparency = math.max(0, imageTransparency - 0.1)}, 0.2)
+                end)
+                imageElement.MouseLeave:Connect(function()
+                    Utils:Tween(imageElement, {ImageTransparency = imageTransparency}, 0.2)
+                end)
+            else
+                imageElement = Instance.new("ImageLabel")
+            end
+
+            imageElement.BackgroundTransparency = backgroundTransparency
+            imageElement.BorderSizePixel = 0
+            imageElement.Size = imgSize
+            imageElement.Image = imgId
+            imageElement.ScaleType = scaleType
+            imageElement.ImageColor3 = imageColor
+            imageElement.ImageTransparency = imageTransparency
+            imageElement.Parent = imgFrame
+
+            local imageCorner = Instance.new("UICorner")
+            imageCorner.CornerRadius = UDim.new(0, 6)
+            imageCorner.Parent = imageElement
+
+            local imageObj = {
+                SetImage = function(_, newImage)
+                    imageElement.Image = newImage
+                end,
+                SetImageColor = function(_, newColor)
+                    imageColor = newColor
+                    imageElement.ImageColor3 = newColor
+                end,
+                SetTransparency = function(_, transparency)
+                    imageTransparency = transparency
+                    imageElement.ImageTransparency = transparency
+                end,
+                SetSize = function(_, newSize)
+                    imageElement.Size = newSize
+                end,
+                Frame = imgFrame,
+                ImageElement = imageElement,
+                Name = "Image",
+                SearchData = "Image",
+                Tags = {}
+            }
+
+            table.insert(tab.Elements, imageObj)
+            return imageObj
+        end
+
         function tab:CopyButton(cbConfig)
             cbConfig = cbConfig or {}
             local cbName = cbConfig.Name or "Copy"
@@ -3577,8 +3957,13 @@ function Zonix:Window(config)
 
             local function updateCheckbox()
                 checkbox.Text = checked and "✓" or ""
-                checkbox.BackgroundColor3 = checked and theme.Accent or theme.Tertiary
-                checkStroke.Color = checked and theme.Accent or theme.Border
+                local bgThemeKey = checked and "Accent" or "Tertiary"
+                local strokeThemeKey = checked and "Accent" or "Border"
+                checkbox:SetAttribute("Theme_BackgroundColor3", bgThemeKey)
+                checkStroke:SetAttribute("Theme_Color", strokeThemeKey)
+                local currentTheme = Utils:GetTheme()
+                checkbox.BackgroundColor3 = currentTheme[bgThemeKey]
+                checkStroke.Color = currentTheme[strokeThemeKey]
             end
 
             updateCheckbox()
@@ -3638,6 +4023,234 @@ function Zonix:Window(config)
             spacer.BorderSizePixel = 0
             spacer.Size = UDim2.new(1, 0, 0, pixels)
             spacer.Parent = tabContent
+        end
+
+        function tab:PlayerList(plConfig)
+            plConfig = plConfig or {}
+            local minHeight = plConfig.MinHeight or 80
+            local maxHeight = plConfig.MaxHeight or 400
+            local callback = plConfig.Callback or function() end
+            local flag = plConfig.Flag
+            
+            local Players = game:GetService("Players")
+            local selectedPlayer = nil
+            
+            local playerListContainer = Instance.new("Frame")
+            SetThemedProperty(playerListContainer, "BackgroundColor3", "Tertiary")
+            playerListContainer.BorderSizePixel = 0
+            playerListContainer.Size = UDim2.new(1, 0, 0, minHeight)
+            playerListContainer.Parent = tabContent
+            
+            local containerCorner = Instance.new("UICorner")
+            containerCorner.CornerRadius = UDim.new(0, 8)
+            containerCorner.Parent = playerListContainer
+            
+            local containerStroke = Instance.new("UIStroke")
+            SetThemedProperty(containerStroke, "Color", "Border")
+            containerStroke.Thickness = 1
+            containerStroke.Parent = playerListContainer
+            
+            local playerScrollFrame = Instance.new("ScrollingFrame")
+            playerScrollFrame.BackgroundTransparency = 1
+            playerScrollFrame.BorderSizePixel = 0
+            playerScrollFrame.Size = UDim2.new(1, -10, 1, -10)
+            playerScrollFrame.Position = UDim2.new(0, 5, 0, 5)
+            playerScrollFrame.ScrollBarThickness = 4
+            SetThemedProperty(playerScrollFrame, "ScrollBarImageColor3", "Accent")
+            playerScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+            playerScrollFrame.Parent = playerListContainer
+            
+            local playerListLayout = Instance.new("UIListLayout")
+            playerListLayout.Padding = UDim.new(0, 6)
+            playerListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            playerListLayout.Parent = playerScrollFrame
+            
+            local playerListPadding = Instance.new("UIPadding")
+            playerListPadding.PaddingTop = UDim.new(0, 5)
+            playerListPadding.PaddingBottom = UDim.new(0, 5)
+            playerListPadding.PaddingLeft = UDim.new(0, 5)
+            playerListPadding.PaddingRight = UDim.new(0, 5)
+            playerListPadding.Parent = playerScrollFrame
+            
+            playerListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+                playerScrollFrame.CanvasSize = UDim2.new(0, 0, 0, playerListLayout.AbsoluteContentSize.Y + 10)
+            end)
+            
+            local function CreatePlayerCard(player)
+                local playerCard = Instance.new("TextButton")
+                SetThemedProperty(playerCard, "BackgroundColor3", "Secondary")
+                playerCard.BorderSizePixel = 0
+                playerCard.Size = UDim2.new(1, -10, 0, 60)
+                playerCard.AutoButtonColor = false
+                playerCard.Text = ""
+                
+                local cardCorner = Instance.new("UICorner")
+                cardCorner.CornerRadius = UDim.new(0, 6)
+                cardCorner.Parent = playerCard
+                
+                local cardStroke = Instance.new("UIStroke")
+                SetThemedProperty(cardStroke, "Color", "Border")
+                cardStroke.Thickness = 1
+                cardStroke.Transparency = 0.5
+                cardStroke.Parent = playerCard
+                
+                local avatarImage = Instance.new("ImageLabel")
+                avatarImage.BackgroundTransparency = 1
+                avatarImage.Position = UDim2.new(0, 8, 0.5, 0)
+                avatarImage.AnchorPoint = Vector2.new(0, 0.5)
+                avatarImage.Size = UDim2.new(0, 44, 0, 44)
+                avatarImage.Image = "rbxthumb://type=AvatarHeadShot&id=" .. player.UserId .. "&w=150&h=150"
+                avatarImage.Parent = playerCard
+                
+                local avatarCorner = Instance.new("UICorner")
+                avatarCorner.CornerRadius = UDim.new(1, 0)
+                avatarCorner.Parent = avatarImage
+                
+                local displayNameLabel = Instance.new("TextLabel")
+                displayNameLabel.BackgroundTransparency = 1
+                displayNameLabel.Position = UDim2.new(0, 60, 0, 8)
+                displayNameLabel.Size = UDim2.new(1, -68, 0, 20)
+                displayNameLabel.Font = Enum.Font.GothamBold
+                displayNameLabel.Text = player.DisplayName
+                SetThemedProperty(displayNameLabel, "TextColor3", "Text")
+                displayNameLabel.TextSize = 14
+                displayNameLabel.TextXAlignment = Enum.TextXAlignment.Left
+                displayNameLabel.TextTruncate = Enum.TextTruncate.AtEnd
+                displayNameLabel.Parent = playerCard
+                
+                local usernameLabel = Instance.new("TextLabel")
+                usernameLabel.BackgroundTransparency = 1
+                usernameLabel.Position = UDim2.new(0, 60, 0, 30)
+                usernameLabel.Size = UDim2.new(1, -68, 0, 18)
+                usernameLabel.Font = Enum.Font.Gotham
+                usernameLabel.Text = "@" .. player.Name
+                SetThemedProperty(usernameLabel, "TextColor3", "TextDark")
+                usernameLabel.TextSize = 12
+                usernameLabel.TextXAlignment = Enum.TextXAlignment.Left
+                usernameLabel.TextTruncate = Enum.TextTruncate.AtEnd
+                usernameLabel.Parent = playerCard
+                
+                playerCard.MouseEnter:Connect(function()
+                    if selectedPlayer ~= player then
+                        SetThemedProperty(cardStroke, "Color", "Accent")
+                        cardStroke.Transparency = 0
+                    end
+                end)
+                
+                playerCard.MouseLeave:Connect(function()
+                    if selectedPlayer ~= player then
+                        SetThemedProperty(cardStroke, "Color", "Border")
+                        cardStroke.Transparency = 0.5
+                    end
+                end)
+                
+                playerCard.MouseButton1Click:Connect(function()
+                    selectedPlayer = player
+                    
+                    if flag then
+                        Zonix.Flags[flag] = player
+                    end
+                    
+                    for _, child in pairs(playerScrollFrame:GetChildren()) do
+                        if child:IsA("TextButton") then
+                            local stroke = child:FindFirstChildOfClass("UIStroke")
+                            if child == playerCard then
+                                SetThemedProperty(stroke, "Color", "Accent")
+                                stroke.Transparency = 0
+                            else
+                                SetThemedProperty(stroke, "Color", "Border")
+                                stroke.Transparency = 0.5
+                            end
+                        end
+                    end
+                    
+                    pcall(callback, player)
+                end)
+                
+                return playerCard
+            end
+            
+            local function RefreshPlayerList()
+                for _, child in pairs(playerScrollFrame:GetChildren()) do
+                    if child:IsA("TextButton") then
+                        child:Destroy()
+                    end
+                end
+                
+                local playerCount = 0
+                for _, player in pairs(Players:GetPlayers()) do
+                    if player ~= Players.LocalPlayer then
+                        local card = CreatePlayerCard(player)
+                        card.Parent = playerScrollFrame
+                        playerCount = playerCount + 1
+                    end
+                end
+                
+                local dynamicHeight = math.clamp(20 + (playerCount * 66), minHeight, maxHeight)
+                playerListContainer.Size = UDim2.new(1, 0, 0, dynamicHeight)
+            end
+            
+            RefreshPlayerList()
+            
+            task.spawn(function()
+                while playerListContainer and playerListContainer.Parent do
+                    task.wait(2)
+                    RefreshPlayerList()
+                end
+            end)
+            
+            Players.PlayerAdded:Connect(function()
+                task.wait(0.5)
+                if playerListContainer and playerListContainer.Parent then
+                    RefreshPlayerList()
+                end
+            end)
+            
+            Players.PlayerRemoving:Connect(function()
+                task.wait(0.5)
+                if playerListContainer and playerListContainer.Parent then
+                    RefreshPlayerList()
+                end
+            end)
+            
+            local element = {
+                Frame = playerListContainer,
+                Name = "PlayerList",
+                SearchData = "PlayerList",
+                Tags = {},
+                Refresh = RefreshPlayerList,
+                GetSelected = function()
+                    return selectedPlayer
+                end,
+                SelectPlayer = function(self, player)
+                    if player and player.Parent then
+                        selectedPlayer = player
+                        if flag then
+                            Zonix.Flags[flag] = player
+                        end
+                        
+                        for _, child in pairs(playerScrollFrame:GetChildren()) do
+                            if child:IsA("TextButton") then
+                                local stroke = child:FindFirstChildOfClass("UIStroke")
+                                local usernameLabel = child:FindFirstChild("TextLabel", true)
+                                
+                                if usernameLabel and usernameLabel.Text:find("@" .. player.Name) then
+                                    SetThemedProperty(stroke, "Color", "Accent")
+                                    stroke.Transparency = 0
+                                else
+                                    SetThemedProperty(stroke, "Color", "Border")
+                                    stroke.Transparency = 0.5
+                                end
+                            end
+                        end
+                        
+                        pcall(callback, player)
+                    end
+                end
+            }
+            
+            table.insert(tab.Elements, element)
+            return element
         end
 
         function tab:GroupBox(gbConfig)
@@ -3798,8 +4411,13 @@ function Zonix:Window(config)
 
                 local function updateCheckbox()
                     checkbox.Text = checked and "✓" or ""
-                    checkbox.BackgroundColor3 = checked and theme.Accent or theme.Background
-                    checkStroke.Color = checked and theme.Accent or theme.Border
+                    local bgThemeKey = checked and "Accent" or "Background"
+                    local strokeThemeKey = checked and "Accent" or "Border"
+                    checkbox:SetAttribute("Theme_BackgroundColor3", bgThemeKey)
+                    checkStroke:SetAttribute("Theme_Color", strokeThemeKey)
+                    local currentTheme = Utils:GetTheme()
+                    checkbox.BackgroundColor3 = currentTheme[bgThemeKey]
+                    checkStroke.Color = currentTheme[strokeThemeKey]
                 end
 
                 updateCheckbox()
@@ -4367,6 +4985,267 @@ function Zonix:Window(config)
                 }
             end
 
+            function groupBox:MultiDropdown(mdConfig)
+                mdConfig = mdConfig or {}
+                local mdName = mdConfig.Name or "Multi Dropdown"
+                local options = mdConfig.Options or {"Option 1", "Option 2", "Option 3"}
+                local defaults = mdConfig.Default or {}
+                local maxSelections = mdConfig.MaxSelections or #options
+                local flag = mdConfig.Flag
+                local callback = mdConfig.Callback or function() end
+
+                local mdFrame = Instance.new("Frame")
+                SetThemedProperty(mdFrame, "BackgroundColor3", "Tertiary")
+                mdFrame.BorderSizePixel = 0
+                mdFrame.Size = UDim2.new(1, 0, 0, 35)
+                mdFrame.ClipsDescendants = true
+                mdFrame.Parent = gbContent
+
+                local mdCorner = Instance.new("UICorner")
+                mdCorner.CornerRadius = UDim.new(0, 6)
+                mdCorner.Parent = mdFrame
+
+                local selectedItems = {}
+                for _, item in ipairs(defaults) do
+                    if table.find(options, item) then
+                        selectedItems[item] = true
+                    end
+                end
+
+                local function getSelectedText()
+                    local selected = {}
+                    for item, isSelected in pairs(selectedItems) do
+                        if isSelected then
+                            table.insert(selected, item)
+                        end
+                    end
+                    return #selected > 0 and table.concat(selected, ", ") or "None"
+                end
+
+                local mdLabel = Instance.new("TextLabel")
+                mdLabel.BackgroundTransparency = 1
+                mdLabel.Position = UDim2.new(0, 8, 0, 0)
+                mdLabel.Size = UDim2.new(1, -35, 0, 35)
+                mdLabel.Font = Enum.Font.Gotham
+                mdLabel.Text = mdName .. ": " .. getSelectedText()
+                SetThemedProperty(mdLabel, "TextColor3", "Text")
+                mdLabel.TextSize = 11
+                mdLabel.TextXAlignment = Enum.TextXAlignment.Left
+                mdLabel.TextTruncate = Enum.TextTruncate.AtEnd
+                mdLabel.Parent = mdFrame
+
+                local mdBtn = Instance.new("TextButton")
+                mdBtn.AnchorPoint = Vector2.new(1, 0)
+                mdBtn.BackgroundTransparency = 1
+                mdBtn.Position = UDim2.new(1, -3, 0, 3)
+                mdBtn.Size = UDim2.new(0, 28, 0, 28)
+                mdBtn.Font = Enum.Font.GothamBold
+                mdBtn.Text = "▼"
+                SetThemedProperty(mdBtn, "TextColor3", "TextDark")
+                mdBtn.TextSize = 10
+                mdBtn.Parent = mdFrame
+
+                local optList = Instance.new("Frame")
+                optList.BackgroundTransparency = 1
+                optList.Position = UDim2.new(0, 0, 0, 35)
+                optList.Size = UDim2.new(1, 0, 0, 0)
+                optList.Parent = mdFrame
+
+                local optLayout = Instance.new("UIListLayout")
+                optLayout.Padding = UDim.new(0, 1)
+                optLayout.Parent = optList
+
+                local opened = false
+
+                if flag then
+                    local flagValue = {}
+                    for item, isSelected in pairs(selectedItems) do
+                        if isSelected then
+                            table.insert(flagValue, item)
+                        end
+                    end
+                    Zonix.Flags[flag] = flagValue
+                end
+
+                local function updateFlag()
+                    if flag then
+                        local flagValue = {}
+                        for item, isSelected in pairs(selectedItems) do
+                            if isSelected then
+                                table.insert(flagValue, item)
+                            end
+                        end
+                        Zonix.Flags[flag] = flagValue
+                    end
+                end
+
+                for _, opt in ipairs(options) do
+                    local optBtn = Instance.new("TextButton")
+                    SetThemedProperty(optBtn, "BackgroundColor3", "Background")
+                    optBtn.BorderSizePixel = 0
+                    optBtn.Size = UDim2.new(1, 0, 0, 28)
+                    optBtn.Font = Enum.Font.Gotham
+                    optBtn.Text = ""
+                    optBtn.TextSize = 11
+                    optBtn.TextXAlignment = Enum.TextXAlignment.Left
+                    optBtn.Parent = optList
+
+                    local checkbox = Instance.new("TextLabel")
+                    SetThemedProperty(checkbox, "BackgroundColor3", "Tertiary")
+                    checkbox.BorderSizePixel = 0
+                    checkbox.Position = UDim2.new(0, 4, 0.5, -8)
+                    checkbox.Size = UDim2.new(0, 16, 0, 16)
+                    checkbox.Font = Enum.Font.GothamBold
+                    checkbox.Text = selectedItems[opt] and "✓" or ""
+                    SetThemedProperty(checkbox, "TextColor3", "Text")
+                    checkbox.TextSize = 12
+                    checkbox.Parent = optBtn
+
+                    local checkCorner = Instance.new("UICorner")
+                    checkCorner.CornerRadius = UDim.new(0, 3)
+                    checkCorner.Parent = checkbox
+
+                    local checkStroke = Instance.new("UIStroke")
+                    SetThemedProperty(checkStroke, "Color", selectedItems[opt] and "Accent" or "Border")
+                    checkStroke.Thickness = 1
+                    checkStroke.Parent = checkbox
+
+                    local optLabel = Instance.new("TextLabel")
+                    optLabel.BackgroundTransparency = 1
+                    optLabel.Position = UDim2.new(0, 25, 0, 0)
+                    optLabel.Size = UDim2.new(1, -25, 1, 0)
+                    optLabel.Font = Enum.Font.Gotham
+                    optLabel.Text = opt
+                    SetThemedProperty(optLabel, "TextColor3", "TextDark")
+                    optLabel.TextSize = 11
+                    optLabel.TextXAlignment = Enum.TextXAlignment.Left
+                    optLabel.Parent = optBtn
+
+                    if selectedItems[opt] then
+                        checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                        local theme = Utils:GetTheme()
+                        checkbox.BackgroundColor3 = theme.Accent
+                    end
+
+                    optBtn.MouseButton1Click:Connect(function()
+                        local currentCount = 0
+                        for _, isSelected in pairs(selectedItems) do
+                            if isSelected then
+                                currentCount = currentCount + 1
+                            end
+                        end
+
+                        if selectedItems[opt] then
+                            selectedItems[opt] = false
+                            checkbox.Text = ""
+                            checkbox:SetAttribute("Theme_BackgroundColor3", "Tertiary")
+                            checkStroke:SetAttribute("Theme_Color", "Border")
+                            local theme = Utils:GetTheme()
+                            checkbox.BackgroundColor3 = theme.Tertiary
+                            checkStroke.Color = theme.Border
+                        elseif currentCount < maxSelections then
+                            selectedItems[opt] = true
+                            checkbox.Text = "✓"
+                            checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                            checkStroke:SetAttribute("Theme_Color", "Accent")
+                            local theme = Utils:GetTheme()
+                            checkbox.BackgroundColor3 = theme.Accent
+                            checkStroke.Color = theme.Accent
+                        end
+
+                        mdLabel.Text = mdName .. ": " .. getSelectedText()
+                        updateFlag()
+                        
+                        local selected = {}
+                        for item, isSelected in pairs(selectedItems) do
+                            if isSelected then
+                                table.insert(selected, item)
+                            end
+                        end
+                        pcall(callback, selected)
+                    end)
+
+                    optBtn.MouseEnter:Connect(function()
+                        ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
+                    end)
+
+                    optBtn.MouseLeave:Connect(function()
+                        ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Background"})
+                    end)
+                end
+
+                mdBtn.MouseButton1Click:Connect(function()
+                    opened = not opened
+                    if opened then
+                        Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 35 + #options * 29)}, 0.3)
+                        Utils:Tween(mdBtn, {Rotation = 180}, 0.3)
+                    else
+                        Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 35)}, 0.3)
+                        Utils:Tween(mdBtn, {Rotation = 0}, 0.3)
+                    end
+                end)
+
+                return {
+                    Set = function(_, items)
+                        selectedItems = {}
+                        local count = 0
+                        for _, item in ipairs(items) do
+                            if table.find(options, item) and count < maxSelections then
+                                selectedItems[item] = true
+                                count = count + 1
+                            end
+                        end
+                        
+                        for _, optBtn in ipairs(optList:GetChildren()) do
+                            if optBtn:IsA("TextButton") then
+                                local optLabel = optBtn:FindFirstChild("TextLabel")
+                                local checkbox = optBtn:FindFirstChildWhichIsA("TextLabel")
+                                local checkStroke = checkbox and checkbox:FindFirstChildWhichIsA("UIStroke")
+                                
+                                if optLabel and checkbox and checkStroke then
+                                    local optText = optLabel.Text
+                                    if selectedItems[optText] then
+                                        checkbox.Text = "✓"
+                                        checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                                        checkStroke:SetAttribute("Theme_Color", "Accent")
+                                        local theme = Utils:GetTheme()
+                                        checkbox.BackgroundColor3 = theme.Accent
+                                        checkStroke.Color = theme.Accent
+                                    else
+                                        checkbox.Text = ""
+                                        checkbox:SetAttribute("Theme_BackgroundColor3", "Tertiary")
+                                        checkStroke:SetAttribute("Theme_Color", "Border")
+                                        local theme = Utils:GetTheme()
+                                        checkbox.BackgroundColor3 = theme.Tertiary
+                                        checkStroke.Color = theme.Border
+                                    end
+                                end
+                            end
+                        end
+                        
+                        mdLabel.Text = mdName .. ": " .. getSelectedText()
+                        updateFlag()
+                        
+                        local selected = {}
+                        for item, isSelected in pairs(selectedItems) do
+                            if isSelected then
+                                table.insert(selected, item)
+                            end
+                        end
+                        pcall(callback, selected)
+                    end,
+                    GetSelected = function()
+                        local selected = {}
+                        for item, isSelected in pairs(selectedItems) do
+                            if isSelected then
+                                table.insert(selected, item)
+                            end
+                        end
+                        return selected
+                    end
+                }
+            end
+
             function groupBox:Textbox(tbConfig)
                 tbConfig = tbConfig or {}
                 local tbName = tbConfig.Name or "Textbox"
@@ -4527,6 +5406,86 @@ function Zonix:Window(config)
                 spacer.Parent = gbContent
             end
 
+            function groupBox:Image(imgConfig)
+                imgConfig = imgConfig or {}
+                local imgType = imgConfig.Type or "ImageLabel"
+                local imgId = imgConfig.Image or ""
+                local imgSize = imgConfig.Size or UDim2.new(1, 0, 0, 150)
+                local callback = imgConfig.Callback or function() end
+                local scaleType = imgConfig.ScaleType or Enum.ScaleType.Fit
+                local imageColor = imgConfig.ImageColor3 or Color3.fromRGB(255, 255, 255)
+                local imageTransparency = imgConfig.ImageTransparency or 0
+                local backgroundTransparency = imgConfig.BackgroundTransparency or 1
+
+                local imgFrame = Instance.new("Frame")
+                SetThemedProperty(imgFrame, "BackgroundColor3", "Tertiary")
+                imgFrame.BorderSizePixel = 0
+                imgFrame.Size = UDim2.new(1, 0, 0, 0)
+                imgFrame.AutomaticSize = Enum.AutomaticSize.Y
+                imgFrame.Parent = gbContent
+
+                local imgCorner = Instance.new("UICorner")
+                imgCorner.CornerRadius = UDim.new(0, 6)
+                imgCorner.Parent = imgFrame
+
+                local imgPad = Instance.new("UIPadding")
+                imgPad.PaddingLeft = UDim.new(0, 8)
+                imgPad.PaddingRight = UDim.new(0, 8)
+                imgPad.PaddingTop = UDim.new(0, 8)
+                imgPad.PaddingBottom = UDim.new(0, 8)
+                imgPad.Parent = imgFrame
+
+                local imageElement
+                if imgType == "ImageButton" then
+                    imageElement = Instance.new("ImageButton")
+                    imageElement.AutoButtonColor = false
+                    imageElement.MouseButton1Click:Connect(function()
+                        Utils:Ripple(imageElement)
+                        callback()
+                    end)
+                    imageElement.MouseEnter:Connect(function()
+                        Utils:Tween(imageElement, {ImageTransparency = math.max(0, imageTransparency - 0.1)}, 0.2)
+                    end)
+                    imageElement.MouseLeave:Connect(function()
+                        Utils:Tween(imageElement, {ImageTransparency = imageTransparency}, 0.2)
+                    end)
+                else
+                    imageElement = Instance.new("ImageLabel")
+                end
+
+                imageElement.BackgroundTransparency = backgroundTransparency
+                imageElement.BorderSizePixel = 0
+                imageElement.Size = imgSize
+                imageElement.Image = imgId
+                imageElement.ScaleType = scaleType
+                imageElement.ImageColor3 = imageColor
+                imageElement.ImageTransparency = imageTransparency
+                imageElement.Parent = imgFrame
+
+                local imageCorner = Instance.new("UICorner")
+                imageCorner.CornerRadius = UDim.new(0, 4)
+                imageCorner.Parent = imageElement
+
+                return {
+                    SetImage = function(_, newImage)
+                        imageElement.Image = newImage
+                    end,
+                    SetImageColor = function(_, newColor)
+                        imageColor = newColor
+                        imageElement.ImageColor3 = newColor
+                    end,
+                    SetTransparency = function(_, transparency)
+                        imageTransparency = transparency
+                        imageElement.ImageTransparency = transparency
+                    end,
+                    SetSize = function(_, newSize)
+                        imageElement.Size = newSize
+                    end,
+                    Frame = imgFrame,
+                    ImageElement = imageElement
+                }
+            end
+
             return groupBox
         end
 
@@ -4582,12 +5541,17 @@ function Zonix:Window(config)
 
             for i, tabName in ipairs(tabNames) do
                 local stBtn = Instance.new("TextButton")
-                stBtn.BackgroundColor3 = i == 1 and theme.Accent or theme.Tertiary
+                if i == 1 then
+                    SetThemedProperty(stBtn, "BackgroundColor3", "Accent")
+                    SetThemedProperty(stBtn, "TextColor3", "Text")
+                else
+                    SetThemedProperty(stBtn, "BackgroundColor3", "Tertiary")
+                    SetThemedProperty(stBtn, "TextColor3", "TextDark")
+                end
                 stBtn.BorderSizePixel = 0
                 stBtn.Size = UDim2.new(1 / #tabNames, -4, 1, 0)
                 stBtn.Font = Enum.Font.GothamBold
                 stBtn.Text = tabName
-                stBtn.TextColor3 = i == 1 and Color3.fromRGB(255, 255, 255) or theme.TextDark
                 stBtn.TextSize = 12
                 stBtn.Parent = stHeader
 
@@ -4656,6 +5620,10 @@ function Zonix:Window(config)
                             ThemedTween(btnFrame, {}, 0.2, {BackgroundColor3 = "Accent"})
                         end
                     )
+                    
+                    return {
+                        Frame = btnFrame
+                    }
                 end
 
                 function subTabObj:Checkbox(cbConfig)
@@ -4720,8 +5688,13 @@ function Zonix:Window(config)
 
                     local function updateCheckbox()
                         checkbox.Text = checked and "✓" or ""
-                        checkbox.BackgroundColor3 = checked and theme.Accent or theme.Tertiary
-                        checkStroke.Color = checked and theme.Accent or theme.Border
+                        local bgThemeKey = checked and "Accent" or "Tertiary"
+                        local strokeThemeKey = checked and "Accent" or "Border"
+                        checkbox:SetAttribute("Theme_BackgroundColor3", bgThemeKey)
+                        checkStroke:SetAttribute("Theme_Color", strokeThemeKey)
+                        local currentTheme = Utils:GetTheme()
+                        checkbox.BackgroundColor3 = currentTheme[bgThemeKey]
+                        checkStroke.Color = currentTheme[strokeThemeKey]
                     end
 
                     updateCheckbox()
@@ -4739,6 +5712,7 @@ function Zonix:Window(config)
                     )
 
                     return {
+                        Frame = cbFrame,
                         Set = function(_, value)
                             checked = value
                             if flag then
@@ -4767,6 +5741,7 @@ function Zonix:Window(config)
                     label.Parent = labelFrame
 
                     return {
+                        Frame = labelFrame,
                         Set = function(_, newText)
                             label.Text = newText
                         end
@@ -4795,6 +5770,10 @@ function Zonix:Window(config)
                     div.Position = UDim2.new(0, 0, 1, -1)
                     div.Size = UDim2.new(1, 0, 0, 1)
                     div.Parent = section
+                    
+                    return {
+                        Frame = section
+                    }
                 end
 
                 function subTabObj:Paragraph(title, text)
@@ -4826,6 +5805,10 @@ function Zonix:Window(config)
                     textLabel.TextWrapped = true
                     textLabel.TextXAlignment = Enum.TextXAlignment.Left
                     textLabel.Parent = paraFrame
+                    
+                    return {
+                        Frame = paraFrame
+                    }
                 end
 
                 function subTabObj:Divider()
@@ -4834,6 +5817,10 @@ function Zonix:Window(config)
                     div.BorderSizePixel = 0
                     div.Size = UDim2.new(1, 0, 0, 1)
                     div.Parent = stTabContent
+                    
+                    return {
+                        Frame = div
+                    }
                 end
 
                 function subTabObj:Toggle(togConfig)
@@ -5288,6 +6275,291 @@ function Zonix:Window(config)
                     }
                 end
 
+                function subTabObj:MultiDropdown(mdConfig)
+                    mdConfig = mdConfig or {}
+                    local mdName = mdConfig.Name or "Multi Dropdown"
+                    local options = mdConfig.Options or {"Option 1", "Option 2", "Option 3"}
+                    local defaults = mdConfig.Default or {}
+                    local maxSelections = mdConfig.MaxSelections or #options
+                    local flag = mdConfig.Flag
+                    local callback = mdConfig.Callback or function() end
+
+                    local mdFrame = Instance.new("Frame")
+                    SetThemedProperty(mdFrame, "BackgroundColor3", "Secondary")
+                    mdFrame.BorderSizePixel = 0
+                    mdFrame.Size = UDim2.new(1, 0, 0, 40)
+                    mdFrame.ClipsDescendants = true
+                    mdFrame.Parent = stTabContent
+
+                    local mdCorner = Instance.new("UICorner")
+                    mdCorner.CornerRadius = UDim.new(0, 8)
+                    mdCorner.Parent = mdFrame
+
+                    local mdStroke = Instance.new("UIStroke")
+                    SetThemedProperty(mdStroke, "Color", "Border")
+                    mdStroke.Thickness = 1
+                    mdStroke.Parent = mdFrame
+
+                    local selectedItems = {}
+                    for _, item in ipairs(defaults) do
+                        if table.find(options, item) then
+                            selectedItems[item] = true
+                        end
+                    end
+
+                    local function getSelectedText()
+                        local selected = {}
+                        for item, isSelected in pairs(selectedItems) do
+                            if isSelected then
+                                table.insert(selected, item)
+                            end
+                        end
+                        return #selected > 0 and table.concat(selected, ", ") or "None"
+                    end
+
+                    local mdLabel = Instance.new("TextLabel")
+                    mdLabel.BackgroundTransparency = 1
+                    mdLabel.Position = UDim2.new(0, 10, 0, 0)
+                    mdLabel.Size = UDim2.new(1, -40, 0, 40)
+                    mdLabel.Font = Enum.Font.GothamBold
+                    mdLabel.Text = mdName .. ": " .. getSelectedText()
+                    SetThemedProperty(mdLabel, "TextColor3", "Text")
+                    mdLabel.TextSize = 13
+                    mdLabel.TextXAlignment = Enum.TextXAlignment.Left
+                    mdLabel.TextTruncate = Enum.TextTruncate.AtEnd
+                    mdLabel.Parent = mdFrame
+
+                    local mdBtn = Instance.new("TextButton")
+                    mdBtn.AnchorPoint = Vector2.new(1, 0)
+                    mdBtn.BackgroundTransparency = 1
+                    mdBtn.Position = UDim2.new(1, -5, 0, 5)
+                    mdBtn.Size = UDim2.new(0, 30, 0, 30)
+                    mdBtn.Font = Enum.Font.GothamBold
+                    mdBtn.Text = "▼"
+                    SetThemedProperty(mdBtn, "TextColor3", "TextDark")
+                    mdBtn.TextSize = 12
+                    mdBtn.Parent = mdFrame
+
+                    local optList = Instance.new("Frame")
+                    optList.BackgroundTransparency = 1
+                    optList.Position = UDim2.new(0, 0, 0, 40)
+                    optList.Size = UDim2.new(1, 0, 0, 0)
+                    optList.Parent = mdFrame
+
+                    local optLayout = Instance.new("UIListLayout")
+                    optLayout.Padding = UDim.new(0, 2)
+                    optLayout.Parent = optList
+
+                    local opened = false
+
+                    if flag then
+                        local flagValue = {}
+                        for item, isSelected in pairs(selectedItems) do
+                            if isSelected then
+                                table.insert(flagValue, item)
+                            end
+                        end
+                        Zonix.Flags[flag] = flagValue
+                    end
+
+                    local function updateFlag()
+                        if flag then
+                            local flagValue = {}
+                            for item, isSelected in pairs(selectedItems) do
+                                if isSelected then
+                                    table.insert(flagValue, item)
+                                end
+                            end
+                            Zonix.Flags[flag] = flagValue
+                        end
+                    end
+
+                    for _, opt in ipairs(options) do
+                        local optBtn = Instance.new("TextButton")
+                        SetThemedProperty(optBtn, "BackgroundColor3", "Tertiary")
+                        optBtn.BorderSizePixel = 0
+                        optBtn.Size = UDim2.new(1, 0, 0, 30)
+                        optBtn.Font = Enum.Font.Gotham
+                        optBtn.Text = ""
+                        optBtn.TextSize = 12
+                        optBtn.TextXAlignment = Enum.TextXAlignment.Left
+                        optBtn.Parent = optList
+
+                        local checkbox = Instance.new("TextLabel")
+                        SetThemedProperty(checkbox, "BackgroundColor3", "Background")
+                        checkbox.BorderSizePixel = 0
+                        checkbox.Position = UDim2.new(0, 5, 0.5, -10)
+                        checkbox.Size = UDim2.new(0, 20, 0, 20)
+                        checkbox.Font = Enum.Font.GothamBold
+                        checkbox.Text = selectedItems[opt] and "✓" or ""
+                        SetThemedProperty(checkbox, "TextColor3", "Text")
+                        checkbox.TextSize = 14
+                        checkbox.Parent = optBtn
+
+                        local checkCorner = Instance.new("UICorner")
+                        checkCorner.CornerRadius = UDim.new(0, 4)
+                        checkCorner.Parent = checkbox
+
+                        local checkStroke = Instance.new("UIStroke")
+                        SetThemedProperty(checkStroke, "Color", selectedItems[opt] and "Accent" or "Border")
+                        checkStroke.Thickness = 1
+                        checkStroke.Parent = checkbox
+
+                        local optLabel = Instance.new("TextLabel")
+                        optLabel.BackgroundTransparency = 1
+                        optLabel.Position = UDim2.new(0, 30, 0, 0)
+                        optLabel.Size = UDim2.new(1, -30, 1, 0)
+                        optLabel.Font = Enum.Font.Gotham
+                        optLabel.Text = opt
+                        SetThemedProperty(optLabel, "TextColor3", "TextDark")
+                        optLabel.TextSize = 12
+                        optLabel.TextXAlignment = Enum.TextXAlignment.Left
+                        optLabel.Parent = optBtn
+
+                        if selectedItems[opt] then
+                            checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                            local theme = Utils:GetTheme()
+                            checkbox.BackgroundColor3 = theme.Accent
+                        end
+
+                        optBtn.MouseButton1Click:Connect(function()
+                            local currentCount = 0
+                            for _, isSelected in pairs(selectedItems) do
+                                if isSelected then
+                                    currentCount = currentCount + 1
+                                end
+                            end
+
+                            if selectedItems[opt] then
+                                selectedItems[opt] = false
+                                checkbox.Text = ""
+                                checkbox:SetAttribute("Theme_BackgroundColor3", "Background")
+                                checkStroke:SetAttribute("Theme_Color", "Border")
+                                local theme = Utils:GetTheme()
+                                checkbox.BackgroundColor3 = theme.Background
+                                checkStroke.Color = theme.Border
+                            elseif currentCount < maxSelections then
+                                selectedItems[opt] = true
+                                checkbox.Text = "✓"
+                                checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                                checkStroke:SetAttribute("Theme_Color", "Accent")
+                                local theme = Utils:GetTheme()
+                                checkbox.BackgroundColor3 = theme.Accent
+                                checkStroke.Color = theme.Accent
+                            end
+
+                            mdLabel.Text = mdName .. ": " .. getSelectedText()
+                            updateFlag()
+                            
+                            local selected = {}
+                            for item, isSelected in pairs(selectedItems) do
+                                if isSelected then
+                                    table.insert(selected, item)
+                                end
+                            end
+                            pcall(callback, selected)
+                        end)
+
+                        optBtn.MouseEnter:Connect(function()
+                            ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Border"})
+                        end)
+
+                        optBtn.MouseLeave:Connect(function()
+                            ThemedTween(optBtn, {}, 0.2, {BackgroundColor3 = "Tertiary"})
+                        end)
+                    end
+
+                    mdBtn.MouseButton1Click:Connect(function()
+                        opened = not opened
+                        if opened then
+                            Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40 + #options * 32)}, 0.3)
+                            Utils:Tween(mdBtn, {Rotation = 180}, 0.3)
+                        else
+                            Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40)}, 0.3)
+                            Utils:Tween(mdBtn, {Rotation = 0}, 0.3)
+                        end
+                    end)
+
+                    local mdClickBtn = Instance.new("TextButton")
+                    mdClickBtn.BackgroundTransparency = 1
+                    mdClickBtn.Size = UDim2.new(1, 0, 0, 40)
+                    mdClickBtn.Text = ""
+                    mdClickBtn.ZIndex = 0
+                    mdClickBtn.Parent = mdFrame
+
+                    mdClickBtn.MouseButton1Click:Connect(function()
+                        opened = not opened
+                        if opened then
+                            Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40 + #options * 32)}, 0.3)
+                            Utils:Tween(mdBtn, {Rotation = 180}, 0.3)
+                        else
+                            Utils:Tween(mdFrame, {Size = UDim2.new(1, 0, 0, 40)}, 0.3)
+                            Utils:Tween(mdBtn, {Rotation = 0}, 0.3)
+                        end
+                    end)
+
+                    return {
+                        Set = function(_, items)
+                            selectedItems = {}
+                            local count = 0
+                            for _, item in ipairs(items) do
+                                if table.find(options, item) and count < maxSelections then
+                                    selectedItems[item] = true
+                                    count = count + 1
+                                end
+                            end
+                            
+                            for _, optBtn in ipairs(optList:GetChildren()) do
+                                if optBtn:IsA("TextButton") then
+                                    local optLabel = optBtn:FindFirstChild("TextLabel")
+                                    local checkbox = optBtn:FindFirstChildWhichIsA("TextLabel")
+                                    local checkStroke = checkbox and checkbox:FindFirstChildWhichIsA("UIStroke")
+                                    
+                                    if optLabel and checkbox and checkStroke then
+                                        local optText = optLabel.Text
+                                        if selectedItems[optText] then
+                                            checkbox.Text = "✓"
+                                            checkbox:SetAttribute("Theme_BackgroundColor3", "Accent")
+                                            checkStroke:SetAttribute("Theme_Color", "Accent")
+                                            local theme = Utils:GetTheme()
+                                            checkbox.BackgroundColor3 = theme.Accent
+                                            checkStroke.Color = theme.Accent
+                                        else
+                                            checkbox.Text = ""
+                                            checkbox:SetAttribute("Theme_BackgroundColor3", "Background")
+                                            checkStroke:SetAttribute("Theme_Color", "Border")
+                                            local theme = Utils:GetTheme()
+                                            checkbox.BackgroundColor3 = theme.Background
+                                            checkStroke.Color = theme.Border
+                                        end
+                                    end
+                                end
+                            end
+                            
+                            mdLabel.Text = mdName .. ": " .. getSelectedText()
+                            updateFlag()
+                            
+                            local selected = {}
+                            for item, isSelected in pairs(selectedItems) do
+                                if isSelected then
+                                    table.insert(selected, item)
+                                end
+                            end
+                            pcall(callback, selected)
+                        end,
+                        GetSelected = function()
+                            local selected = {}
+                            for item, isSelected in pairs(selectedItems) do
+                                if isSelected then
+                                    table.insert(selected, item)
+                                end
+                            end
+                            return selected
+                        end,
+                        Frame = mdFrame
+                    }
+                end
+
                 function subTabObj:Textbox(tbConfig)
                     tbConfig = tbConfig or {}
                     local tbName = tbConfig.Name or "Textbox"
@@ -5461,6 +6733,622 @@ function Zonix:Window(config)
                     }
                 end
 
+                function subTabObj:ColorPicker(cpConfig)
+                    cpConfig = cpConfig or {}
+                    local cpName = cpConfig.Name or "Color"
+                    local default = cpConfig.Default or Color3.fromRGB(255, 255, 255)
+                    local flag = cpConfig.Flag
+                    local callback = cpConfig.Callback or function()
+                        end
+
+                    local cpFrame = Instance.new("Frame")
+                    SetThemedProperty(cpFrame, "BackgroundColor3", "Secondary")
+                    cpFrame.BorderSizePixel = 0
+                    cpFrame.Size = UDim2.new(1, 0, 0, 40)
+                    cpFrame.Parent = stTabContent
+
+                    local cpCorner = Instance.new("UICorner")
+                    cpCorner.CornerRadius = UDim.new(0, 8)
+                    cpCorner.Parent = cpFrame
+
+                    local cpStroke = Instance.new("UIStroke")
+                    SetThemedProperty(cpStroke, "Color", "Border")
+                    cpStroke.Thickness = 1
+                    cpStroke.Parent = cpFrame
+
+                    local cpLabel = Instance.new("TextLabel")
+                    cpLabel.BackgroundTransparency = 1
+                    cpLabel.Position = UDim2.new(0, 10, 0, 0)
+                    cpLabel.Size = UDim2.new(1, -50, 1, 0)
+                    cpLabel.Font = Enum.Font.GothamBold
+                    cpLabel.Text = cpName
+                    SetThemedProperty(cpLabel, "TextColor3", "Text")
+                    cpLabel.TextSize = 13
+                    cpLabel.TextXAlignment = Enum.TextXAlignment.Left
+                    cpLabel.Parent = cpFrame
+
+                    local cpDisplay = Instance.new("TextButton")
+                    cpDisplay.AnchorPoint = Vector2.new(1, 0.5)
+                    cpDisplay.BackgroundColor3 = default
+                    cpDisplay.BorderSizePixel = 0
+                    cpDisplay.Position = UDim2.new(1, -10, 0.5, 0)
+                    cpDisplay.Size = UDim2.new(0, 30, 0, 30)
+                    cpDisplay.Text = ""
+                    cpDisplay.AutoButtonColor = false
+                    cpDisplay.Parent = cpFrame
+
+                    local cpDisplayCorner = Instance.new("UICorner")
+                    cpDisplayCorner.CornerRadius = UDim.new(0, 6)
+                    cpDisplayCorner.Parent = cpDisplay
+
+                    local cpDisplayStroke = Instance.new("UIStroke")
+                    SetThemedProperty(cpDisplayStroke, "Color", "Border")
+                    cpDisplayStroke.Thickness = 2
+                    cpDisplayStroke.Parent = cpDisplay
+
+                    if flag then
+                        Zonix.Flags[flag] = default
+                    end
+
+                    local currentH = 0
+                    local currentS = 1
+                    local currentV = 1
+                    local currentColor = default
+                    local pickerOpen = false
+
+                    local function RGBtoHSV(col)
+                        local r, g, b = col.R, col.G, col.B
+                        local mx, mn = math.max(r, g, b), math.min(r, g, b)
+                        local d = mx - mn
+                        local h, s, v = 0, 0, mx
+                        if d > 0 then
+                            s = d / mx
+                            if r == mx then
+                                h = (g - b) / d
+                            elseif g == mx then
+                                h = 2 + (b - r) / d
+                            else
+                                h = 4 + (r - g) / d
+                            end
+                            h = h / 6
+                            if h < 0 then
+                                h = h + 1
+                            end
+                        end
+                        return h, s, v
+                    end
+
+                    local function HSVtoRGB(h, s, v)
+                        if s == 0 then
+                            return Color3.new(v, v, v)
+                        end
+                        local i = math.floor(h * 6)
+                        local f = h * 6 - i
+                        local p, q, t = v * (1 - s), v * (1 - f * s), v * (1 - (1 - f) * s)
+                        i = i % 6
+                        if i == 0 then
+                            return Color3.new(v, t, p)
+                        elseif i == 1 then
+                            return Color3.new(q, v, p)
+                        elseif i == 2 then
+                            return Color3.new(p, v, t)
+                        elseif i == 3 then
+                            return Color3.new(p, q, v)
+                        elseif i == 4 then
+                            return Color3.new(t, p, v)
+                        else
+                            return Color3.new(v, p, q)
+                        end
+                    end
+
+                    local function ToHex(col)
+                        return string.format(
+                            "#%02x%02x%02x",
+                            math.floor(col.R * 255),
+                            math.floor(col.G * 255),
+                            math.floor(col.B * 255)
+                        )
+                    end
+
+                    local function ToCMYK(col)
+                        local k = 1 - math.max(col.R, col.G, col.B)
+                        if k == 1 then
+                            return 0, 0, 0, 1
+                        end
+                        return (1 - col.R - k) / (1 - k), (1 - col.G - k) / (1 - k), (1 - col.B - k) / (1 - k), k
+                    end
+
+                    local function ToHSL(col)
+                        local mx, mn = math.max(col.R, col.G, col.B), math.min(col.R, col.G, col.B)
+                        local l = (mx + mn) / 2
+                        if mx == mn then
+                            return 0, 0, l
+                        end
+                        local d = mx - mn
+                        local s = l > 0.5 and d / (2 - mx - mn) or d / (mx + mn)
+                        local h
+                        if col.R == mx then
+                            h = (col.G - col.B) / d + (col.G < col.B and 6 or 0)
+                        elseif col.G == mx then
+                            h = (col.B - col.R) / d + 2
+                        else
+                            h = (col.R - col.G) / d + 4
+                        end
+                        return h / 6, s, l
+                    end
+
+                    currentH, currentS, currentV = RGBtoHSV(default)
+
+                    cpDisplay.MouseButton1Click:Connect(
+                        function()
+                            if pickerOpen then
+                                return
+                            end
+                            pickerOpen = true
+
+                            local sg = Instance.new("ScreenGui")
+                            sg.Name = "ColorPickerModal"
+                            sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                            sg.DisplayOrder = 999999
+                            sg.IgnoreGuiInset = true
+                            sg.Parent = Executor.GetHui()
+
+                            local bg = Instance.new("TextButton", sg)
+                            bg.BackgroundColor3, bg.BackgroundTransparency = Color3.new(0, 0, 0), 0.5
+                            bg.BorderSizePixel, bg.Size, bg.ZIndex = 0, UDim2.new(1, 0, 1, 0), 999999
+                            bg.Text = ""
+                            bg.AutoButtonColor = false
+                            bg.Active = true
+
+                            local viewportSize = workspace.CurrentCamera.ViewportSize
+                            local baseWidth, baseHeight = 480, 580
+                            local scale
+                            
+                            if viewportSize.X < 600 or viewportSize.Y < 700 then
+                                scale = math.min(viewportSize.X / 500, viewportSize.Y / 650) * 0.95
+                            elseif viewportSize.X > 1920 then
+                                scale = math.min(viewportSize.X / 1920, 1.5)
+                            else
+                                scale = 1
+                            end
+                            
+                            local pickerWidth = math.floor(baseWidth * scale)
+                            local pickerHeight = math.floor(baseHeight * scale)
+
+                            local pk = Instance.new("Frame", bg)
+                            pk.AnchorPoint, pk.BackgroundColor3, pk.BorderSizePixel = Vector2.new(0.5, 0.5), theme.Background, 0
+                            pk.Position, pk.Size, pk.ZIndex = UDim2.new(0.5, 0, 0.5, 0), UDim2.new(0, pickerWidth, 0, pickerHeight), 1000000
+                            pk.Active = true
+                            Instance.new("UICorner", pk).CornerRadius = UDim.new(0, 12)
+                            local st = Instance.new("UIStroke", pk)
+                            SetThemedProperty(st, "Color", "Border")
+                            st.Thickness = 2
+
+                            local tb = Instance.new("Frame", pk)
+                            tb.BackgroundColor3, tb.BorderSizePixel, tb.Size, tb.ZIndex =
+                                theme.Topbar,
+                                0,
+                                UDim2.new(1, 0, 0, math.floor(50 * scale)),
+                                1000001
+                            Instance.new("UICorner", tb).CornerRadius = UDim.new(0, 12)
+                            local tc = Instance.new("Frame", tb)
+                            tc.BackgroundColor3, tc.BorderSizePixel, tc.Position, tc.Size, tc.ZIndex =
+                                theme.Topbar,
+                                0,
+                                UDim2.new(0, 0, 1, -12),
+                                UDim2.new(1, 0, 0, 12),
+                                1000001
+                            local tl = Instance.new("TextLabel", tb)
+                            tl.BackgroundTransparency, tl.Position, tl.Size = 1, UDim2.new(0, math.floor(20 * scale), 0, 0), UDim2.new(1, math.floor(-80 * scale), 1, 0)
+                            tl.Font, tl.Text, tl.TextColor3, tl.TextSize, tl.TextXAlignment, tl.ZIndex =
+                                Enum.Font.GothamBold,
+                                "Color Picker",
+                                theme.Text,
+                                math.floor(16 * scale),
+                                Enum.TextXAlignment.Left,
+                                1000002
+
+                            local closeBtn = Instance.new("TextButton", tb)
+                            closeBtn.AnchorPoint, closeBtn.BackgroundColor3, closeBtn.BorderSizePixel =
+                                Vector2.new(1, 0.5),
+                                theme.Error,
+                                0
+                            closeBtn.Position, closeBtn.Size = UDim2.new(1, math.floor(-15 * scale), 0.5, 0), UDim2.new(0, math.floor(30 * scale), 0, math.floor(30 * scale))
+                            closeBtn.Font, closeBtn.Text, closeBtn.TextColor3, closeBtn.TextSize, closeBtn.ZIndex =
+                                Enum.Font.GothamBold,
+                                "x",
+                                Color3.new(1, 1, 1),
+                                math.floor(18 * scale),
+                                1000002
+                            closeBtn.AutoButtonColor = false
+                            Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
+
+                            closeBtn.MouseEnter:Connect(
+                                function()
+                                    Utils:Tween(closeBtn, {BackgroundColor3 = Color3.fromRGB(200, 50, 50)}, 0.2)
+                                end
+                            )
+                            closeBtn.MouseLeave:Connect(
+                                function()
+                                    ThemedTween(closeBtn, {}, 0.2, {BackgroundColor3 = "Error"})
+                                end
+                            )
+                            closeBtn.MouseButton1Click:Connect(
+                                function()
+                                    cpDisplay.BackgroundColor3 = currentColor
+                                    if flag then
+                                        Zonix.Flags[flag] = currentColor
+                                    end
+                                    pcall(callback, currentColor)
+                                    pickerOpen = false
+                                    inputEndedConn:Disconnect()
+                                    inputChangedConn:Disconnect()
+                                    sg:Destroy()
+                                end
+                            )
+
+                            local sv = Instance.new("ImageButton", pk)
+                            sv.BackgroundColor3, sv.BorderSizePixel, sv.Position, sv.Size, sv.ZIndex, sv.AutoButtonColor =
+                                HSVtoRGB(currentH, 1, 1),
+                                0,
+                                UDim2.new(0, math.floor(20 * scale), 0, math.floor(70 * scale)),
+                                UDim2.new(0, math.floor(340 * scale), 0, math.floor(320 * scale)),
+                                1000001,
+                                false
+                            Instance.new("UICorner", sv).CornerRadius = UDim.new(0, 8)
+
+                            local w = Instance.new("Frame", sv)
+                            w.BackgroundColor3, w.BorderSizePixel, w.Size, w.ZIndex =
+                                Color3.new(1, 1, 1),
+                                0,
+                                UDim2.new(1, 0, 1, 0),
+                                1000002
+                            Instance.new("UICorner", w).CornerRadius = UDim.new(0, 8)
+                            local wg = Instance.new("UIGradient", w)
+                            wg.Transparency =
+                                NumberSequence.new({NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1)})
+
+                            local bk = Instance.new("Frame", sv)
+                            bk.BackgroundColor3, bk.BorderSizePixel, bk.Size, bk.ZIndex =
+                                Color3.new(0, 0, 0),
+                                0,
+                                UDim2.new(1, 0, 1, 0),
+                                1000003
+                            Instance.new("UICorner", bk).CornerRadius = UDim.new(0, 8)
+                            local bkg = Instance.new("UIGradient", bk)
+                            bkg.Transparency, bkg.Rotation =
+                                NumberSequence.new({NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0)}),
+                                90
+
+                            local sc = Instance.new("Frame", sv)
+                            sc.AnchorPoint, sc.BackgroundColor3, sc.BorderSizePixel =
+                                Vector2.new(0.5, 0.5),
+                                Color3.new(1, 1, 1),
+                                0
+                            sc.Position, sc.Size, sc.ZIndex =
+                                UDim2.new(currentS, 0, 1 - currentV, 0),
+                                UDim2.new(0, math.floor(20 * scale), 0, math.floor(20 * scale)),
+                                1000004
+                            Instance.new("UICorner", sc).CornerRadius = UDim.new(1, 0)
+                            local scs = Instance.new("UIStroke", sc)
+                            scs.Color, scs.Thickness = Color3.fromRGB(40, 40, 50), math.max(2, math.floor(3 * scale))
+
+                            local hu = Instance.new("ImageButton", pk)
+                            hu.BackgroundColor3, hu.BorderSizePixel, hu.Position, hu.Size, hu.ZIndex, hu.AutoButtonColor =
+                                Color3.new(1, 1, 1),
+                                0,
+                                UDim2.new(0, math.floor(20 * scale), 0, math.floor(410 * scale)),
+                                UDim2.new(0, math.floor(440 * scale), 0, math.floor(20 * scale)),
+                                1000001,
+                                false
+                            Instance.new("UICorner", hu).CornerRadius = UDim.new(1, 0)
+                            local hg = Instance.new("UIGradient", hu)
+                            hg.Color =
+                                ColorSequence.new(
+                                {
+                                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+                                    ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 255, 0)),
+                                    ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)),
+                                    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
+                                    ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
+                                    ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 0, 255)),
+                                    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
+                                }
+                            )
+
+                            local hc = Instance.new("Frame", hu)
+                            hc.AnchorPoint, hc.BackgroundColor3, hc.BorderSizePixel =
+                                Vector2.new(0.5, 0.5),
+                                Color3.new(1, 1, 1),
+                                0
+                            hc.Position, hc.Size, hc.ZIndex = UDim2.new(currentH, 0, 0.5, 0), UDim2.new(0, math.floor(16 * scale), 0, math.floor(32 * scale)), 1000002
+                            Instance.new("UICorner", hc).CornerRadius = UDim.new(1, 0)
+                            local hcs = Instance.new("UIStroke", hc)
+                            hcs.Color, hcs.Thickness = Color3.fromRGB(40, 40, 50), math.max(2, math.floor(3 * scale))
+
+                            local pv = Instance.new("Frame", pk)
+                            pv.BackgroundColor3, pv.BorderSizePixel, pv.Position, pv.Size, pv.ZIndex =
+                                currentColor,
+                                0,
+                                UDim2.new(0, math.floor(380 * scale), 0, math.floor(70 * scale)),
+                                UDim2.new(0, math.floor(80 * scale), 0, math.floor(80 * scale)),
+                                1000001
+                            Instance.new("UICorner", pv).CornerRadius = UDim.new(0, 8)
+                            local pvs = Instance.new("UIStroke", pv)
+                            SetThemedProperty(pvs, "Color", "Border")
+                            pvs.Thickness = 2
+
+                            local hf = Instance.new("Frame", pk)
+                            hf.BackgroundColor3, hf.BorderSizePixel, hf.Position, hf.Size, hf.ZIndex =
+                                theme.Secondary,
+                                0,
+                                UDim2.new(0, math.floor(20 * scale), 0, math.floor(440 * scale)),
+                                UDim2.new(0, math.floor(440 * scale), 0, math.floor(50 * scale)),
+                                1000001
+                            Instance.new("UICorner", hf).CornerRadius = UDim.new(0, 8)
+                            local hfStroke = Instance.new("UIStroke", hf)
+                            SetThemedProperty(hfStroke, "Color", "Border")
+
+                            local ht = Instance.new("TextLabel", hf)
+                            ht.BackgroundTransparency, ht.Position, ht.Size =
+                                1,
+                                UDim2.new(0, math.floor(15 * scale), 0, 0),
+                                UDim2.new(0, math.floor(100 * scale), 0, math.floor(20 * scale))
+                            ht.Font, ht.Text, ht.TextColor3, ht.TextSize, ht.TextXAlignment, ht.ZIndex =
+                                Enum.Font.GothamBold,
+                                "HEX",
+                                theme.Text,
+                                math.floor(12 * scale),
+                                Enum.TextXAlignment.Left,
+                                1000002
+
+                            local hv = Instance.new("TextLabel", hf)
+                            hv.BackgroundTransparency, hv.Position, hv.Size =
+                                1,
+                                UDim2.new(0, math.floor(15 * scale), 0, math.floor(20 * scale)),
+                                UDim2.new(1, math.floor(-80 * scale), 0, math.floor(25 * scale))
+                            hv.Font, hv.Text, hv.TextColor3, hv.TextSize, hv.TextXAlignment, hv.ZIndex =
+                                Enum.Font.Gotham,
+                                ToHex(currentColor),
+                                theme.TextDark,
+                                math.floor(14 * scale),
+                                Enum.TextXAlignment.Left,
+                                1000002
+
+                            local hb = Instance.new("TextButton", hf)
+                            hb.AnchorPoint, hb.BackgroundTransparency, hb.Position, hb.Size =
+                                Vector2.new(1, 0.5),
+                                1,
+                                UDim2.new(1, math.floor(-10 * scale), 0.5, 0),
+                                UDim2.new(0, math.floor(30 * scale), 0, math.floor(30 * scale))
+                            hb.Font, hb.Text, hb.TextColor3, hb.TextSize, hb.ZIndex =
+                                Enum.Font.GothamBold,
+                                "📋",
+                                theme.TextDark,
+                                math.floor(16 * scale),
+                                1000002
+                            hb.MouseButton1Click:Connect(
+                                function()
+                                    Executor.SetClipboard(hv.Text)
+                                    hb.Text = "✓"
+                                    task.wait(1)
+                                    hb.Text = "📋"
+                                end
+                            )
+
+                            local vf = Instance.new("Frame", pk)
+                            vf.BackgroundTransparency, vf.Position, vf.Size, vf.ZIndex =
+                                1,
+                                UDim2.new(0, math.floor(20 * scale), 0, math.floor(510 * scale)),
+                                UDim2.new(0, math.floor(440 * scale), 0, math.floor(50 * scale)),
+                                1000001
+
+                            local function MV(n, x, v)
+                                local f = Instance.new("Frame", vf)
+                                f.BackgroundColor3, f.BorderSizePixel, f.Position, f.Size, f.ZIndex =
+                                    theme.Secondary,
+                                    0,
+                                    UDim2.new(0, math.floor(x * scale), 0, 0),
+                                    UDim2.new(0, math.floor(105 * scale), 0, math.floor(50 * scale)),
+                                    1000001
+                                Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
+                                local fStroke = Instance.new("UIStroke", f)
+                                SetThemedProperty(fStroke, "Color", "Border")
+                                local t = Instance.new("TextLabel", f)
+                                t.BackgroundTransparency, t.Position, t.Size =
+                                    1,
+                                    UDim2.new(0, math.floor(10 * scale), 0, math.floor(5 * scale)),
+                                    UDim2.new(1, math.floor(-20 * scale), 0, math.floor(15 * scale))
+                                t.Font, t.Text, t.TextColor3, t.TextSize, t.TextXAlignment, t.ZIndex =
+                                    Enum.Font.GothamBold,
+                                    n,
+                                    theme.Text,
+                                    math.floor(11 * scale),
+                                    Enum.TextXAlignment.Left,
+                                    1000002
+                                local vv = Instance.new("TextLabel", f)
+                                vv.BackgroundTransparency, vv.Position, vv.Size =
+                                    1,
+                                    UDim2.new(0, math.floor(10 * scale), 0, math.floor(22 * scale)),
+                                    UDim2.new(1, math.floor(-20 * scale), 0, math.floor(23 * scale))
+                                vv.Font, vv.Text, vv.TextColor3, vv.TextSize, vv.TextXAlignment, vv.ZIndex =
+                                    Enum.Font.Gotham,
+                                    v,
+                                    theme.TextDark,
+                                    math.floor(12 * scale),
+                                    Enum.TextXAlignment.Left,
+                                    1000002
+                                return vv
+                            end
+
+                            local r, g, b =
+                                math.floor(currentColor.R * 255),
+                                math.floor(currentColor.G * 255),
+                                math.floor(currentColor.B * 255)
+                            local rgbD = MV("RGB", 0, r .. ", " .. g .. ", " .. b)
+                            local c, m, y, k = ToCMYK(currentColor)
+                            local cmykD =
+                                MV(
+                                "CMYK",
+                                112,
+                                math.floor(c * 100) ..
+                                    "%, " ..
+                                        math.floor(m * 100) ..
+                                            "%, " .. math.floor(y * 100) .. "%, " .. math.floor(k * 100) .. "%"
+                            )
+                            local hsvD =
+                                MV(
+                                "HSV",
+                                224,
+                                math.floor(currentH * 360) ..
+                                    "°, " .. math.floor(currentS * 100) .. "%, " .. math.floor(currentV * 100) .. "%"
+                            )
+                            local h2, s2, l2 = ToHSL(currentColor)
+                            local hslD =
+                                MV(
+                                "HSL",
+                                336,
+                                math.floor(h2 * 360) .. "°, " .. math.floor(s2 * 100) .. "%, " .. math.floor(l2 * 100) .. "%"
+                            )
+
+                            local function Up(col)
+                                currentColor = col
+                                pv.BackgroundColor3, hv.Text = col, ToHex(col)
+                                local r2, g2, b2 = math.floor(col.R * 255), math.floor(col.G * 255), math.floor(col.B * 255)
+                                rgbD.Text = r2 .. ", " .. g2 .. ", " .. b2
+                                local c2, m2, y2, k2 = ToCMYK(col)
+                                cmykD.Text =
+                                    math.floor(c2 * 100) ..
+                                    "%, " ..
+                                        math.floor(m2 * 100) ..
+                                            "%, " .. math.floor(y2 * 100) .. "%, " .. math.floor(k2 * 100) .. "%"
+                                hsvD.Text =
+                                    math.floor(currentH * 360) ..
+                                    "°, " .. math.floor(currentS * 100) .. "%, " .. math.floor(currentV * 100) .. "%"
+                                local h3, s3, l3 = ToHSL(col)
+                                hslD.Text =
+                                    math.floor(h3 * 360) ..
+                                    "°, " .. math.floor(s3 * 100) .. "%, " .. math.floor(l3 * 100) .. "%"
+                            end
+
+                            local svD = false
+                            local function UpSV(i)
+                                currentS = math.clamp((i.Position.X - sv.AbsolutePosition.X) / sv.AbsoluteSize.X, 0, 1)
+                                currentV = 1 - math.clamp((i.Position.Y - sv.AbsolutePosition.Y) / sv.AbsoluteSize.Y, 0, 1)
+                                sc.Position = UDim2.new(currentS, 0, 1 - currentV, 0)
+                                Up(HSVtoRGB(currentH, currentS, currentV))
+                            end
+
+                            sv.InputBegan:Connect(
+                                function(i)
+                                    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                                        svD = true
+                                        UpSV(i)
+                                    end
+                                end
+                            )
+
+                            local huD = false
+                            local function UpHu(i)
+                                currentH = math.clamp((i.Position.X - hu.AbsolutePosition.X) / hu.AbsoluteSize.X, 0, 1)
+                                hc.Position = UDim2.new(currentH, 0, 0.5, 0)
+                                sv.BackgroundColor3 = HSVtoRGB(currentH, 1, 1)
+                                Up(HSVtoRGB(currentH, currentS, currentV))
+                            end
+
+                            hu.InputBegan:Connect(
+                                function(i)
+                                    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                                        huD = true
+                                        UpHu(i)
+                                    end
+                                end
+                            )
+
+                            local inputEndedConn
+                            local inputChangedConn
+
+                            inputEndedConn =
+                                UserInputService.InputEnded:Connect(
+                                function(i)
+                                    if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+                                        svD = false
+                                        huD = false
+                                    end
+                                end
+                            )
+
+                            inputChangedConn =
+                                UserInputService.InputChanged:Connect(
+                                function(i)
+                                    if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
+                                        if svD then
+                                            UpSV(i)
+                                        end
+                                        if huD then
+                                            UpHu(i)
+                                        end
+                                    end
+                                end
+                            )
+
+                            bg.MouseButton1Click:Connect(
+                                function()
+                                    cpDisplay.BackgroundColor3 = currentColor
+                                    if flag then
+                                        Zonix.Flags[flag] = currentColor
+                                    end
+                                    pcall(callback, currentColor)
+                                    pickerOpen = false
+                                    inputEndedConn:Disconnect()
+                                    inputChangedConn:Disconnect()
+                                    sg:Destroy()
+                                end
+                            )
+
+                            sg.Destroying:Connect(
+                                function()
+                                    pickerOpen = false
+                                    if inputEndedConn then
+                                        inputEndedConn:Disconnect()
+                                    end
+                                    if inputChangedConn then
+                                        inputChangedConn:Disconnect()
+                                    end
+                                end
+                            )
+                        end
+                    )
+
+                    if cpConfig.Tooltip then
+                        Utils:AddTooltip(cpFrame, cpConfig.Tooltip)
+                    end
+
+                    local colorPickerElement = {
+                        Set = function(_, color)
+                            cpDisplay.BackgroundColor3 = color
+                            currentColor = color
+                            currentH, currentS, currentV = RGBtoHSV(color)
+
+                            if flag then
+                                Zonix.Flags[flag] = color
+                            end
+
+                            pcall(callback, color)
+                        end,
+                        Frame = cpFrame,
+                        Name = cpName,
+                        SearchData = cpName,
+                        Tags = {}
+                    }
+                    
+                    if flag then
+                        Zonix.FlaggedElements[flag] = colorPickerElement
+                    end
+                    
+                    return colorPickerElement
+                end
+
                 function subTabObj:AddSpacing(pixels)
                     pixels = pixels or 10
                     local spacer = Instance.new("Frame")
@@ -5468,6 +7356,95 @@ function Zonix:Window(config)
                     spacer.BorderSizePixel = 0
                     spacer.Size = UDim2.new(1, 0, 0, pixels)
                     spacer.Parent = stTabContent
+                    
+                    return {
+                        Frame = spacer
+                    }
+                end
+
+                function subTabObj:Image(imgConfig)
+                    imgConfig = imgConfig or {}
+                    local imgType = imgConfig.Type or "ImageLabel"
+                    local imgId = imgConfig.Image or ""
+                    local imgSize = imgConfig.Size or UDim2.new(1, 0, 0, 150)
+                    local callback = imgConfig.Callback or function() end
+                    local scaleType = imgConfig.ScaleType or Enum.ScaleType.Fit
+                    local imageColor = imgConfig.ImageColor3 or Color3.fromRGB(255, 255, 255)
+                    local imageTransparency = imgConfig.ImageTransparency or 0
+                    local backgroundTransparency = imgConfig.BackgroundTransparency or 1
+
+                    local imgFrame = Instance.new("Frame")
+                    SetThemedProperty(imgFrame, "BackgroundColor3", "Secondary")
+                    imgFrame.BorderSizePixel = 0
+                    imgFrame.Size = UDim2.new(1, 0, 0, 0)
+                    imgFrame.AutomaticSize = Enum.AutomaticSize.Y
+                    imgFrame.Parent = stTabContent
+
+                    local imgCorner = Instance.new("UICorner")
+                    imgCorner.CornerRadius = UDim.new(0, 8)
+                    imgCorner.Parent = imgFrame
+
+                    local imgStroke = Instance.new("UIStroke")
+                    SetThemedProperty(imgStroke, "Color", "Border")
+                    imgStroke.Thickness = 1
+                    imgStroke.Parent = imgFrame
+
+                    local imgPad = Instance.new("UIPadding")
+                    imgPad.PaddingLeft = UDim.new(0, 10)
+                    imgPad.PaddingRight = UDim.new(0, 10)
+                    imgPad.PaddingTop = UDim.new(0, 10)
+                    imgPad.PaddingBottom = UDim.new(0, 10)
+                    imgPad.Parent = imgFrame
+
+                    local imageElement
+                    if imgType == "ImageButton" then
+                        imageElement = Instance.new("ImageButton")
+                        imageElement.AutoButtonColor = false
+                        imageElement.MouseButton1Click:Connect(function()
+                            Utils:Ripple(imageElement)
+                            callback()
+                        end)
+                        imageElement.MouseEnter:Connect(function()
+                            Utils:Tween(imageElement, {ImageTransparency = math.max(0, imageTransparency - 0.1)}, 0.2)
+                        end)
+                        imageElement.MouseLeave:Connect(function()
+                            Utils:Tween(imageElement, {ImageTransparency = imageTransparency}, 0.2)
+                        end)
+                    else
+                        imageElement = Instance.new("ImageLabel")
+                    end
+
+                    imageElement.BackgroundTransparency = backgroundTransparency
+                    imageElement.BorderSizePixel = 0
+                    imageElement.Size = imgSize
+                    imageElement.Image = imgId
+                    imageElement.ScaleType = scaleType
+                    imageElement.ImageColor3 = imageColor
+                    imageElement.ImageTransparency = imageTransparency
+                    imageElement.Parent = imgFrame
+
+                    local imageCorner = Instance.new("UICorner")
+                    imageCorner.CornerRadius = UDim.new(0, 6)
+                    imageCorner.Parent = imageElement
+
+                    return {
+                        SetImage = function(_, newImage)
+                            imageElement.Image = newImage
+                        end,
+                        SetImageColor = function(_, newColor)
+                            imageColor = newColor
+                            imageElement.ImageColor3 = newColor
+                        end,
+                        SetTransparency = function(_, transparency)
+                            imageTransparency = transparency
+                            imageElement.ImageTransparency = transparency
+                        end,
+                        SetSize = function(_, newSize)
+                            imageElement.Size = newSize
+                        end,
+                        Frame = imgFrame,
+                        ImageElement = imageElement
+                    }
                 end
 
                 function subTabObj:GroupBox(gbConfig)
@@ -5582,8 +7559,13 @@ function Zonix:Window(config)
 
                         local function updateCheckbox()
                             checkbox.Text = checked and "✓" or ""
-                            checkbox.BackgroundColor3 = checked and theme.Accent or theme.Background
-                            checkStroke.Color = checked and theme.Accent or theme.Border
+                            local bgThemeKey = checked and "Accent" or "Background"
+                            local strokeThemeKey = checked and "Accent" or "Border"
+                            checkbox:SetAttribute("Theme_BackgroundColor3", bgThemeKey)
+                            checkStroke:SetAttribute("Theme_Color", strokeThemeKey)
+                            local currentTheme = Utils:GetTheme()
+                            checkbox.BackgroundColor3 = currentTheme[bgThemeKey]
+                            checkStroke.Color = currentTheme[strokeThemeKey]
                         end
 
                         updateCheckbox()
@@ -5620,12 +7602,153 @@ function Zonix:Window(config)
                     return groupBox
                 end
 
+                function subTabObj:AddElement(elementType, config)
+                    local normalizedType = elementType
+                    local typeAliases = {
+                        ["spacing"] = "AddSpacing",
+                        ["space"] = "AddSpacing",
+                        ["addspacing"] = "AddSpacing",
+                        ["label"] = "Label",
+                        ["section"] = "Section",
+                        ["button"] = "Button",
+                        ["toggle"] = "Toggle",
+                        ["slider"] = "Slider",
+                        ["dropdown"] = "Dropdown",
+                        ["multidropdown"] = "MultiDropdown",
+                        ["textbox"] = "Textbox",
+                        ["checkbox"] = "Checkbox",
+                        ["progressbar"] = "ProgressBar",
+                        ["paragraph"] = "Paragraph",
+                        ["divider"] = "Divider",
+                        ["groupbox"] = "GroupBox",
+                        ["image"] = "Image"
+                    }
+                    
+                    local lowerType = elementType:lower()
+                    if typeAliases[lowerType] then
+                        normalizedType = typeAliases[lowerType]
+                    end
+                    
+                    local validTypes = {
+                        "Button", "Toggle", "Slider", "Dropdown", "MultiDropdown", "Textbox", "Label", 
+                        "Section", "Checkbox", "ProgressBar", "Paragraph", "Divider",
+                        "GroupBox", "AddSpacing", "Image"
+                    }
+                    
+                    local isValid = false
+                    for _, validType in ipairs(validTypes) do
+                        if normalizedType == validType then
+                            isValid = true
+                            break
+                        end
+                    end
+                    
+                    if not isValid then
+                        warn("[Zonix UI SubTab] Invalid element type: " .. tostring(elementType))
+                        return nil
+                    end
+                    
+                    local finalConfig = config
+                    
+                    if type(config) ~= "table" then
+                        if normalizedType == "Label" then
+                            finalConfig = {Text = tostring(config)}
+                        elseif normalizedType == "Section" then
+                            finalConfig = {Name = tostring(config)}
+                        elseif normalizedType == "AddSpacing" then
+                            finalConfig = {Height = tonumber(config) or 10}
+                        elseif normalizedType == "Paragraph" then
+                            finalConfig = {Title = "Info", Text = tostring(config)}
+                        elseif normalizedType == "Divider" then
+                            finalConfig = {}
+                        else
+                            finalConfig = {}
+                        end
+                    else
+                        finalConfig = config
+                    end
+                    
+                    finalConfig = finalConfig or {}
+                    
+                    local element
+                    if normalizedType == "Button" then
+                        element = subTabObj:Button(finalConfig)
+                    elseif normalizedType == "Toggle" then
+                        element = subTabObj:Toggle(finalConfig)
+                    elseif normalizedType == "Slider" then
+                        element = subTabObj:Slider(finalConfig)
+                    elseif normalizedType == "Dropdown" then
+                        element = subTabObj:Dropdown(finalConfig)
+                    elseif normalizedType == "MultiDropdown" then
+                        element = subTabObj:MultiDropdown(finalConfig)
+                    elseif normalizedType == "Textbox" then
+                        element = subTabObj:Textbox(finalConfig)
+                    elseif normalizedType == "Label" then
+                        element = subTabObj:Label(finalConfig.Text or "")
+                    elseif normalizedType == "Section" then
+                        element = subTabObj:Section(finalConfig.Name or "Section")
+                    elseif normalizedType == "Checkbox" then
+                        element = subTabObj:Checkbox(finalConfig)
+                    elseif normalizedType == "ProgressBar" then
+                        element = subTabObj:ProgressBar(finalConfig)
+                    elseif normalizedType == "Paragraph" then
+                        element = subTabObj:Paragraph(finalConfig.Title or "", finalConfig.Text or "")
+                    elseif normalizedType == "Divider" then
+                        element = subTabObj:Divider()
+                    elseif normalizedType == "Image" then
+                        element = subTabObj:Image(finalConfig)
+                    elseif normalizedType == "GroupBox" then
+                        element = subTabObj:GroupBox(finalConfig)
+                    elseif normalizedType == "AddSpacing" then
+                        element = subTabObj:AddSpacing(finalConfig.Height or 10)
+                    end
+                    
+                    return element
+                end
+
+                function subTabObj:RemoveElement(element)
+                    if not element then
+                        warn("[Zonix UI SubTab] Cannot remove nil element")
+                        return false
+                    end
+                    
+                    if element.Flag then
+                        Zonix.Flags[element.Flag] = nil
+                        Zonix.FlaggedElements[element.Flag] = nil
+                    end
+                    
+                    if element.DependencyOf then
+                        for _, dependentElement in ipairs(element.DependencyOf) do
+                            if dependentElement.Frame then
+                                dependentElement.Frame:Destroy()
+                            end
+                        end
+                    end
+                    
+                    if element.Frame then
+                        element.Frame:Destroy()
+                    elseif element.Container then
+                        element.Container:Destroy()
+                    end
+                    
+                    for k, _ in pairs(element) do
+                        element[k] = nil
+                    end
+                    
+                    return true
+                end
+
                 stBtn.MouseButton1Click:Connect(
                     function()
                         for j, otherTab in ipairs(subTab.Tabs) do
                             otherTab.Container.Visible = j == i
-                            otherTab.TabButton.BackgroundColor3 = j == i and theme.Accent or theme.Tertiary
-                            otherTab.TabButton.TextColor3 = j == i and Color3.fromRGB(255, 255, 255) or theme.TextDark
+                            local bgThemeKey = j == i and "Accent" or "Tertiary"
+                            local textThemeKey = j == i and "Text" or "TextDark"
+                            otherTab.TabButton:SetAttribute("Theme_BackgroundColor3", bgThemeKey)
+                            otherTab.TabButton:SetAttribute("Theme_TextColor3", textThemeKey)
+                            local currentTheme = Utils:GetTheme()
+                            otherTab.TabButton.BackgroundColor3 = currentTheme[bgThemeKey]
+                            otherTab.TabButton.TextColor3 = j == i and Color3.fromRGB(255, 255, 255) or currentTheme[textThemeKey]
                         end
                         subTab.ActiveTab = i
                     end
@@ -6000,7 +8123,7 @@ function Zonix:Window(config)
                     
                     if hideNonMatching and not customSearch then
                         for _, element in pairs(tab.Elements) do
-                            if element.Frame and element ~= search then
+                            if element and element.Frame and element ~= search then
                                 element.Frame.Visible = true
                             end
                         end
@@ -6075,7 +8198,7 @@ function Zonix:Window(config)
                         end
                     else
                         for _, element in pairs(tab.Elements) do
-                        if element.SearchData then
+                        if element and element.SearchData then
                             local searchData = caseSensitive and element.SearchData or element.SearchData:lower()
                             local matches = false
                             local score = 0
@@ -6189,7 +8312,7 @@ function Zonix:Window(config)
                             end
                             
                             for _, element in pairs(tab.Elements) do
-                                if element.Frame and element ~= search then
+                                if element and element.Frame and element ~= search then
                                     if matchingElements[element] then
                                         element.Frame.Visible = true
                                     else
@@ -6199,7 +8322,7 @@ function Zonix:Window(config)
                             end
                         else
                             for _, element in pairs(tab.Elements) do
-                                if element.Frame and element ~= search then
+                                if element and element.Frame and element ~= search then
                                     element.Frame.Visible = true
                                 end
                             end
@@ -6221,7 +8344,7 @@ function Zonix:Window(config)
                 
                 if hideNonMatching and not customSearch then
                     for _, element in pairs(tab.Elements) do
-                        if element.Frame and element ~= search then
+                        if element and element.Frame and element ~= search then
                             element.Frame.Visible = true
                         end
                     end
@@ -6269,7 +8392,7 @@ function Zonix:Window(config)
             
             function search:AddElementTag(elementName, tag)
                 for _, element in pairs(tab.Elements) do
-                    if element.Name == elementName then
+                    if element and element.Name and element.Name == elementName then
                         if not element.Tags then
                             element.Tags = {}
                         end
@@ -6351,7 +8474,7 @@ function Zonix:Window(config)
             end)
 
             for _, element in pairs(tab.Elements) do
-                if element.Frame and element.Name then
+                if element and element.Frame and element.Name then
                     element.SearchData = element.Name
                     if element.Description then
                         element.SearchData = element.SearchData .. " " .. element.Description
@@ -6396,15 +8519,267 @@ function Zonix:Window(config)
             }
         end
 
+        
+        function tab:AddElement(elementType, config)
+            local normalizedType = elementType
+            local typeAliases = {
+                ["spacing"] = "AddSpace",
+                ["space"] = "AddSpace",
+                ["addspacing"] = "AddSpace",
+                ["label"] = "Label",
+                ["section"] = "Section",
+                ["button"] = "Button",
+                ["toggle"] = "Toggle",
+                ["slider"] = "Slider",
+                ["dropdown"] = "Dropdown",
+                ["textbox"] = "Textbox",
+                ["keybind"] = "Keybind",
+                ["colorpicker"] = "ColorPicker",
+                ["multidropdown"] = "MultiDropdown",
+                ["checkbox"] = "Checkbox",
+                ["progressbar"] = "ProgressBar",
+                ["loadingindicator"] = "LoadingIndicator",
+                ["paragraph"] = "Paragraph",
+                ["divider"] = "Divider",
+                ["groupbox"] = "GroupBox",
+                ["search"] = "Search",
+                ["image"] = "Image"
+            }
+            
+            local lowerType = elementType:lower()
+            if typeAliases[lowerType] then
+                normalizedType = typeAliases[lowerType]
+            end
+            
+            local validTypes = {
+                "Button", "Toggle", "Slider", "Dropdown", "Textbox", "Label", 
+                "Section", "Keybind", "ColorPicker", "MultiDropdown", "Checkbox",
+                "ProgressBar", "LoadingIndicator", "Paragraph", "Divider",
+                "GroupBox", "AddSpace", "Search", "Image"
+            }
+            
+            local isValid = false
+            for _, validType in ipairs(validTypes) do
+                if normalizedType == validType then
+                    isValid = true
+                    break
+                end
+            end
+            
+            if not isValid then
+                warn("[Zonix UI] Invalid element type: " .. tostring(elementType))
+                warn("[Zonix UI] Valid types: Button, Toggle, Slider, Dropdown, Textbox, Label, Section, Keybind, ColorPicker, MultiDropdown, Checkbox, ProgressBar, LoadingIndicator, Paragraph, Divider, GroupBox, AddSpace, Search, Image")
+                return nil
+            end
+            
+            local finalConfig = config
+            
+            if type(config) ~= "table" then
+                if normalizedType == "Label" then
+                    finalConfig = {Text = tostring(config)}
+                elseif normalizedType == "Section" then
+                    finalConfig = {Name = tostring(config)}
+                elseif normalizedType == "AddSpace" then
+                    finalConfig = {Height = tonumber(config) or 10}
+                elseif normalizedType == "Paragraph" then
+                    finalConfig = {Title = "Info", Text = tostring(config)}
+                elseif normalizedType == "Divider" then
+                    finalConfig = {}
+                else
+                    finalConfig = {}
+                end
+            else
+                finalConfig = config
+            end
+            
+            finalConfig = finalConfig or {}
+            
+            local element
+            if normalizedType == "Button" then
+                element = tab:Button(finalConfig)
+            elseif normalizedType == "Toggle" then
+                element = tab:Toggle(finalConfig)
+            elseif normalizedType == "Slider" then
+                element = tab:Slider(finalConfig)
+            elseif normalizedType == "Dropdown" then
+                element = tab:Dropdown(finalConfig)
+            elseif normalizedType == "Textbox" then
+                element = tab:Textbox(finalConfig)
+            elseif normalizedType == "Label" then
+                element = tab:Label(finalConfig)
+            elseif normalizedType == "Section" then
+                element = tab:Section(finalConfig)
+            elseif normalizedType == "Keybind" then
+                element = tab:Keybind(finalConfig)
+            elseif normalizedType == "ColorPicker" then
+                element = tab:ColorPicker(finalConfig)
+            elseif normalizedType == "MultiDropdown" then
+                element = tab:MultiDropdown(finalConfig)
+            elseif normalizedType == "Checkbox" then
+                element = tab:Checkbox(finalConfig)
+            elseif normalizedType == "ProgressBar" then
+                element = tab:ProgressBar(finalConfig)
+            elseif normalizedType == "LoadingIndicator" then
+                element = tab:LoadingIndicator(finalConfig)
+            elseif normalizedType == "Paragraph" then
+                element = tab:Paragraph(finalConfig)
+            elseif normalizedType == "Divider" then
+                element = tab:Divider(finalConfig)
+            elseif normalizedType == "Image" then
+                element = tab:Image(finalConfig)
+            elseif normalizedType == "GroupBox" then
+                element = tab:GroupBox(finalConfig)
+            elseif normalizedType == "AddSpace" then
+                element = tab:AddSpace(finalConfig)
+            elseif normalizedType == "Search" then
+                element = tab:Search(finalConfig)
+            end
+            
+            return element
+        end
+        
+        function tab:RemoveElement(element)
+            if not element then
+                warn("[Zonix UI] Cannot remove nil element")
+                return false
+            end
+            
+            for i, el in ipairs(tab.Elements) do
+                if el == element then
+                    table.remove(tab.Elements, i)
+                    break
+                end
+            end
+            
+            if element.Flag then
+                Zonix.Flags[element.Flag] = nil
+                Zonix.FlaggedElements[element.Flag] = nil
+            end
+            
+            if element.DependencyOf then
+                for _, dependentElement in ipairs(element.DependencyOf) do
+                    if dependentElement.Frame then
+                        dependentElement.Frame:Destroy()
+                    end
+                end
+            end
+            
+            if element.Frame then
+                element.Frame:Destroy()
+            elseif element.Container then
+                element.Container:Destroy()
+            end
+            
+            for k, _ in pairs(element) do
+                element[k] = nil
+            end
+            
+            return true
+        end
+        
+        function tab:RemoveElementByName(name)
+            if not name then
+                warn("[Zonix UI] Element name is required")
+                return false
+            end
+            
+            for i, element in ipairs(tab.Elements) do
+                if element and element.Name and element.Name == name then
+                    return tab:RemoveElement(element)
+                end
+            end
+            
+            warn("[Zonix UI] Element with name '" .. name .. "' not found")
+            return false
+        end
+        
+        function tab:RemoveElementByFlag(flag)
+            if not flag then
+                warn("[Zonix UI] Flag is required")
+                return false
+            end
+            
+            local element = Zonix.FlaggedElements[flag]
+            if element then
+                return tab:RemoveElement(element)
+            end
+            
+            warn("[Zonix UI] Element with flag '" .. flag .. "' not found")
+            return false
+        end
+        
+        function tab:GetElement(identifier)
+            for _, element in ipairs(tab.Elements) do
+                if element and element.Name and element.Name == identifier then
+                    return element
+                end
+            end
+            
+            if Zonix.FlaggedElements[identifier] then
+                return Zonix.FlaggedElements[identifier]
+            end
+            
+            return nil
+        end
+        
+        function tab:ClearElements()
+            for i = #tab.Elements, 1, -1 do
+                tab:RemoveElement(tab.Elements[i])
+            end
+            
+            return true
+        end
+
         return tab
+    end
+
+    function window:SetCompactMode(enabled)
+        window.CompactMode = enabled
+
+        local newScreenSize = workspace.CurrentCamera.ViewportSize
+        local newCompactScale = enabled and 0.75 or 1.0
+
+        if isMobile then
+            local safeAreaPadding = 100
+            local maxMobileWidth = math.min(newScreenSize.X * 0.85, 480)
+            local maxMobileHeight = math.min(newScreenSize.Y - safeAreaPadding, 550)
+
+            windowWidth = maxMobileWidth * newCompactScale
+            windowHeight = maxMobileHeight * newCompactScale
+        else
+            local baseWidth = 700
+            local baseHeight = 520
+            local baseScreenWidth = 1920
+
+            if newScreenSize.X > baseScreenWidth then
+                local scaleFactor = math.min(newScreenSize.X / baseScreenWidth, 1.8)
+                windowWidth = baseWidth * scaleFactor * newCompactScale
+                windowHeight = baseHeight * scaleFactor * newCompactScale
+            elseif newScreenSize.X < 1366 then
+                local scaleFactor = newScreenSize.X / 1366
+                windowWidth = math.max(baseWidth * scaleFactor * newCompactScale, 400)
+                windowHeight = math.max(baseHeight * scaleFactor * newCompactScale, 300)
+            else
+                windowWidth = baseWidth * newCompactScale
+                windowHeight = baseHeight * newCompactScale
+            end
+        end
+
+        if not window.Minimized then
+            Utils:Tween(main, {Size = UDim2.new(0, windowWidth, 0, windowHeight)}, 0.3)
+        end
+
+        Zonix:Notify({
+            Title = "Compact Mode",
+            Content = enabled and "Compact mode enabled" or "Compact mode disabled",
+            Duration = 2,
+            Type = "Info"
+        })
     end
 
     return window
 end
 
--- ═══════════════════════════════════════════════════════════════
---                         CONFIG SYSTEM
--- ═══════════════════════════════════════════════════════════════
 
 function Zonix:SaveConfig(name)
     name = name or "default"
@@ -6486,12 +8861,9 @@ function Zonix:LoadConfig(name)
     )
 end
 
--- ═══════════════════════════════════════════════════════════════
---                            INIT
--- ═══════════════════════════════════════════════════════════════
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.4.4 LOADED!                  ║")
+print("║                 Zonix UI v1.5.8 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
