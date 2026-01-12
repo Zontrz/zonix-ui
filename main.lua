@@ -3171,6 +3171,8 @@ function Zonix:Window(config)
                     end
                     pickerOpen = true
 
+                    local inputEndedConn
+                    local inputChangedConn
                     local sg = Instance.new("ScreenGui")
                     sg.Name = "ColorPickerModal"
                     sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -3266,8 +3268,8 @@ function Zonix:Window(config)
                             end
                             pcall(callback, currentColor)
                             pickerOpen = false
-                            inputEndedConn:Disconnect()
-                            inputChangedConn:Disconnect()
+                            if inputEndedConn then inputEndedConn:Disconnect() end
+                            if inputChangedConn then inputChangedConn:Disconnect() end
                             sg:Destroy()
                         end
                     )
@@ -3548,10 +3550,6 @@ function Zonix:Window(config)
                                 UpHu(i)
                             end
                         end
-                    )
-
-                    local inputEndedConn
-                    local inputChangedConn
 
                     inputEndedConn =
                         UserInputService.InputEnded:Connect(
@@ -6885,6 +6883,8 @@ function Zonix:Window(config)
                                 return
                             end
                             pickerOpen = true
+                            local inputEndedConn
+                            local inputChangedConn
 
                             local sg = Instance.new("ScreenGui")
                             sg.Name = "ColorPickerModal"
@@ -6981,8 +6981,8 @@ function Zonix:Window(config)
                                     end
                                     pcall(callback, currentColor)
                                     pickerOpen = false
-                                    inputEndedConn:Disconnect()
-                                    inputChangedConn:Disconnect()
+                                    if inputEndedConn then inputEndedConn:Disconnect() end
+                                    if inputChangedConn then inputChangedConn:Disconnect() end
                                     sg:Destroy()
                                 end
                             )
@@ -7265,8 +7265,6 @@ function Zonix:Window(config)
                                 end
                             )
 
-                            local inputEndedConn
-                            local inputChangedConn
 
                             inputEndedConn =
                                 UserInputService.InputEnded:Connect(
