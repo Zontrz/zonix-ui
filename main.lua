@@ -1,10 +1,13 @@
 --[[
     ╔══════════════════════════════════════════════════════════════╗
-    ║                    Zonix UI v1.5.8                           ║
+    ║                    Zonix UI v1.5.9                           ║
     ║                                                              ║
     ║                   Created by Zontraz                         ║
     ║                   https://zon.su                             ║
     ╚══════════════════════════════════════════════════════════════╝
+
+    v1.5.9
+    • Minor bug fixes
 
     v1.5.8 - COMPACT MODE:
     • NEW: Window CompactMode configuration option
@@ -290,7 +293,7 @@ Executor.ListFiles = FindFunc("listfiles") or function()
 
 
 local Zonix = {
-    Version = "1.5.8",
+    Version = "1.5.9",
     Creator = "Zontraz",
     Website = "https://zon.su",
     Executor = Executor.Name,
@@ -2732,10 +2735,21 @@ function Zonix:Window(config)
                     
                     for _, optBtn in ipairs(optList:GetChildren()) do
                         if optBtn:IsA("TextButton") then
-                            local optLabel = optBtn:FindFirstChild("TextLabel")
-                            local checkbox = optBtn:FindFirstChildWhichIsA("TextLabel")
+                            local checkbox = nil
+                            local optLabel = nil
+
+                            for _, child in ipairs(optBtn:GetChildren()) do
+                                if child:IsA("TextLabel") then
+                                    if child:FindFirstChildWhichIsA("UIStroke") then
+                                        checkbox = child
+                                    else
+                                        optLabel = child
+                                    end
+                                end
+                            end
+
                             local checkStroke = checkbox and checkbox:FindFirstChildWhichIsA("UIStroke")
-                            
+
                             if optLabel and checkbox and checkStroke then
                                 local optText = optLabel.Text
                                 if selectedItems[optText] then
@@ -2756,10 +2770,10 @@ function Zonix:Window(config)
                             end
                         end
                     end
-                    
+
                     mdLabel.Text = mdName .. ": " .. getSelectedText()
                     updateFlag()
-                    
+
                     local selected = {}
                     for item, isSelected in pairs(selectedItems) do
                         if isSelected then
@@ -5197,10 +5211,21 @@ function Zonix:Window(config)
                         
                         for _, optBtn in ipairs(optList:GetChildren()) do
                             if optBtn:IsA("TextButton") then
-                                local optLabel = optBtn:FindFirstChild("TextLabel")
-                                local checkbox = optBtn:FindFirstChildWhichIsA("TextLabel")
+                                local checkbox = nil
+                                local optLabel = nil
+
+                                for _, child in ipairs(optBtn:GetChildren()) do
+                                    if child:IsA("TextLabel") then
+                                        if child:FindFirstChildWhichIsA("UIStroke") then
+                                            checkbox = child
+                                        else
+                                            optLabel = child
+                                        end
+                                    end
+                                end
+
                                 local checkStroke = checkbox and checkbox:FindFirstChildWhichIsA("UIStroke")
-                                
+
                                 if optLabel and checkbox and checkStroke then
                                     local optText = optLabel.Text
                                     if selectedItems[optText] then
@@ -5221,10 +5246,10 @@ function Zonix:Window(config)
                                 end
                             end
                         end
-                        
+
                         mdLabel.Text = mdName .. ": " .. getSelectedText()
                         updateFlag()
-                        
+
                         local selected = {}
                         for item, isSelected in pairs(selectedItems) do
                             if isSelected then
@@ -6510,10 +6535,21 @@ function Zonix:Window(config)
                             
                             for _, optBtn in ipairs(optList:GetChildren()) do
                                 if optBtn:IsA("TextButton") then
-                                    local optLabel = optBtn:FindFirstChild("TextLabel")
-                                    local checkbox = optBtn:FindFirstChildWhichIsA("TextLabel")
+                                    local checkbox = nil
+                                    local optLabel = nil
+
+                                    for _, child in ipairs(optBtn:GetChildren()) do
+                                        if child:IsA("TextLabel") then
+                                            if child:FindFirstChildWhichIsA("UIStroke") then
+                                                checkbox = child
+                                            else
+                                                optLabel = child
+                                            end
+                                        end
+                                    end
+
                                     local checkStroke = checkbox and checkbox:FindFirstChildWhichIsA("UIStroke")
-                                    
+
                                     if optLabel and checkbox and checkStroke then
                                         local optText = optLabel.Text
                                         if selectedItems[optText] then
@@ -6534,10 +6570,10 @@ function Zonix:Window(config)
                                     end
                                 end
                             end
-                            
+
                             mdLabel.Text = mdName .. ": " .. getSelectedText()
                             updateFlag()
-                            
+
                             local selected = {}
                             for item, isSelected in pairs(selectedItems) do
                                 if isSelected then
@@ -8353,6 +8389,7 @@ function Zonix:Window(config)
             function search:ClearHistory()
                 self.History = {}
                 historyFrame.Visible = false
+                historyFrame.Size = UDim2.new(1, 0, 0, 0)
             end
 
             function search:SetText(text)
@@ -8421,6 +8458,7 @@ function Zonix:Window(config)
                 if searchHistory and #search.History > 0 then
                     task.wait(0.1)
                     historyFrame.Visible = false
+                    historyFrame.Size = UDim2.new(1, 0, 0, 0)
                 end
             end)
 
@@ -8454,6 +8492,7 @@ function Zonix:Window(config)
                             searchBox.Text = query
                             performSearch(query)
                             historyFrame.Visible = false
+                            historyFrame.Size = UDim2.new(1, 0, 0, 0)
                         end)
 
                         historyBtn.MouseEnter:Connect(function()
@@ -8862,7 +8901,7 @@ end
 
 
 print("╔══════════════════════════════════════════════════════════╗")
-print("║                 Zonix UI v1.5.8 LOADED!                  ║")
+print("║                 Zonix UI v1.5.9 LOADED!                  ║")
 print("╠══════════════════════════════════════════════════════════╣")
 print("║  Created by: Zontraz                                     ║")
 print("║  Website: https://zon.su                                 ║")
